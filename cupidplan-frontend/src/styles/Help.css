@@ -1,0 +1,36 @@
+/* Help.css - Styles for Help & Support Page */
+.help-container {
+    max-width: 900px;
+    margin: auto;
+    padding: 40px 20px;
+    text-align: left;
+}
+
+.help-header {
+    font-size: 2rem;
+    font-weight: bold;
+    color: #ff4d6d;
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+.help-section {
+    margin-bottom: 30px;
+}
+
+.help-question {
+    font-size: 1.2rem;
+    font-weight: bold;
+    color: #444;
+    margin-bottom: 10px;
+}
+
+.help-answer {
+    font-size: 1rem;
+    color: #555;
+    line-height: 1.6;
+}
+body {
+    background-color: #f9f9f9;
+    font-family: Arial, sans-serif;
+}

@@ -169,6 +169,14 @@ const Login = () => {
             </>
           )}
 
+          {/* New Signup Button Below Send OTP */}
+          <div className=".signup-container">
+            <p>New to CupidPlan.Me?</p>
+            <button className="signup-button" onClick={() => navigate("/signup")}>
+              Create an Account
+            </button>
+          </div>
+
           <div className="testimonials">
             <h3>💬 What Our Users Say</h3>
             <p>"CupidPlan helped me find the love of my life!" - Alex</p>

@@ -103,4 +103,20 @@
     font-size: 14px;
     cursor: not-allowed;
   }
-  
+  /* Added styles for login button positioning */
+.login-button {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  background-color: #ff4a6e; /* Match existing button styles */
+  color: white;
+  padding: 10px 15px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 16px;
+}
+
+.login-button:hover {
+  background-color: #e03e60; /* Darker shade on hover */
+}

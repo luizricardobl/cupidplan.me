@@ -1,0 +1,33 @@
+/* About.css - Styles for About Us Page */
+.about-container {
+    max-width: 900px;
+    margin: auto;
+    padding: 40px 20px;
+    text-align: center;
+}
+
+.about-header {
+    font-size: 2rem;
+    font-weight: bold;
+    color: #ff4d6d;
+    margin-bottom: 20px;
+}
+
+.about-text {
+    font-size: 1.1rem;
+    color: #333;
+    line-height: 1.6;
+    margin-bottom: 20px;
+}
+
+.about-image {
+    width: 100%;
+    max-width: 600px;
+    border-radius: 10px;
+    margin-top: 20px;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+}
+body {
+    background-color: #f9f9f9;
+    font-family: Arial, sans-serif;
+}

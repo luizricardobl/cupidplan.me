@@ -1,0 +1,249 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;500;600;700;800;900&display=swap');
+
+/* Apply styles ONLY to the Signup page */
+.signup-container * {
+  font-family: "Inter", sans-serif;
+}
+
+/* Hide scrollbar */
+.signup-container ::-webkit-scrollbar {
+  display: none;
+}
+
+/* Page background */
+.signup-container {
+  min-height: 100vh;
+  background-color: #f9fafb;
+}
+
+/* Header */
+.signup-container .signup-header {
+  border-bottom: 1px solid #e5e7eb;
+  background-color: #ffffff;
+  padding: 16px 24px;
+}
+
+.signup-container .signup-header .logo {
+  font-size: 24px;
+  font-weight: bold;
+  color: #1f2937;
+}
+
+.signup-container .signup-header nav {
+  display: flex;
+  gap: 16px;
+}
+
+.signup-container .signup-header nav a {
+  color: #6b7280;
+  text-decoration: none;
+}
+
+.signup-container .signup-header nav a:hover {
+  text-decoration: underline;
+}
+
+/* Signup Form */
+.signup-container .signup-main {
+  max-width: 700px;
+  margin: 0 auto;
+  padding: 48px 24px;
+}
+
+.signup-container .signup-title {
+  font-size: 32px;
+  font-weight: bold;
+  text-align: center;
+  margin-bottom: 16px;
+}
+
+.signup-container .signup-subtitle {
+  text-align: center;
+  color: #6b7280;
+  margin-bottom: 32px;
+}
+
+.signup-container .signup-form {
+  background: white;
+  padding: 24px;
+  border-radius: 8px;
+  box-shadow: 0px 2px 6px rgba(0, 0, 0, 0.1);
+}
+
+/* Input fields */
+.signup-container .signup-form label {
+  display: block;
+  font-weight: 600;
+  margin-bottom: 6px;
+}
+
+.signup-container .signup-form input {
+  width: 100%;
+  padding: 12px;
+  border: 1px solid #d1d5db;
+  border-radius: 6px;
+  font-size: 16px;
+}
+
+.signup-container .signup-form input:focus {
+  outline: none;
+  border-color: #1f2937;
+  box-shadow: 0px 0px 4px rgba(31, 41, 55, 0.3);
+}
+
+/* Progress bar */
+.signup-container .signup-progress {
+  margin-bottom: 24px;
+}
+
+.signup-container .progress-text {
+  display: flex;
+  justify-content: space-between;
+  color: #6b7280;
+}
+
+.signup-container .progress-bar {
+  height: 8px;
+  background-color: #e5e7eb;
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.signup-container .progress-bar-inner {
+  height: 100%;
+  background-color: #1f2937;
+  width: 20%; /* Update as needed for progress */
+  transition: width 0.3s ease-in-out;
+}
+
+/* Buttons */
+.signup-container .signup-buttons {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 24px;
+}
+
+.signup-container .back-button {
+  padding: 12px 24px;
+  border: 1px solid #6b7280;
+  border-radius: 6px;
+  color: #6b7280;
+  background: white;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+.signup-container .back-button:hover {
+  background-color: #f3f4f6;
+}
+
+.signup-container .next-button {
+  padding: 12px 24px;
+  background-color: #1f2937;
+  color: white;
+  border-radius: 6px;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+.signup-container .next-button:hover {
+  background-color: #111827;
+}
+
+/* Footer */
+.signup-container .signup-footer {
+  text-align: center;
+  padding: 24px;
+  border-top: 1px solid #e5e7eb;
+  background-color: white;
+  color: #6b7280;
+  font-size: 14px;
+}
+/* Profile Picture Upload Box */
+.profile-upload {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.upload-box {
+  width: 140px; /* Slightly bigger */
+  height: 140px;
+  background-color: #f3f4f6;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 10px;
+  position: relative;
+}
+
+/* User icon inside the upload box */
+.upload-icon {
+  font-size: 60px; /* Make it bigger */
+  color: #9ca3af;
+  position: absolute;
+}
+
+/* Uploaded image fits perfectly */
+.uploaded-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 10px;
+}
+
+/* Upload button */
+.upload-button {
+  background-color: #e5e7eb;
+  color: #374151;
+  padding: 8px 12px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+.upload-button:hover {
+  background-color: #d1d5db;
+}
+
+.upload-note {
+  font-size: 12px;
+  color: #6b7280;
+  margin-top: 4px;
+}
+/* Hide default file input */
+.file-input {
+  display: none;
+}
+
+.selected-items {
+  display: flex;
+  flex-wrap: wrap;  /* Allows items to wrap to the next line */
+  gap: 10px; /* Adds spacing between items */
+  margin-top: 10px;
+}
+
+.selected-item {
+  background-color: #f3f4f6; /* Light gray background */
+  color: #333; /* Dark text color */
+  padding: 8px 12px;
+  border-radius: 15px; /* Rounded corners for a pill shape */
+  font-size: 14px;
+  display: inline-flex;
+  align-items: center;
+}
+
+.selected-item::after {
+  content: " ✖"; /* Adds a small close symbol */
+  font-size: 14px;
+  margin-left: 6px;
+  cursor: pointer;
+  color: #ff4d4d; /* Red close button */
+}
+
+.selected-item::after:hover {
+  color: #d43f3f; /* Darker red on hover */
+}

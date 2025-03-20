@@ -1,0 +1,87 @@
+/* General Navigation Bar */
+.nav-bar {
+    display: flex;
+    justify-content: space-between; /* Space between left and right sections */
+    align-items: center;
+    background: #0077cc; /* Dark blue background */
+    padding: 15px 20px;
+  }
+  
+  /* Centered Navigation Buttons (Only Show After Login) */
+  .nav-links {
+    display: flex;
+    gap: 15px;
+  }
+  
+  /* Help & About in the Top Right Corner */
+  .top-right-buttons {
+    margin-left: auto; /* Pushes Help & About to the right */
+    display: flex;
+    gap: 10px;
+  }
+  
+  /* Help & About Buttons */
+  .top-button {
+    background: #ffb347; /* Orange background */
+    color: white;
+    padding: 10px 15px;
+    text-decoration: none;
+    border-radius: 5px;
+    font-size: 16px;
+    transition: background 0.3s ease;
+  }
+  
+  .top-button:hover {
+    background: #e09e3f; /* Darker orange */
+  }
+  
+  /* Individual Navigation Buttons */
+  .nav-button {
+    background: #ff4a6e;
+    color: white;
+    padding: 10px 15px;
+    text-decoration: none;
+    border-radius: 5px;
+    font-size: 16px;
+    transition: background 0.3s ease;
+  }
+  
+  .nav-button:hover {
+    background: #e03e60;
+  }
+  
+  /* Fix button spacing on Help page */
+.page-footer {
+    margin-top: 20px;
+    display: flex;
+    justify-content: center;
+    gap: 15px; /* Added more space between buttons */
+    flex-wrap: wrap; /* Ensures proper spacing on smaller screens */
+  }
+  
+  /* Make "Back to Home" button match the others */
+  .back-home-container {
+    margin-top: 20px;
+    display: flex;
+    justify-content: center;
+  }
+  
+  .nav-button {
+    background: #ff4a6e;
+    color: white;
+    padding: 10px 15px;
+    text-decoration: none;
+    border-radius: 5px;
+    font-size: 16px;
+    transition: background 0.3s ease;
+    display: inline-block; /* Ensures proper spacing */
+  }
+  
+  .nav-button:hover {
+    background: #e03e60;
+  }
+
+
+  
+ 
+  
