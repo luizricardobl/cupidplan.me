@@ -27,7 +27,6 @@ mongoose.connect(process.env.MONGO_URI)
   .then(() => console.log("✅ MongoDB connected"))
   .catch(err => console.error("❌ MongoDB connection error:", err));
 
-
 // ✅ Store OTPs in memory (temporary storage)
 const otpStorage = {}; // { email: otp }
 
@@ -38,36 +37,6 @@ const transporter = nodemailer.createTransport({
     user: "apikey", // Required for SendGrid
     pass: process.env.SENDGRID_API_KEY,
   },
-});
-
-// ✅ API Route to Send OTP
-app.post("/api/send-otp", async (req, res) => {
-  const { email } = req.body;
-
-  if (!email) {
-    return res.status(400).json({ error: "Email is required" });
-  }
-
-  // ✅ Generate a new OTP
-  const otp = Math.floor(100000 + Math.random() * 900000).toString();
-  otpStorage[email] = otp; // Store OTP in memory
-
-  console.log(`Generated OTP for ${email}: ${otp}`); // Debugging log
-
-  const msg = {
-    to: email,
-    from: process.env.EMAIL_SENDER,
-    subject: "Your CupidPlan.Me OTP Code",
-    text: `Your OTP code is: ${otp}. It is valid for 5 minutes.`,
-  };
-
-  try {
-    await sgMail.send(msg);
-    res.json({ success: true, message: "OTP sent successfully!" });
-  } catch (error) {
-    console.error("Error sending OTP:", error);
-    res.status(500).json({ success: false, message: "Error sending OTP" });
-  }
 });
 
 // ✅ API Route to Verify OTP

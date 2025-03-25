@@ -32,65 +32,58 @@ const Signup = () => {
   const navigate = useNavigate();
 
   // Handle going to the next step
-  const nextStep = (e) => {
+  const nextStep = async (e) => {
     e.preventDefault();
   
-    // Validate required fields for each step
-    if (step === 1) {
-      if (!fullName || !email || !password || !confirmPassword) {
-        alert("❌ Please fill out all required fields.");
-        return;
-      }
-      if (password !== confirmPassword) {
-        alert("❌ Passwords do not match.");
-        return;
-      }
+    // Step-based validation
+    if (step === 1 && (!fullName || !email || !password || !confirmPassword)) {
+      alert("❌ Please fill out all required fields.");
+      return;
     }
   
-    if (step === 2) {
-      if (!dob || !gender || !interestedIn || !location) {
-        alert("❌ Please complete your profile details before continuing.");
-        return;
-      }
+    if (step === 1 && password !== confirmPassword) {
+      alert("❌ Passwords do not match.");
+      return;
     }
   
-    if (step === 3) {
-      if (!relationshipGoal) {
-        alert("❌ Please select your relationship goal.");
-        return;
-      }
+    if (step === 2 && (!dob || !gender || !interestedIn || !location)) {
+      alert("❌ Please complete your profile details.");
+      return;
+    }
+  
+    if (step === 3 && !relationshipGoal) {
+      alert("❌ Please select your relationship goal.");
+      return;
     }
   
     if (step === 4) {
-      const termsCheckbox = document.querySelector('input[name="termsCheckbox"]'); // Find checkbox by name
-      if (!termsCheckbox || !termsCheckbox.checked) {
-        alert("❌ You must agree to the Terms & Conditions to proceed.");
+      const checkbox = document.querySelector('input[name="termsCheckbox"]');
+      if (!checkbox?.checked) {
+        alert("❌ You must agree to the Terms & Conditions.");
         return;
       }
-    }
-    
   
+      // ✅ Call handleSignup to save user + trigger OTP
+      await handleSignup(e);
+      return;
+    }
+  
+    // Move to next step
     setStep(step + 1);
   };
+  
   
 
   const handleSignup = async (e) => {
     e.preventDefault();
-    console.log("🔹 Signing up with email:", email); // Debugging log
   
     if (!email) {
       alert("❌ Email is missing! Please enter your email.");
       return;
     }
-    
-    if (step < 5) {
-      nextStep(e);
-      return;
-    }
   
-    // Prepare user data for signup
     const userData = {
-      fullName,
+      name: fullName, // backend expects "name"
       email,
       phone,
       password,
@@ -103,8 +96,12 @@ const Signup = () => {
       hobbies,
       dealbreakers,
     };
-  
+
+    console.log("📦 Sending this user data to backend:", userData);
+    console.table(userData);
+
     try {
+      // Step 1: Create user
       const res = await fetch("http://localhost:5000/api/auth/signup", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -112,19 +109,48 @@ const Signup = () => {
       });
   
       const data = await res.json();
-      if (data.success) {
-        alert("✅ Signup successful! Check your email for OTP.");
-        setStep(5); // Move to OTP step
-      } else {
-        alert(data.message);
+  
+      if (!res.ok || !data.success) {
+        alert(data.message || "Signup failed.");
+        return;
       }
+  
+      console.log("✅ Account created. Sending OTP...");
+  
+      // Step 2: Send OTP
+      const otpRes = await fetch("http://localhost:5000/api/auth/send-otp", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email }),
+      });
+  
+      const otpData = await otpRes.json();
+  
+      if (!otpRes.ok || !otpData.success) {
+        alert(otpData.message || "Failed to send OTP.");
+        return;
+      }
+  
+      alert("✅ OTP sent! Please check your email.");
+      setStep(5);
+  
+      // Start countdown timer
+      setResendDisabled(true);
+      setCountdown(30);
+      const interval = setInterval(() => {
+        setCountdown((prev) => {
+          if (prev === 1) {
+            clearInterval(interval);
+            setResendDisabled(false);
+          }
+          return prev - 1;
+        });
+      }, 1000);
     } catch (error) {
       console.error("Signup error:", error);
       alert("❌ Signup failed. Try again.");
     }
   };
-  
-  
   
 
   // Handle going back to the previous step
@@ -163,22 +189,29 @@ const Signup = () => {
     e.preventDefault();
     const enteredOtp = otp.join("");
   
+    if (enteredOtp.length !== 6) {
+      alert("Please enter a valid 6-digit OTP.");
+      return;
+    }
+  
     try {
-      const response = await fetch("http://localhost:5000/api/verify-otp", {
+      const verifyResponse = await fetch("http://localhost:5000/api/auth/verify-otp", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email, otp: enteredOtp }),
       });
   
-      const data = await response.json();
-      if (data.success) {
-        alert("Email verified successfully! Welcome to CupidPlan.Me.");
-        navigate("/dashboard"); // Redirect to dashboard
+      const verifyData = await verifyResponse.json();
+  
+      if (verifyResponse.ok && verifyData.success) {
+        alert("🎉 Email verified successfully! Welcome to CupidPlan.Me.");
+        navigate("/home");
       } else {
-        alert("Invalid OTP. Please try again.");
+        alert(verifyData.message || "Invalid OTP. Try again.");
       }
     } catch (error) {
-      alert("Error verifying OTP.");
+      console.error("❌ Error verifying OTP:", error);
+      alert("Something went wrong. Please try again.");
     }
   };
   
@@ -188,7 +221,7 @@ const Signup = () => {
     console.log("📩 Resend OTP clicked. Sending request..."); // Debugging log
   
     try {
-      const response = await fetch("http://localhost:5000/api/send-otp", {
+      const response = await fetch("http://localhost:5000/api/auth/send-otp", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email }),
@@ -253,7 +286,7 @@ const Signup = () => {
               <div className="progress-bar"><div className="progress-bar-inner" style={{ width: "20%" }}></div></div>
             </div>
 
-            <form onSubmit={handleSignup} className="signup-form">
+            <form onSubmit={nextStep} className="signup-form">
               <label>Full Name *</label>
               <input type="text" placeholder="Enter your full name" value={fullName} onChange={(e) => setFullName(e.target.value)} required />
 

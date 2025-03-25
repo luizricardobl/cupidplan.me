@@ -1,7 +1,7 @@
-const mongoose = require('mongoose');
+const mongoose = require("mongoose");
 
 const UserSchema = new mongoose.Schema({
-  fullName: { type: String, required: true },
+  name: { type: String, required: true },
   email: { type: String, required: true, unique: true },
   password: { type: String, required: true },
   phone: { type: String },
@@ -11,9 +11,9 @@ const UserSchema = new mongoose.Schema({
   location: { type: String, required: true },
   aboutMe: { type: String },
   relationshipGoal: { type: String, required: true },
-  hobbies: { type: [String] },
-  dealbreakers: { type: [String] },
-  verified: { type: Boolean, default: false }, // User must verify OTP
+  hobbies: [String],
+  dealbreakers: [String],
+  verified: { type: Boolean, default: false },
 });
 
-module.exports = mongoose.model('User', UserSchema);
+module.exports = mongoose.model("User", UserSchema);

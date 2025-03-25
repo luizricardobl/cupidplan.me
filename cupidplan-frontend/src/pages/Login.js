@@ -32,22 +32,22 @@ const Login = () => {
     }
 
     try {
-      const response = await fetch("http://localhost:5000/api/send-otp", {
+      const response = await fetch("http://localhost:5000/api/auth/send-otp", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email: userInput }),
       });
-
+      
       const data = await response.json();
-
-      if (data.success) {
+      
+      if (response.ok && data.success) {
         toast.success(isResend ? "OTP resent to your email!" : "OTP sent to your email!");
         setStep(2);
-
+      
         // Reset resend timer
         setResendDisabled(true);
         setTimer(30);
-
+      
         // Start countdown
         const countdown = setInterval(() => {
           setTimer((prev) => {
@@ -58,13 +58,19 @@ const Login = () => {
             return prev - 1;
           });
         }, 1000);
+      
       } else {
-        toast.error("Error sending OTP. Try again.");
-      }
+        if (data.message === "User not found") {
+          toast.error("No account found with this email. Please sign up first.");
+        } else {
+          toast.error(data.message || "Error sending OTP. Try again.");
+        }
+      } // <-- ✅ this ends the else block
     } catch (error) {
-      toast.error("Failed to send OTP.");
+      toast.error("Failed to send OTP. Please try again.");
     }
   };
+
 
   // ✅ Verify OTP with Backend
   const handleVerifyOTP = async (e) => {
@@ -76,7 +82,7 @@ const Login = () => {
     }
   
     try {
-      const response = await fetch("http://localhost:5000/api/verify-otp", {
+      const response = await fetch("http://localhost:5000/api/auth/verify-otp", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email: userInput, otp }),
