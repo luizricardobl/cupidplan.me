@@ -11,14 +11,15 @@ import About from './pages/About';
 import Terms from './pages/Terms';
 import Privacy from './pages/Privacy';
 import Community from './pages/Community';
-import "./styles/NavBar.css"; // Styling for navigation
+import Chat from "./pages/Chat";
+import "./styles/NavBar.css"; 
 
 function App() {
-  const location = useLocation(); // Get current page route
-  const isLoginPage = location.pathname === "/"; // Check if user is on login page
-  const isSignupPage = location.pathname === "/signup"; // Check if user is on signup page
-  const isRestrictedPage = ["/help", "/about", "/terms", "/privacy", "/community"].includes(location.pathname); // Restricted pages
-  const isLoggedIn = !isLoginPage && !isSignupPage && !isRestrictedPage; // User is logged in if NOT on login/signup/restricted pages
+  const location = useLocation(); 
+  const isLoginPage = location.pathname === "/"; 
+  const isSignupPage = location.pathname === "/signup"; 
+  const isRestrictedPage = ["/help", "/about", "/terms", "/privacy", "/community"].includes(location.pathname); 
+  const isLoggedIn = !isLoginPage && !isSignupPage && !isRestrictedPage; 
 
   return (
     <div className="app-container">
@@ -65,6 +66,8 @@ function App() {
         <Route path="/terms" element={<Terms />} />
         <Route path="/privacy" element={<Privacy />} />
         <Route path="/community" element={<Community />} />
+        <Route path="/chat" element={<Chat />} />
+
       </Routes>
     </div>
   );

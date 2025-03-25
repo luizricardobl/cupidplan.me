@@ -12,7 +12,7 @@ let otpStorage = {};
 // 🔹 1. User Signup & Save in Database
 router.post("/signup", async (req, res) => {
     try {
-      console.log("📩 Signup request received:", req.body); // Log incoming request data
+      console.log("📩 Signup request received:", req.body); 
   
       const { name, email, phone, password, dob, gender, interestedIn, location, aboutMe, relationshipGoal, hobbies, dealbreakers } = req.body;
 
@@ -50,7 +50,7 @@ router.post("/signup", async (req, res) => {
         relationshipGoal,
         hobbies,
         dealbreakers,
-        verified: false, // Mark as unverified until OTP is confirmed
+        verified: false, 
       });
   
       await newUser.save();
@@ -121,7 +121,7 @@ router.post("/verify-otp", async (req, res) => {
 
     // Mark user as verified
     await User.findOneAndUpdate({ email }, { verified: true });
-    delete otpStorage[email]; // Remove OTP after verification
+    delete otpStorage[email]; 
 
     console.log("✅ OTP verified successfully");
     res.status(200).json({ success: true, message: "Email verified successfully" });

@@ -1,70 +1,104 @@
-import React, {useState} from "react";
+import React, { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import "../styles/Matches.css";
 
-//Placeholder profiles TODO: Replace with actual data from DB/backend
-const profiles = [
-    {
-        id: 1,
-        name: "Sarah",
-        age: 28,
-        job: "Software Engineer",
-        distance: "2 miles away",
-        matchPercentage: 94,
-        avatar: "https://api.dicebear.com/7.x/notionists/svg?scale=200&seed=456",
-    },
-    {
-        id: 2,
-        name: "Emma",
-        age: 26,
-        job: "Designer",
-        distance: "5 miles away",
-        matchPercentage: 88,
-        avatar: "https://api.dicebear.com/7.x/notionists/svg?scale=200&seed=102",
-    },
-];
-
 const Matches = () => {
-    const [currentIndex, setCurrentIndex] = useState(0);
+  const [matches, setMatches] = useState([]);
+  const [currentIndex, setCurrentIndex] = useState(0);
+  const [loading, setLoading] = useState(true);
 
-    const handleNext = () => {
-        setCurrentIndex((prevIndex) => (prevIndex + 1) % profiles.length);
+  const navigate = useNavigate();
+  const loggedInEmail =
+    localStorage.getItem("rememberedUser") || sessionStorage.getItem("loggedInUser");
+
+  useEffect(() => {
+    const fetchMatches = async () => {
+      try {
+        const res = await fetch(`http://localhost:5000/api/matches/${loggedInEmail}`);
+        const data = await res.json();
+
+        if (data.success) {
+          setMatches(data.matches);
+        } else {
+          console.error("Failed to fetch matches");
+        }
+      } catch (err) {
+        console.error("Error fetching matches:", err);
+      } finally {
+        setLoading(false);
+      }
     };
 
-    const handlePrev = () => {
-        setCurrentIndex((prevIndex) =>
-            prevIndex === 0 ? profiles.length - 1 : prevIndex - 1
-        );
-    };
+    if (loggedInEmail) {
+      fetchMatches();
+    }
+  }, [loggedInEmail]);
 
-    const profile = profiles[currentIndex];
+  const nextMatch = () => {
+    if (currentIndex < matches.length - 1) {
+      setCurrentIndex(currentIndex + 1);
+    }
+  };
 
-    return (
-        <div className="match-container">
-            <h1 className="match-header">CupidPlan.me</h1> {/*TODO: Move this to the navbar*/}
-            <div className="profile-card">
-                <img src={profile.avatar} alt={profile.name} className="profile-image" />
+  const prevMatch = () => {
+    if (currentIndex > 0) {
+      setCurrentIndex(currentIndex - 1);
+    }
+  };
 
-                <div className="profile-info">
-                    <h2>{profile.name}, {profile.age}</h2>
-                    <p>{profile.job}</p>
-                    <p>{profile.distance}</p>
-                    <p className="match-percentage">{profile.matchPercentage}% Match</p>
+  const currentMatch = matches[currentIndex];
 
-                    <div className="action-buttons">
-                        <button className="chat-button">Start Chat</button> {/*TODO: Link to chat page*/}
-                        <button className="profile-button">View Profile</button> {/*TODO: Link to profile page*/}
-                    </div>
-                </div>
+  return (
+    <div className="matches-container">
+      <h1>CupidPlan.me</h1>
+
+      {loading ? (
+        <p>Loading matches...</p>
+      ) : currentMatch ? (
+        <div className="match-card">
+          <img
+            src="/images/default-profile.png"
+            alt="Profile"
+            className="match-img"
+          />
+          <div className="match-info">
+            <h2>{currentMatch.name}</h2>
+            <p>{currentMatch.aboutMe || "No bio available."}</p>
+            <p>{currentMatch.location || "Location not provided"}</p>
+            <p className="match-percent">{currentMatch.matchPercentage}% Match</p>
+            <div className="match-buttons">
+              <button
+                onClick={() =>
+                  navigate("/chat", {
+                    state: { selectedUserEmail: currentMatch.email },
+                  })
+                }
+              >
+                Start Chat
+              </button>
+              <button className="profile-btn">View Profile</button>
             </div>
-
-            <div className="nav-buttons">
-                <button onClick={handlePrev} className="nav-button">⬅ Prev</button>
-                <span>{currentIndex + 1} / {profiles.length}</span>
-                <button onClick={handleNext} className="nav-button">Next ➡</button>
-            </div>
+          </div>
         </div>
-    );
+      ) : (
+        <p>No matches found.</p>
+      )}
+
+      {matches.length > 1 && (
+        <div className="pagination">
+          <button onClick={prevMatch} disabled={currentIndex === 0}>
+            ⬅ Prev
+          </button>
+          <span>
+            {currentIndex + 1} / {matches.length}
+          </span>
+          <button onClick={nextMatch} disabled={currentIndex === matches.length - 1}>
+            Next ➡
+          </button>
+        </div>
+      )}
+    </div>
+  );
 };
 
 export default Matches;
- 
