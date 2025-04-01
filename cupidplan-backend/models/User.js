@@ -8,12 +8,26 @@ const UserSchema = new mongoose.Schema({
   dob: { type: Date, required: true },
   gender: { type: String, required: true },
   interestedIn: { type: String, required: true },
-  location: { type: String, required: true },
+  location: { type: String, required: true }, // Human-readable (e.g. "Boston, MA")
+  geoLocation: {
+    type: {
+      type: String,
+      enum: ["Point"],
+      default: "Point"
+    },
+    coordinates: {
+      type: [Number], // [longitude, latitude]
+      default: [0, 0]
+    }
+  },
   aboutMe: { type: String },
   relationshipGoal: { type: String, required: true },
   hobbies: [String],
   dealbreakers: [String],
   verified: { type: Boolean, default: false },
 });
+
+// ✅ Ensure the geoLocation field is indexed for location queries
+UserSchema.index({ geoLocation: "2dsphere" });
 
 module.exports = mongoose.model("User", UserSchema);

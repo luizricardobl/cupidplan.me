@@ -27,7 +27,7 @@ const server = http.createServer(app);
 const { Server } = require("socket.io");
 const io = new Server(server, {
   cors: {
-    origin: "http://localhost:3000", 
+    origin: '*',
     methods: ["GET", "POST"]
   }
 });
@@ -94,26 +94,20 @@ io.on("connection", (socket) => {
   socket.on("joinRoom", (room) => {
     socket.join(room);
     console.log(`🟢 User ${socket.id} joined room: ${room}`);
+  });
 
-    socket.on("typing", ({ room, sender }) => {
-      socket.to(room).emit("partnerTyping", { sender, room });
-    });
+  socket.on("typing", ({ room, sender }) => {
+    socket.to(room).emit("partnerTyping", { sender, room });
+  });
+
+  socket.on("deleteMessage", ({ messageId, room }) => {
+    socket.to(room).emit("messageDeleted", { messageId });
+    console.log(`🗑️ Message ${messageId} deleted in room: ${room}`);
   });
 
   socket.on("sendMessage", async ({ room, sender, receiver, message }) => {
     const timestamp = new Date().toISOString();
 
-    console.log(`📨 ${sender}: ${message} (room: ${room})`);
-
-    // Emit message to other participants
-    io.to(room).emit("receiveMessage", {
-      sender,
-      receiver,
-      message,
-      timestamp,
-    });
-
-    // Save message in DB using ObjectId references
     try {
       const senderUser = await User.findOne({ email: sender });
       const receiverUser = await User.findOne({ email: receiver });
@@ -123,32 +117,39 @@ io.on("connection", (socket) => {
         return;
       }
 
-      const existingChat = await ChatModel.findOne({
+      let chat = await ChatModel.findOne({
         participants: { $all: [senderUser._id, receiverUser._id] },
       });
 
-      if (existingChat) {
-        existingChat.messages.push({
-          sender: senderUser._id,
-          text: message,
-          timestamp,
-        });
-        await existingChat.save();
+      const newMessage = {
+        sender: senderUser._id,
+        text: message,
+        timestamp,
+      };
+
+      if (chat) {
+        chat.messages.push(newMessage);
       } else {
-        const newChat = new ChatModel({
+        chat = new ChatModel({
           participants: [senderUser._id, receiverUser._id],
-          messages: [
-            {
-              sender: senderUser._id,
-              text: message,
-              timestamp,
-            },
-          ],
+          messages: [newMessage],
         });
-        await newChat.save();
       }
 
-      console.log("✅ Message saved to DB");
+      await chat.save();
+
+      const savedMessage = chat.messages[chat.messages.length - 1];
+
+      const enrichedMessage = {
+        _id: savedMessage._id,
+        sender,
+        receiver,
+        message: savedMessage.text,
+        timestamp: savedMessage.timestamp,
+      };
+
+      io.to(room).emit("receiveMessage", enrichedMessage);
+      console.log("✅ Message saved & emitted:", enrichedMessage);
     } catch (err) {
       console.error("❌ Error saving message:", err);
     }

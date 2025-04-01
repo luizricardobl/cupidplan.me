@@ -57,7 +57,7 @@ const Matches = () => {
       ) : currentMatch ? (
         <div className="match-card">
           <img
-            src="/images/default-profile.png"
+            src="/images/default-profile.jpg"
             alt="Profile"
             className="match-img"
           />

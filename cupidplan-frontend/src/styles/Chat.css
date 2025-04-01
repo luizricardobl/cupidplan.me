@@ -76,4 +76,13 @@
     text-align: left;
   }
   
+  .delete-button {
+    margin-top: 4px;
+    background-color: #ff4d4d;
+    color: white;
+    border: none;
+    padding: 4px 8px;
+    border-radius: 5px;
+    cursor: pointer;
+  }
   

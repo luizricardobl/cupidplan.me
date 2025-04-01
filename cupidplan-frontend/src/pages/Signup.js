@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef} from "react";
 import { Link, useNavigate } from "react-router-dom";
 import "../styles/Signup.css"; // Keep using the same CSS
 
@@ -31,6 +31,30 @@ const Signup = () => {
 
   const navigate = useNavigate();
 
+  // ✅ REFERENCE to the location input
+  const locationInputRef = useRef(null);
+  
+  // New handler to listen to the autocomplete element's selection
+  useEffect(() => {
+    if (step === 2 && window.google && window.google.maps) {
+      const autocomplete = new window.google.maps.places.Autocomplete(locationInputRef.current, {
+        types: ["geocode"]
+      });
+  
+      autocomplete.addListener("place_changed", () => {
+        const place = autocomplete.getPlace();
+        if (place && place.formatted_address) {
+          setLocation(place.formatted_address);
+        }
+      });
+    }
+  }, [step]);
+  
+  
+  
+
+  
+  
   // Handle going to the next step
   const nextStep = async (e) => {
     e.preventDefault();
@@ -263,15 +287,22 @@ const Signup = () => {
 
   return (
     <div className="signup-container">
-      {/* Header */}
-      <header className="signup-header">
-        <div className="max-w-7xl mx-auto flex justify-between items-center">
-          <div className="logo">CupidPlan.Me</div>
-          <nav>
-            <Link to="/help">Help</Link>
-          </nav>
-        </div>
-      </header>
+  {/* Header */}
+  <header className="logo-container">
+    <div className="max-w-7xl mx-auto flex justify-between items-center">
+      {/* Group logo image + text in a flexbox */}
+      <div className="logo-combo">
+        <img src="/images/cupid-logo.png" alt="Cupid Logo" className="cupid-logo" />
+        <div className="logo-text">CupidPlan.Me</div>
+      </div>
+
+      {/* Help Button */}
+      <button className="signup-help-button" onClick={() => navigate("/help")}>
+        Help
+      </button>
+    </div>
+  </header>
+
 
       {/* Main Signup Form */}
       <main className="signup-main">
@@ -352,8 +383,25 @@ const Signup = () => {
                 <option value="everyone">Everyone</option>
               </select>
 
+              
+              {/* Replace this part in Step 2 of Signup */}
               <label>Location *</label>
-              <input type="text" placeholder="Enter your location" value={location} onChange={(e) => setLocation(e.target.value)} required />
+<input
+  ref={locationInputRef}
+  type="text"
+  placeholder="Enter your address"
+  value={location}
+  onChange={(e) => setLocation(e.target.value)}
+  className="place-autocomplete-input"
+  required
+/>
+
+
+
+
+
+
+
 
               <label>About Me</label>
               <textarea placeholder="Tell us a little about yourself..." value={aboutMe} onChange={(e) => setAboutMe(e.target.value)} maxLength={250}></textarea>

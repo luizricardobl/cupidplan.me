@@ -1,122 +1,187 @@
 /* Login.css */
 .login-container {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100vh;
-    background: linear-gradient(to bottom, #ff758c, #ff7eb3);
-  }
-  
-  .cupid-animation {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100vh;
-  }
-  
-  .cupid-logo {
-    width: 50px;
-    height: 50px;
-    opacity: 0; /* Start invisible */
-    animation: fadeIn 1.5s ease-in-out forwards, growLogo 1.5s ease-in-out forwards;
-  }
-  
-  @keyframes fadeIn {
-    0% {
-      opacity: 0;
-    }
-    100% {
-      opacity: 1;
-    }
-  }
-  
-  @keyframes growLogo {
-    0% {
-      transform: scale(0.2);
-    }
-    100% {
-      transform: scale(2);
-    }
-  }
-  .login-box {
-    background: white;
-    padding: 20px;
-    border-radius: 10px;
-    text-align: center;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-  }
-  
-  .login-box h1 {
-    font-size: 24px;
-    margin-bottom: 10px;
-  }
-  
-  .login-box p {
-    color: gray;
-  }
-  
-  .login-box form {
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-  }
-  
-  input {
-    padding: 10px;
-    border: 1px solid #ddd;
-    border-radius: 5px;
-  }
-  
-  button {
-    background: #ff4a6e;
-    color: white;
-    padding: 10px;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    font-size: 16px;
-  }
-  
-  button:hover {
-    background: #e03e60;
-  }
-  
-  .testimonials {
-    margin-top: 20px;
-    font-style: italic;
-  }
-   
-  .resend-active {
-    margin-top: 10px;
-    background: none;
-    border: none;
-    color: #ff4a6e;
-    font-size: 14px;
-    cursor: pointer;
-  }
-  
-  .resend-disabled {
-    margin-top: 10px;
-    background: none;
-    border: none;
-    color: gray;
-    font-size: 14px;
-    cursor: not-allowed;
-  }
-  /* Added styles for login button positioning */
-.login-button {
-  position: absolute;
-  top: 20px;
-  right: 20px;
-  background-color: #ff4a6e; /* Match existing button styles */
-  color: white;
-  padding: 10px 15px;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
-  font-size: 16px;
+  display: flex;
+  justify-content: center;
+   background: linear-gradient(to bottom, #fff0f5, #ffffff);
+  align-items: center;
+  min-height: 100vh;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
-.login-button:hover {
-  background-color: #e03e60; /* Darker shade on hover */
+.login-box {
+  width: 400px;
+  padding: 30px;
+  background: #ffffff;
+  border-radius: 16px;
+  box-shadow: 0px 8px 16px rgba(0, 0, 0, 0.15);
+  text-align: center;
+  transition: all 0.3s ease-in-out;
+}
+
+.login-box h1 {
+  font-size: 26px;
+  font-weight: bold;
+  margin-bottom: 10px;
+  color: #222;
+}
+
+.login-box p {
+  color: #999;
+  margin-bottom: 20px;
+  font-size: 15px;
+}
+
+.login-box form {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.login-box input[type="text"],
+.login-box input[type="email"],
+.login-box input[type="password"] {
+  padding: 12px 15px;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+  font-size: 14px;
+}
+
+.login-box button[type="submit"] {
+  padding: 12px;
+  background: #8c0b0b;
+  color: #fff;
+  font-size: 16px;
+  font-weight: 600;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background 0.3s ease;
+}
+
+.login-box button[type="submit"]:hover {
+  background: #6f0808;
+}
+
+label {
+  font-size: 14px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  color: #555;
+  margin-top: 8px;
+}
+
+.signup-container {
+  margin-top: 20px;
+}
+
+.signup-button {
+  background: #8c0b0b;
+  color: #fff;
+  padding: 10px 20px;
+  font-size: 14px;
+  font-weight: 600;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  margin-top: 10px;
+  transition: background 0.3s ease;
+}
+
+.signup-button:hover {
+  background: #6f0808;
+}
+
+.testimonials {
+  margin-top: 30px;
+  font-style: italic;
+  font-size: 14px;
+  color: #444;
+  text-align: left;
+}
+
+.testimonials h3 {
+  font-style: normal;
+  font-weight: 600;
+  margin-bottom: 10px;
+}
+
+.resend-active,
+.resend-disabled {
+  background: none;
+  border: none;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  padding-top: 8px;
+}
+
+.resend-active {
+  color: #8c0b0b;
+}
+
+.resend-disabled {
+  color: gray;
+  cursor: not-allowed;
+}
+
+/* Logo Animation */
+.cupid-animation {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  background: #fff;
+}
+
+.cupid-logo {
+  width: 80px;
+  height: 80px;
+  opacity: 0;
+  animation: fadeIn 1.5s ease-in-out forwards, growLogo 1.5s ease-in-out forwards;
+}
+
+@keyframes fadeIn {
+  0% { opacity: 0; }
+  100% { opacity: 1; }
+}
+
+@keyframes growLogo {
+  0% { transform: scale(0.5); }
+  100% { transform: scale(2); }
+}
+.login-logo {
+  width: 100px;
+  margin-bottom: 10px;
+}
+
+
+
+input {
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+input:focus {
+  border-color: #ff4a6e;
+  box-shadow: 0 0 5px rgba(255, 74, 110, 0.3);
+  outline: none;
+}
+
+button {
+  background: #8b0000;
+  color: white;
+  padding: 10px;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 16px;
+  transition: background 0.3s ease, transform 0.2s ease;
+}
+
+button:hover {
+  background: #a30000;
+  transform: scale(1.11);
 }

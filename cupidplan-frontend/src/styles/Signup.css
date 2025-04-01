@@ -247,3 +247,149 @@
 .selected-item::after:hover {
   color: #d43f3f; /* Darker red on hover */
 }
+
+.signup-help-button {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  background-color: #a40024;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  padding: 10px 14px;
+  font-weight: bold;
+  cursor: pointer;
+  z-index: 999;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+  transition: background-color 0.3s ease;
+}
+
+.signup-help-button:hover {
+  background-color: #a40024;
+}
+
+
+
+.logo-container {
+  display: flex;
+  align-items: center;
+  gap: 10px; /* spacing between image and text */
+  padding: 10px 20px;
+}
+
+.logo-combo {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.cupid-logo {
+  width: 40px;
+  height: 40px;
+}
+
+.logo-text {
+  font-size: 24px;
+  font-weight: bold;
+  color: #222;
+}
+/* === Step 2: Profile Step Enhancements === */
+
+.signup-form input[type="date"],
+.signup-form select,
+.signup-form textarea {
+  width: 100%;
+  padding: 12px;
+  font-size: 15px;
+  border: 1px solid #d1d5db;
+  border-radius: 8px;
+  background-color: #f9fafb;
+  transition: all 0.3s ease;
+}
+
+.signup-form select:focus,
+.signup-form input[type="date"]:focus,
+.signup-form textarea:focus {
+  border-color: #a40024;
+  outline: none;
+  box-shadow: 0 0 5px rgba(255, 74, 110, 0.3);
+}
+
+.signup-form textarea {
+  resize: vertical;
+  min-height: 80px;
+}
+
+/* Upload section improvements */
+.profile-upload {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background-color: #f9fafb;
+  padding: 20px;
+  border-radius: 10px;
+  border: 1px dashed #cbd5e1;
+  margin-bottom: 24px;
+  transition: border 0.3s;
+}
+
+.profile-upload:hover {
+  border-color: #a40024;
+}
+
+.upload-box {
+  width: 130px;
+  height: 130px;
+  border-radius: 50%;
+  background-color: #e5e7eb;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 10px;
+  overflow: hidden;
+}
+
+.upload-icon {
+  font-size: 50px;
+  color: #9ca3af;
+}
+
+.uploaded-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 50%;
+}
+
+.upload-button {
+  margin-top: 10px;
+  background-color: #a40024;
+  color: white;
+  padding: 8px 16px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: 500;
+}
+
+.upload-button:hover {
+  background-color: #a40024;
+}
+
+.upload-note {
+  margin-top: 6px;
+  font-size: 12px;
+  color: #6b7280;
+  text-align: center;
+}
+
+.place-autocomplete-input {
+  width: 100%;
+  padding: 12px;
+  font-size: 16px;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+  margin-bottom: 15px;
+}
+.autocomplete-wrapper {
+  margin-bottom: 15px;
+}

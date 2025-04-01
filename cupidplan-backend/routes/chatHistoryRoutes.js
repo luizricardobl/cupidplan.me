@@ -24,6 +24,7 @@ router.get("/history/:senderEmail/:receiverEmail", async (req, res) => {
     }
 
     const messages = chat.messages.map((msg) => ({
+      _id: msg._id, // ✅ include _id
       sender: msg.sender.email,
       message: msg.text,
       timestamp: msg.timestamp,
@@ -36,4 +37,19 @@ router.get("/history/:senderEmail/:receiverEmail", async (req, res) => {
   }
 });
 
+// ✅ DELETE message by ID
+router.delete("/delete/:id", async (req, res) => {
+  try {
+    const { id } = req.params;
+    await Chat.updateOne(
+      { "messages._id": id },
+      { $pull: { messages: { _id: id } } }
+    );
+    res.json({ success: true });
+  } catch (err) {
+    console.error("Error deleting message:", err);
+    res.status(500).json({ success: false });
+  }
+});
+// ✅ CORRECT EXPORT
 module.exports = router;

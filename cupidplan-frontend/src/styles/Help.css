@@ -1,10 +1,11 @@
 /* Help.css - Styles for Help & Support Page */
 .help-container {
-    max-width: 900px;
-    margin: auto;
-    padding: 40px 20px;
-    text-align: left;
+  background-color: hwb(0 95% 3%);/* Light grey */
+  padding: 40px 20px;
+  min-height: 100vh;
 }
+
+
 
 .help-header {
     font-size: 2rem;

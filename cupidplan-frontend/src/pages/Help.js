@@ -1,10 +1,10 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import "../styles/NavBar.css"; 
+import "../styles/Help.css"; 
 
 const Help = () => {
   return (
-    <div className="page-container">
+    <div className="help-container">
       <h1>Help & Support – CupidPlan.Me</h1>
       <p>Welcome to CupidPlan.Me Support!</p>
       <p>We're here to help! Whether you're experiencing technical issues, need assistance with your profile, or have questions about our features, you've come to the right place.</p>
@@ -78,15 +78,11 @@ const Help = () => {
 
       {/* Additional Resources */}
       <div className="page-footer">
-        <Link to="/terms" className="nav-button">Terms of Service</Link>
-        <Link to="/privacy" className="nav-button">Privacy Policy</Link>
-        <Link to="/community" className="nav-button">Community Guidelines</Link>
-      </div>
-
-      {/* Back Home Button */}
-      <div className="back-home-container">
-        <Link to="/" className="nav-button">Back to Home</Link>
-      </div>
+  <Link to="/terms" className="nav-button">Terms of Service</Link>
+  <Link to="/privacy" className="nav-button">Privacy Policy</Link>
+  <Link to="/guidelines" className="nav-button">Community Guidelines</Link>
+  <Link to="/" className="nav-button">Back to Home</Link>
+</div>
     </div>
   );
 };

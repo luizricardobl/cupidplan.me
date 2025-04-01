@@ -1,10 +1,10 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import "../styles/NavBar.css"; 
+import "../styles/About.css"; 
 
 const About = () => {
   return (
-    <div className="page-container">
+    <div className="about-container">
       <h1>About CupidPlan.Me</h1>
       <p>Welcome to CupidPlan.Me, where meaningful connections begin. Our platform is designed to foster real relationships based on compatibility, shared interests, and effortless date planning.</p>
 
@@ -44,14 +44,11 @@ const About = () => {
       <p>Whether you're here for love, companionship, or a fun date night, **CupidPlan.Me is the only dating platform that matches you and plans your dates effortlessly.** Sign up today and let us take care of everything!</p>
 
       <div className="page-footer">
-        <Link to="/terms" className="nav-button">Terms of Service</Link>
-        <Link to="/privacy" className="nav-button">Privacy Policy</Link>
-        <Link to="/community" className="nav-button">Community Guidelines</Link>
-      </div>
-
-      <div className="back-home-container">
-        <Link to="/" className="nav-button">Back to Home</Link>
-      </div>
+  <Link to="/terms" className="nav-button">Terms of Service</Link>
+  <Link to="/privacy" className="nav-button">Privacy Policy</Link>
+  <Link to="/guidelines" className="nav-button">Community Guidelines</Link>
+  <Link to="/" className="nav-button">Back to Home</Link>
+</div>
     </div>
   );
 };

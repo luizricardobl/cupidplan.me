@@ -125,6 +125,8 @@ const Login = () => {
         </div>
       ) : (
         <div className="login-box">
+          <img src="/images/cupid-logo.png" alt="CupidPlan Logo" className="login-logo" />
+
           <h1>Welcome to CupidPlan.Me</h1>
           <p>Find your perfect match!</p>
 
