@@ -6,6 +6,7 @@ const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const fetch = require("node-fetch"); // ✅ Used for Geocoding API
 const sgMail = require("@sendgrid/mail");
+
 sgMail.setApiKey(process.env.SENDGRID_API_KEY);
 
 // Store OTPs temporarily
@@ -148,11 +149,28 @@ router.post("/verify-otp", async (req, res) => {
       return res.status(400).json({ success: false, message: "Invalid OTP" });
     }
 
-    await User.findOneAndUpdate({ email }, { verified: true });
+    const user = await User.findOneAndUpdate(
+      { email },
+      { verified: true },
+      { new: true }
+    );
+
     delete otpStorage[email];
 
-    console.log("✅ OTP verified successfully");
-    res.status(200).json({ success: true, message: "Email verified successfully" });
+    // ✅ Generate JWT token
+    const token = jwt.sign(
+      { id: user._id, email: user.email },
+      process.env.JWT_SECRET,
+      { expiresIn: "7d" }
+    );
+
+    console.log("✅ OTP verified and token generated");
+    return res.status(200).json({
+      success: true,
+      message: "Email verified successfully",
+      token, // ⬅️ send this back to frontend
+    });
+
   } catch (error) {
     console.error("❌ Error verifying OTP:", error);
     res.status(500).json({ success: false, message: "Error verifying OTP" });

@@ -2,6 +2,8 @@ import React, { useState } from "react";
 import "../styles/profile.css";
 import profilePic from "../assets/default-profile.jpg";
 import logo from "../assets/cupid-plan-logo-2.png";
+import { useEffect } from "react";
+import axios from "axios";
 
 const Profile = () => {
   const [editingProfile, setEditingProfile] = useState(false);
@@ -30,6 +32,44 @@ const Profile = () => {
       adventurous: false,
     },
   });
+
+  useEffect(() => {
+    const fetchProfile = async () => {
+      try {
+        const token = localStorage.getItem("token"); // or sessionStorage
+        console.log("Token being used:", token);
+        const response = await axios.get("http://localhost:5000/api/user/me", {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+  
+        const data = response.data;
+  
+        setProfile((prev) => ({
+          ...prev,
+          name: data.name || prev.name,
+          location: data.location || prev.location,
+          age: data.dob ? new Date().getFullYear() - new Date(data.dob).getFullYear() : prev.age,
+          aboutMe: data.aboutMe || prev.aboutMe,
+          interests: data.hobbies || [],
+          minAge: data.minAge || prev.minAge,
+          maxAge: data.maxAge || prev.maxAge,
+          distance: data.distance || prev.distance,
+          types: {
+            casual: data.relationshipGoal === "casual",
+            romantic: data.relationshipGoal === "romantic",
+            adventurous: data.relationshipGoal === "adventurous",
+          },
+        }));
+      } catch (err) {
+        console.error("Failed to fetch profile:", err);
+      }
+    };
+  
+    fetchProfile();
+  }, []);
+  
 
   const handleProfileChange = (e) => {
     const { id, value } = e.target;

@@ -93,14 +93,20 @@ const Login = () => {
       if (data.success) {
         toast.success("OTP verified successfully!");
   
-        // ✅ Store login based on "Remember Me" selection
+        // ✅ Save the JWT token from response
+        if (data.token) {
+          localStorage.setItem("token", data.token); // 💾 STORE TOKEN
+        }
+  
+        // ✅ Optionally store email
         if (rememberMe) {
           localStorage.setItem("rememberedUser", userInput);
         } else {
-          sessionStorage.setItem("loggedInUser", userInput); // Store for session only
+          sessionStorage.setItem("loggedInUser", userInput);
         }
   
-        setTimeout(() => navigate("/home"), 1000); // Redirect after success
+        // ⏩ Redirect to homepage
+        setTimeout(() => navigate("/home"), 1000);
       } else {
         toast.error("Invalid OTP. Try again.");
       }
@@ -108,6 +114,7 @@ const Login = () => {
       toast.error("Failed to verify OTP.");
     }
   };
+  
   
 
   // ✅ Handle Logout (Clear Remember Me)
