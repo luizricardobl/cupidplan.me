@@ -46,6 +46,21 @@ router.put("/preferences", authenticate, async (req, res) => {
       res.status(500).json({ success: false, message: "Server error" });
     }
   });
+
+  router.put("/about-me", authenticate, async (req, res) => {
+    try {
+      const { aboutMe } = req.body;
+      const User = require("../models/User");
+  
+      await User.findByIdAndUpdate(req.user.id, { aboutMe });
+  
+      res.status(200).json({ success: true, message: "About Me updated!" });
+    } catch (err) {
+      console.error("❌ Failed to update About Me:", err);
+      res.status(500).json({ success: false, message: "Server error" });
+    }
+  });
+  
   
   
 module.exports = router;

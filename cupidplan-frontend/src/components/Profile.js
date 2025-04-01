@@ -115,11 +115,28 @@ const Profile = () => {
     }
   };
 
-  const saveBio = () => {
-    setEditingBio(false);
-    setBioSaved(true);
-    setTimeout(() => setBioSaved(false), 2000);
+  const saveBio = async () => {
+    try {
+      const token = localStorage.getItem("token");
+  
+      await axios.put(
+        "http://localhost:5000/api/user/about-me",
+        { aboutMe: profile.aboutMe },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+  
+      setEditingBio(false);
+      setBioSaved(true);
+      setTimeout(() => setBioSaved(false), 2000);
+    } catch (err) {
+      console.error("❌ Failed to save About Me:", err);
+    }
   };
+  
   const savePreferences = async () => {
     const token = localStorage.getItem("token");
   
