@@ -445,3 +445,13 @@ body {
   font-weight: bold;
   cursor: pointer;
 }
+.delete-picture-btn {
+  margin-top: 10px;
+  background-color: #a40024;
+  color: white;
+  border: none;
+  padding: 5px 8px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 0.85rem;
+}

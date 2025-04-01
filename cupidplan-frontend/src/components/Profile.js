@@ -23,6 +23,7 @@ const Profile = () => {
     location: "",
     age: 28,
     aboutMe: "",
+    profilePicUrl: "",
     interests: [],
     dealbreakers:[],
     minAge: 18,
@@ -55,6 +56,8 @@ const Profile = () => {
           location: data.location || prev.location,
           age: data.dob ? new Date().getFullYear() - new Date(data.dob).getFullYear() : prev.age,
           aboutMe: data.aboutMe || prev.aboutMe,
+          profileImage: data.profileImage || "", 
+          profilePicUrl: data.profilePicUrl || "", 
           interests: data.hobbies || [],
           dealbreakers: data.dealbreakers || [],
           minAge: data.minAge || prev.minAge,
@@ -183,6 +186,34 @@ const Profile = () => {
     }));
     setPrefsChanged(true); // ✅ flag as changed
   };
+  const handleProfilePicChange = async (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+  
+    const formData = new FormData();
+    formData.append("image", file);
+  
+    try {
+      const token = localStorage.getItem("token");
+      const response = await axios.post("http://localhost:5000/api/upload/upload-profile-pic", formData, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "multipart/form-data",
+        },
+      });
+  
+      const newUrl = response.data.url;
+  
+      // ✅ Set it in state
+      setProfile((prev) => ({
+        ...prev,
+        profilePicUrl: newUrl,
+      }));
+      setPrefsChanged(true); 
+    } catch (err) {
+      console.error("❌ Failed to upload image:", err);
+    }
+  };
   
 
   const toggleSetting = (key) => {
@@ -216,34 +247,48 @@ const Profile = () => {
           <div className="background-overlay">
             <div className="container">
               <div className="profile-info">
-                <div className="profile-img-container">
-                  <img src={profilePic} alt="Profile" className="profile-image"
-                  />
-                  <button
-                    className="camera-button"
-                    onClick={() =>
-                      document.getElementById("profilePicInput").click()
-                    }
-                  >
-                    <i className="fa-solid fa-camera"></i>
-                  </button>
-                  <input
-                    type="file"
-                    id="profilePicInput"
-                    accept="image/*"
-                    style={{ display: "none" }}
-                    onChange={(e) => {
-                      const file = e.target.files[0];
-                      if (file) {
-                        const reader = new FileReader();
-                        reader.onload = () => {
-                          document.querySelector(".profile-image").src =
-                            reader.result;
-                        };
-                        reader.readAsDataURL(file);
-                      }
-                    }}
-                  />
+              <div className="profile-img-container">
+  <img
+    src={profile.profilePicUrl || profilePic}
+    alt="Profile"
+    className="profile-image"
+  />
+
+  <button
+    className="camera-button"
+    onClick={() => document.getElementById("profilePicInput").click()}
+  >
+    <i className="fa-solid fa-camera"></i>
+  </button>
+
+  <input
+    type="file"
+    id="profilePicInput"
+    accept="image/*"
+    style={{ display: "none" }}
+    onChange={handleProfilePicChange}
+  />
+
+  {profile.profilePicUrl && (
+    <button
+      className="delete-picture-btn"
+      onClick={async () => {
+        try {
+          const token = localStorage.getItem("token");
+          await axios.delete("http://localhost:5000/api/upload/delete-profile-pic", {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          });
+          setProfile((prev) => ({ ...prev, profilePicUrl: "" }));
+        } catch (err) {
+          console.error("❌ Failed to delete profile picture:", err);
+        }
+      }}
+    >
+      Remove Picture
+    </button>
+  )}
                 </div>
               </div>
               <div className="profile-details">

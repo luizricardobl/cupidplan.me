@@ -16,6 +16,7 @@ const nodemailer = require('nodemailer');
 const sgMail = require("@sendgrid/mail");
 sgMail.setApiKey(process.env.SENDGRID_API_KEY);
 const userRoutes = require('./routes/userRoutes');
+const uploadRoute = require("./routes/uploadRoute");
 
 console.log('All modules loaded successfully.');
 
@@ -37,6 +38,7 @@ const io = new Server(server, {
 app.use(cors());
 app.use(express.json());
 app.use('/api/user', userRoutes);
+app.use("/api/upload", uploadRoute);
 // ✅ MongoDB connection
 mongoose.connect(process.env.MONGO_URI)
   .then(() => console.log("✅ MongoDB connected"))
