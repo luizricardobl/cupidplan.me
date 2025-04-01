@@ -7,6 +7,7 @@ const UserSchema = new mongoose.Schema({
   phone: { type: String },
   profileImage: { type: String, default: "" },
   profilePicUrl: { type: String },
+  profilePicPublicId: { type: String },
   dob: { type: Date, required: true },
   gender: { type: String, required: true },
   interestedIn: { type: String, required: true },

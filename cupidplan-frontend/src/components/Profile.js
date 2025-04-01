@@ -10,6 +10,7 @@ const Profile = () => {
   const [editingBio, setEditingBio] = useState(false);
   const [newTag, setNewTag] = useState("");
   const [showTagInput, setShowTagInput] = useState(false);
+  const [uploadingImage, setUploadingImage] = useState(false);
   const [prefsChanged, setPrefsChanged] = useState(false);
   const [bioSaved, setBioSaved] = useState(false);
   const [toggles, setToggles] = useState({
@@ -192,6 +193,7 @@ const Profile = () => {
   
     const formData = new FormData();
     formData.append("image", file);
+    setUploadingImage(true);
   
     try {
       const token = localStorage.getItem("token");
@@ -202,18 +204,19 @@ const Profile = () => {
         },
       });
   
-      const newUrl = response.data.url;
-  
-      // ✅ Set it in state
+      const newUrl = response.data.url + `?cb=${Date.now()}`; // 💡 cache-busting trick
       setProfile((prev) => ({
         ...prev,
         profilePicUrl: newUrl,
       }));
-      setPrefsChanged(true); 
     } catch (err) {
       console.error("❌ Failed to upload image:", err);
+      alert("Failed to upload image. Please try again.");
+    } finally {
+      setUploadingImage(false);
     }
   };
+  
   
 
   const toggleSetting = (key) => {
@@ -254,12 +257,15 @@ const Profile = () => {
     className="profile-image"
   />
 
-  <button
-    className="camera-button"
-    onClick={() => document.getElementById("profilePicInput").click()}
-  >
-    <i className="fa-solid fa-camera"></i>
-  </button>
+<button
+  className="camera-button"
+  onClick={() => !uploadingImage && document.getElementById("profilePicInput").click()}
+  disabled={uploadingImage}
+  title={uploadingImage ? "Uploading..." : "Upload new picture"}
+>
+  <i className="fa-solid fa-camera"></i>
+</button>
+
 
   <input
     type="file"
