@@ -24,6 +24,7 @@ const Profile = () => {
     age: 28,
     aboutMe: "",
     interests: [],
+    dealbreakers:[],
     minAge: 18,
     maxAge: 100,
     distance: 50,
@@ -55,6 +56,7 @@ const Profile = () => {
           age: data.dob ? new Date().getFullYear() - new Date(data.dob).getFullYear() : prev.age,
           aboutMe: data.aboutMe || prev.aboutMe,
           interests: data.hobbies || [],
+          dealbreakers: data.dealbreakers || [],
           minAge: data.minAge || prev.minAge,
           maxAge: data.maxAge || prev.maxAge,
           distance: data.distance || prev.distance,
@@ -87,6 +89,7 @@ const Profile = () => {
           distance: profile.distance,
           relationshipGoal: profile.types.casual ? "casual" : profile.types.romantic ? "romantic" : profile.types.adventurous ? "adventurous" : "",
           types: profile.types,
+          dealbreakers: profile.dealbreakers,
         },
         {
           headers: {
@@ -129,7 +132,8 @@ const Profile = () => {
           maxAge: profile.maxAge,
           distance: profile.distance,
           types: profile.types,
-          hobbies: profile.interests, // ✅ Save to backend
+          hobbies: profile.interests, 
+          dealbreakers: profile.dealbreakers,
         },
         {
           headers: {
@@ -527,6 +531,59 @@ const Profile = () => {
                     <div className="toggle-circle"></div>
                   </button>
                 </div>
+                <div className="profile-section">
+  <h2 className="section-title">Dealbreakers</h2>
+  <div className="interest-tags">
+    <div className="tags-container">
+      {profile.dealbreakers.map((tag, index) => (
+        <span
+          key={index}
+          className="tag"
+          onClick={() => {
+            setProfile((prev) => ({
+              ...prev,
+              dealbreakers: prev.dealbreakers.filter((t) => t !== tag),
+            }));
+            setPrefsChanged(true);
+          }}
+        >
+          {tag} <span className="remove-tag">×</span>
+        </span>
+      ))}
+    </div>
+    {showTagInput === "dealbreaker" ? (
+      <input
+        type="text"
+        className="tag-input"
+        placeholder="Add Dealbreaker"
+        value={newTag}
+        onChange={(e) => setNewTag(e.target.value)}
+        onKeyDown={(e) => {
+          if (e.key === "Enter") {
+            if (newTag && !profile.dealbreakers.includes(newTag)) {
+              setProfile((prev) => ({
+                ...prev,
+                dealbreakers: [...prev.dealbreakers, newTag],
+              }));
+              setPrefsChanged(true);
+            }
+            setNewTag("");
+            setShowTagInput(false);
+          }
+        }}
+        onBlur={() => setShowTagInput(false)}
+      />
+    ) : (
+      <button
+        className="add-interest-btn"
+        onClick={() => setShowTagInput("dealbreaker")}
+      >
+        + Add Dealbreaker
+      </button>
+    )}
+  </div>
+</div>
+
               </div>
             </div>
           </div>
