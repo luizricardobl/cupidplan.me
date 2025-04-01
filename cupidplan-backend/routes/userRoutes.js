@@ -14,5 +14,36 @@ router.get('/me', authenticate, async (req, res) => {
     res.status(500).json({ message: 'Server error' });
   }
 });
-
+// PUT /api/user/preferences
+router.put("/preferences", authenticate, async (req, res) => {
+    try {
+      const { minAge, maxAge, distance, types } = req.body;
+  
+      const updatedUser = await User.findByIdAndUpdate(
+        req.user.id,
+        {
+          minAge,
+          maxAge,
+          distance,
+          types, // ✅ store the full types object
+        },
+        { new: true }
+      );
+  
+      if (!updatedUser) {
+        return res.status(404).json({ success: false, message: "User not found" });
+      }
+  
+      res.status(200).json({
+        success: true,
+        message: "Preferences updated",
+        data: updatedUser,
+      });
+    } catch (error) {
+      console.error("❌ Error updating preferences:", error);
+      res.status(500).json({ success: false, message: "Server error" });
+    }
+  });
+  
+  
 module.exports = router;

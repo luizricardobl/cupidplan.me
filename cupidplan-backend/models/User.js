@@ -25,9 +25,21 @@ const UserSchema = new mongoose.Schema({
   hobbies: [String],
   dealbreakers: [String],
   verified: { type: Boolean, default: false },
+
+  // ✅ New preference fields
+  minAge: { type: Number, default: 18 },
+  maxAge: { type: Number, default: 99 },
+  distance: { type: Number, default: 50 },
+
+  // ✅ New date types (multi-choice toggles)
+  types: {
+    casual: { type: Boolean, default: false },
+    romantic: { type: Boolean, default: false },
+    adventurous: { type: Boolean, default: false },
+  }
 });
 
-// ✅ Ensure the geoLocation field is indexed for location queries
+// ✅ Index geoLocation for spatial queries
 UserSchema.index({ geoLocation: "2dsphere" });
 
 module.exports = mongoose.model("User", UserSchema);

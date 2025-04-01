@@ -10,6 +10,7 @@ const Profile = () => {
   const [editingBio, setEditingBio] = useState(false);
   const [newTag, setNewTag] = useState("");
   const [showTagInput, setShowTagInput] = useState(false);
+  const [prefsChanged, setPrefsChanged] = useState(false);
   const [bioSaved, setBioSaved] = useState(false);
   const [toggles, setToggles] = useState({
     showProfile: false,
@@ -18,13 +19,13 @@ const Profile = () => {
   });
 
   const [profile, setProfile] = useState({
-    name: "User",
-    location: "New York, NY",
+    name: "",
+    location: "",
     age: 28,
     aboutMe: "",
     interests: [],
     minAge: 18,
-    maxAge: 30,
+    maxAge: 100,
     distance: 50,
     types: {
       casual: false,
@@ -32,6 +33,7 @@ const Profile = () => {
       adventurous: false,
     },
   });
+  
 
   useEffect(() => {
     const fetchProfile = async () => {
@@ -56,11 +58,8 @@ const Profile = () => {
           minAge: data.minAge || prev.minAge,
           maxAge: data.maxAge || prev.maxAge,
           distance: data.distance || prev.distance,
-          types: {
-            casual: data.relationshipGoal === "casual",
-            romantic: data.relationshipGoal === "romantic",
-            adventurous: data.relationshipGoal === "adventurous",
-          },
+          types: data.types || prev.types,
+ 
         }));
       } catch (err) {
         console.error("Failed to fetch profile:", err);
@@ -76,8 +75,30 @@ const Profile = () => {
     setProfile((prev) => ({ ...prev, [id]: value }));
   };
 
-  const saveProfile = () => {
-    setEditingProfile(false);
+  const saveProfile = async () => {
+    try {
+      const token = localStorage.getItem("token");
+  
+      await axios.put(
+        "http://localhost:5000/api/user/preferences",
+        {
+          minAge: profile.minAge,
+          maxAge: profile.maxAge,
+          distance: profile.distance,
+          relationshipGoal: profile.types.casual ? "casual" : profile.types.romantic ? "romantic" : profile.types.adventurous ? "adventurous" : "",
+          types: profile.types,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+  
+      setEditingProfile(false);
+    } catch (error) {
+      console.error("Error saving profile preferences:", error);
+    }
   };
 
   const handleAboutChange = (e) => {
@@ -92,7 +113,37 @@ const Profile = () => {
     setBioSaved(true);
     setTimeout(() => setBioSaved(false), 2000);
   };
-
+  const savePreferences = async () => {
+    const token = localStorage.getItem("token");
+  
+    // Get the selected relationshipGoal
+    const relationshipGoal = Object.entries(profile.types).find(
+      ([type, isChecked]) => isChecked
+    )?.[0];
+  
+    try {
+      const res = await axios.put(
+        "http://localhost:5000/api/user/preferences",
+        {
+          minAge: profile.minAge,
+          maxAge: profile.maxAge,
+          distance: profile.distance,
+          types: profile.types, // ✅ Only send the object now
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+  
+      console.log("✅ Preferences saved:", res.data);
+      setPrefsChanged(false); // Reset the "Save" button trigger
+    } catch (err) {
+      console.error("❌ Failed to save preferences:", err);
+    }
+  };
+  
   const addInterest = () => {
     if (newTag && !profile.interests.includes(newTag)) {
       setProfile((prev) => ({
@@ -113,15 +164,18 @@ const Profile = () => {
   const handleSliderChange = (e) => {
     const { id, value } = e.target;
     setProfile((prev) => ({ ...prev, [id]: Number(value) }));
+    setPrefsChanged(true); // ✅ flag as changed
   };
-
+  
   const handleCheckboxChange = (e) => {
     const { value, checked } = e.target;
     setProfile((prev) => ({
       ...prev,
       types: { ...prev.types, [value]: checked },
     }));
+    setPrefsChanged(true); // ✅ flag as changed
   };
+  
 
   const toggleSetting = (key) => {
     setToggles((prev) => ({ ...prev, [key]: !prev[key] }));
@@ -364,13 +418,19 @@ const Profile = () => {
                           <input
                             type="checkbox"
                             value={type}
-                            checked={profile.types[type]}
+                            checked={!!profile.types[type]}
                             onChange={handleCheckboxChange}
                           />
                           {type.charAt(0).toUpperCase() + type.slice(1)}
                         </label>
                       ))}
                     </div>
+                    {prefsChanged && (
+  <button className="save-preferences-btn" onClick={savePreferences}>
+    Save Preferences
+  </button>
+)}
+
                   </div>
                 </div>
               </div>
