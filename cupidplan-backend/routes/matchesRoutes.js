@@ -46,6 +46,7 @@ router.get("/:email", async (req, res) => {
       const sharedDealbreakers = user.dealbreakers.filter(d =>
         currentUser.dealbreakers.includes(d)
       );
+      const dealbreakerPenalty = sharedDealbreakers.length * 10;
 
       const sharedTypes = Object.entries(currentUser.types).filter(
         ([key, value]) => value && user.types && user.types[key]
@@ -54,7 +55,7 @@ router.get("/:email", async (req, res) => {
       const typeScore = sharedTypes * 20;
 
       const hobbyScore = (sharedHobbies.length / (currentUser.hobbies.length || 1)) * 100;
-      const dealbreakerPenalty = sharedDealbreakers.length * 10;
+      
 
       // ✅ Add location score only if both users have geoLocation
       let locationScore = 0;
@@ -64,12 +65,15 @@ router.get("/:email", async (req, res) => {
 
       // ✅ Final weighted match score
       const matchPercentage = Math.max(
-        Math.round(0.4 * typeScore + 0.3 * hobbyScore + 0.2 * locationScore - dealbreakerPenalty),
+        Math.round(
+          0.4 * typeScore +   // more weight on shared types
+          0.35 * hobbyScore + // more weight on shared hobbies
+          0.15 * locationScore - 
+          dealbreakerPenalty  // heavier penalty now
+        ),
         0
       );
-      
-      
-
+     
       return {
         ...user.toObject(),
         matchPercentage,
