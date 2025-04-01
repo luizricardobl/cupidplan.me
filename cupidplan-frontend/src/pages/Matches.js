@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import "../styles/Matches.css";
+import axios from "axios"; 
+
 
 const Matches = () => {
   const [matches, setMatches] = useState([]);
@@ -48,6 +50,26 @@ const Matches = () => {
 
   const currentMatch = matches[currentIndex];
 
+  const handleLike = async () => {
+    try {
+      const token = localStorage.getItem("token");
+      await axios.post(
+        "http://localhost:5000/api/likes",
+        { receiverId: currentMatch._id },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      alert("You liked this user!");
+    } catch (err) {
+      console.error("Error liking user:", err);
+      alert("Failed to like user. You might've already liked them.");
+    }
+  };
+  
+
   return (
     <div className="matches-container">
       <h1>CupidPlan.me</h1>
@@ -67,17 +89,21 @@ const Matches = () => {
             <p>{currentMatch.location || "Location not provided"}</p>
             <p className="match-percent">{currentMatch.matchPercentage}% Match</p>
             <div className="match-buttons">
-              <button
-                onClick={() =>
-                  navigate("/chat", {
-                    state: { selectedUserEmail: currentMatch.email },
-                  })
-                }
-              >
-                Start Chat
-              </button>
-              <button className="profile-btn">View Profile</button>
-            </div>
+  <button
+    onClick={() =>
+      navigate("/chat", {
+        state: { selectedUserEmail: currentMatch.email },
+      })
+    }
+  >
+    Start Chat
+  </button>
+  <button className="profile-btn">View Profile</button>
+  <button className="like-btn" onClick={handleLike}>
+    ❤️ Like
+  </button> {/* NEW Like  */}
+</div>
+
           </div>
         </div>
       ) : (
