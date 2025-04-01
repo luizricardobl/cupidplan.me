@@ -34,11 +34,15 @@ const io = new Server(server, {
   }
 });
 
+
+
 // ✅ Middleware
 app.use(cors());
 app.use(express.json());
 app.use('/api/user', userRoutes);
 app.use("/api/upload", uploadRoute);
+app.use("/api/likes", require("./routes/likeRoutes"));
+
 // ✅ MongoDB connection
 mongoose.connect(process.env.MONGO_URI)
   .then(() => console.log("✅ MongoDB connected"))

@@ -11,6 +11,7 @@ const Profile = () => {
   const [newTag, setNewTag] = useState("");
   const [showTagInput, setShowTagInput] = useState(false);
   const [uploadingImage, setUploadingImage] = useState(false);
+  const [likesThisWeek, setLikesThisWeek] = useState(0);
   const [prefsChanged, setPrefsChanged] = useState(false);
   const [bioSaved, setBioSaved] = useState(false);
   const [toggles, setToggles] = useState({
@@ -41,12 +42,11 @@ const Profile = () => {
   useEffect(() => {
     const fetchProfile = async () => {
       try {
-        const token = localStorage.getItem("token"); // or sessionStorage
+        const token = localStorage.getItem("token");
         console.log("Token being used:", token);
+  
         const response = await axios.get("http://localhost:5000/api/user/me", {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
+          headers: { Authorization: `Bearer ${token}` },
         });
   
         const data = response.data;
@@ -65,15 +65,32 @@ const Profile = () => {
           maxAge: data.maxAge || prev.maxAge,
           distance: data.distance || prev.distance,
           types: data.types || prev.types,
- 
         }));
       } catch (err) {
         console.error("Failed to fetch profile:", err);
       }
     };
   
-    fetchProfile();
+    const fetchLikesCount = async () => {
+      try {
+        const token = localStorage.getItem("token");
+        if (!token) {
+          console.warn("⚠️ No token found in localStorage");
+          return;
+        }
+        const res = await axios.get("http://localhost:5000/api/likes/received/count", {
+          headers: { Authorization: `Bearer ${token}` },
+        });
+        setLikesThisWeek(res.data.count);
+      } catch (err) {
+        console.error("❌ Failed to fetch likes:", err);
+      }
+    };
+  
+    fetchProfile();       // ✅ calls the profile fetch
+    fetchLikesCount();    // ✅ calls the likes count fetch
   }, []);
+  
   
 
   const handleProfileChange = (e) => {
@@ -550,7 +567,8 @@ const Profile = () => {
                 <div className="stats-box-content">
                   <i className="fa-solid fa-heart stats-icon"></i>
                   <div className="stats-details">
-                    <h3 className="stats-value">30 Likes</h3>
+                  <h3 className="stats-value">{likesThisWeek} Likes</h3>
+
                     <p className="stats-timeframe">This week</p>
                   </div>
                 </div>
