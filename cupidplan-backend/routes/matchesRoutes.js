@@ -47,6 +47,12 @@ router.get("/:email", async (req, res) => {
         currentUser.dealbreakers.includes(d)
       );
 
+      const sharedTypes = Object.entries(currentUser.types).filter(
+        ([key, value]) => value && user.types && user.types[key]
+      ).length;
+
+      const typeScore = sharedTypes * 20;
+
       const hobbyScore = (sharedHobbies.length / (currentUser.hobbies.length || 1)) * 100;
       const dealbreakerPenalty = sharedDealbreakers.length * 10;
 
@@ -58,9 +64,11 @@ router.get("/:email", async (req, res) => {
 
       // ✅ Final weighted match score
       const matchPercentage = Math.max(
-        Math.round(0.6 * hobbyScore + 0.3 * locationScore - dealbreakerPenalty),
+        Math.round(0.4 * typeScore + 0.3 * hobbyScore + 0.2 * locationScore - dealbreakerPenalty),
         0
       );
+      
+      
 
       return {
         ...user.toObject(),

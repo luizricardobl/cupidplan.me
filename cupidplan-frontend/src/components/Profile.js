@@ -128,7 +128,8 @@ const Profile = () => {
           minAge: profile.minAge,
           maxAge: profile.maxAge,
           distance: profile.distance,
-          types: profile.types, // ✅ Only send the object now
+          types: profile.types,
+          hobbies: profile.interests, // ✅ Save to backend
         },
         {
           headers: {
@@ -138,7 +139,7 @@ const Profile = () => {
       );
   
       console.log("✅ Preferences saved:", res.data);
-      setPrefsChanged(false); // Reset the "Save" button trigger
+      setPrefsChanged(false);
     } catch (err) {
       console.error("❌ Failed to save preferences:", err);
     }
@@ -151,15 +152,18 @@ const Profile = () => {
         interests: [...prev.interests, newTag],
       }));
       setNewTag("");
+      setPrefsChanged(true); // ✅ Trigger save button
     }
   };
-
+  
   const removeInterest = (tag) => {
     setProfile((prev) => ({
       ...prev,
       interests: prev.interests.filter((t) => t !== tag),
     }));
+    setPrefsChanged(true); // ✅ Trigger save button
   };
+  
 
   const handleSliderChange = (e) => {
     const { id, value } = e.target;
