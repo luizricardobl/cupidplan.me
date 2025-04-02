@@ -724,21 +724,22 @@ useEffect(() => {
                 </div>
                 {unreadSenders.length > 0 && toggles.aiRecommendations ? (
   <div className="stats-box-content chat-alert">
-    <i className="fa-solid fa-message stats-icon"></i>
-    <div className="stats-details">
-      <h3 className="stats-value">New Messages</h3>
-      {unreadSenders.map((sender) => (
-        <div
-          key={sender.email}
-          style={{ marginTop: "6px", cursor: "pointer" }}
-          onClick={() => goToChat(sender.email)}
-        >
-          <strong>{sender.name}</strong> messaged you!
-          <p style={{ color: "blue" }}>Click to chat</p>
-        </div>
-      ))}
-    </div>
+  <i className="fa-solid fa-message stats-icon"></i>
+  <div className="stats-details">
+    <h3 className="stats-value">New Messages</h3>
+    {unreadSenders.map((sender) => (
+      <div
+        key={sender.email}
+        className="chat-alert-message"
+        onClick={() => goToChat(sender.email)}
+      >
+        <strong className="sender-name">{sender.name}</strong> sent you a message
+        <p className="click-to-chat">Click to chat</p>
+      </div>
+    ))}
   </div>
+</div>
+
 ) : (
   <div className="stats-box-content">
     <i className="fa-solid fa-user-group stats-icon"></i>

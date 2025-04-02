@@ -560,3 +560,35 @@ body.dark-mode .stats-icon {
 }
 
 
+
+
+
+.chat-alert-message {
+  background-color: #fff0f5;
+  border-left: 4px solid #ff4b7d;
+  padding: 10px 14px;
+  margin-top: 10px;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+}
+
+.chat-alert-message:hover {
+  background-color: #ffe6ee;
+}
+
+.sender-name {
+  display: block;
+  font-weight: 600;
+  color: #cc005f;
+  font-size: 1rem;
+  margin-bottom: 4px;
+}
+
+.click-to-chat {
+  margin: 0;
+  font-size: 0.9rem;
+  color: #007bff;
+  text-decoration: underline;
+}
