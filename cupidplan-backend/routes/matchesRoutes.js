@@ -36,7 +36,15 @@ router.get("/:email", async (req, res) => {
       return res.status(404).json({ success: false, message: "User not found" });
     }
 
-    const allUsers = await User.find({ email: { $ne: email } });
+    const allUsers = await User.find({
+      email: { $ne: email },
+      $or: [{ hideProfile: { $exists: false } }, { hideProfile: false }]
+    });
+    
+    
+    
+    
+    
 
     const matches = allUsers.map((user) => {
       const sharedHobbies = user.hobbies.filter(hobby =>

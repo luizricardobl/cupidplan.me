@@ -302,12 +302,14 @@ const Profile = () => {
     try {
       const token = localStorage.getItem("token");
       const body = {};
-  
+      
       if (key === "showProfile") {
-        body.hideProfile = !newValue;
+        body.hideProfile = newValue;
       } else if (key === "aiRecommendations") {
         body.chatNotifications = newValue;
       }
+      console.log("Saving setting:", key, "→", body);
+
   
       await axios.put("http://localhost:5000/api/user/settings/toggles", body, {
 
