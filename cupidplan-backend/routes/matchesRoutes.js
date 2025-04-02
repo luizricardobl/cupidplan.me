@@ -25,6 +25,48 @@ const calculateDistanceScore = (current, other) => {
   // Convert distance to a score: closer = higher
   return Math.max(100 - distance, 0); // Cap at 0 for long distances
 };
+router.get("/recent/:email", async (req, res) => {
+  const email = req.params.email;
+
+  try {
+    const user = await User.findOne({ email });
+    if (!user) return res.status(404).json({ success: false, message: "User not found" });
+
+    const allUsers = await User.find({
+      _id: { $ne: user._id },
+      "hideProfile": false,
+    });
+
+    const uniqueMatches = [];
+    const seenEmails = new Set();
+
+    for (const otherUser of allUsers) {
+      const shared = (otherUser.hobbies || []).filter((h) =>
+        (user.hobbies || []).map(h => h.toLowerCase()).includes(h.toLowerCase())
+      );
+      
+
+      //if (shared.length > 0 && !seenEmails.has(otherUser.email)) {//
+      if (!seenEmails.has(otherUser.email)) {
+        uniqueMatches.push({
+          name: otherUser.name,
+          email: otherUser.email,
+          profilePicUrl: otherUser.profilePicUrl,
+          sharedHobbies: shared,
+        });
+        seenEmails.add(otherUser.email);
+      }
+
+      if (uniqueMatches.length >= 20) break; 
+    }
+
+    res.json({ success: true, recentMatches: uniqueMatches });
+  } catch (err) {
+    console.error("❌ Error fetching recent matches:", err);
+    res.status(500).json({ success: false, message: "Internal server error" });
+  }
+});
+
 
 // GET /api/matches/:email
 router.get("/:email", async (req, res) => {
@@ -41,11 +83,6 @@ router.get("/:email", async (req, res) => {
       $or: [{ hideProfile: { $exists: false } }, { hideProfile: false }]
     });
     
-    
-    
-    
-    
-
     const matches = allUsers.map((user) => {
       const sharedHobbies = user.hobbies.filter(hobby =>
         currentUser.hobbies.includes(hobby)

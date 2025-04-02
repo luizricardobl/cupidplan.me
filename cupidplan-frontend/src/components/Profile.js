@@ -22,6 +22,7 @@ const Profile = () => {
   const [uploadingImage, setUploadingImage] = useState(false);
   const [likesThisWeek, setLikesThisWeek] = useState(0);
   const [prefsChanged, setPrefsChanged] = useState(false);
+  const [recentMatches, setRecentMatches] = useState([]);
   const [unreadSenders, setUnreadSenders] = useState([]);
   const [bioSaved, setBioSaved] = useState(false);
   const navigate = useNavigate();
@@ -139,6 +140,48 @@ const Profile = () => {
     fetchLikesCount();    // ✅ calls the likes count fetch
     fetchUnreadNotifications();
   }, []);
+  const shuffle = (array) => {
+    let currentIndex = array.length, randomIndex;
+  
+    while (currentIndex !== 0) {
+      randomIndex = Math.floor(Math.random() * currentIndex);
+      currentIndex--;
+      [array[currentIndex], array[randomIndex]] = [
+        array[randomIndex], array[currentIndex]];
+    }
+  
+    return array;
+  };
+  
+  const fetchRecentMatches = async () => {
+    try {
+      const res = await axios.get(
+        `http://localhost:5000/api/matches/recent/${
+          localStorage.getItem("rememberedUser") || sessionStorage.getItem("loggedInUser")
+        }`
+      );
+  
+      if (res.data.success) {
+        const shuffled = shuffle(res.data.recentMatches);
+        console.log("🌀 Shuffled Matches:", shuffled);
+        setRecentMatches(shuffled.slice(0, 2));
+      }
+    } catch (err) {
+      console.error("❌ Failed to fetch recent matches:", err);
+    }
+  };
+  
+  
+  useEffect(() => {
+    fetchRecentMatches(); 
+  
+    const interval = setInterval(() => {
+      fetchRecentMatches(); 
+    },40000); 
+  
+    return () => clearInterval(interval); 
+  }, []);
+  
   
   useEffect(() => {
   if (toggles.darkMode) {
@@ -705,32 +748,26 @@ useEffect(() => {
               <div className="match-history">
                 <h2 className="section-title">Recent Matches</h2>
                 <div className="match-history-grid">
-                  <div className="match-box">
-                    <div className="match-box-content">
-                      <img
-                        src={profilePic}
-                        alt="Match"
-                        className="match-profile"
-                      />
-                      <div className="match-details">
-                        <h3 className="match-name">Sarah Parker</h3>
-                        <p className="match-timeframe">Matched 2 days ago</p>
-                      </div>
-                    </div>
-                  </div>
-                  <div className="match-box">
-                    <div className="match-box-content">
-                      <img
-                        src={profilePic}
-                        alt="Match"
-                        className="match-profile"
-                      />
-                      <div className="match-details">
-                        <h3 className="match-name">John Smith</h3>
-                        <p className="match-timeframe">Matched 3 days ago</p>
-                      </div>
-                    </div>
-                  </div>
+                {recentMatches.map((match, index) => (
+  <div className="match-box" key={index}>
+    <div className="match-box-content">
+      <img
+        src={match.profilePicUrl || profilePic}
+        alt="Match"
+        className="match-profile"
+      />
+      <div className="match-details">
+        <h3 className="match-name">{match.name}</h3>
+        <p className="match-timeframe">
+  {match.sharedHobbies?.length > 0
+    ? `You both like ${match.sharedHobbies[0]}!`
+    : `Someone new to explore!`}
+</p>
+
+      </div>
+    </div>
+  </div>
+))}
                 </div>
               </div>
             </div>
