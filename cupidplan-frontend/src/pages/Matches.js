@@ -2,8 +2,12 @@ import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import "../styles/Matches.css";
 import axios from "axios"; 
+import { io } from "socket.io-client";
 
-
+const socket = io("http://localhost:5000", {
+  transports: ["websocket"],
+  withCredentials: true,
+});
 const Matches = () => {
   const [matches, setMatches] = useState([]);
   const [currentIndex, setCurrentIndex] = useState(0);
@@ -46,6 +50,24 @@ const Matches = () => {
     if (loggedInEmail) {
       fetchMatches();
     }
+    socket.on("profileVisibilityChanged", ({ email, hidden }) => {
+      console.log(`🔄 Match visibility update received for ${email}: ${hidden ? "HIDDEN" : "VISIBLE"}`);
+    
+      setMatches((prevMatches) => {
+        if (hidden) {
+          // Remove the hidden profile
+          return prevMatches.filter((match) => match.email !== email);
+        } else {
+          // Re-fetch to add them back if they should now be shown
+          fetchMatches(); // Make sure this function is defined
+          return prevMatches;
+        }
+      });
+    });
+    
+    return () => {
+      socket.off("profileVisibilityChanged");
+    };
   }, [loggedInEmail]);
 
   const nextMatch = () => {

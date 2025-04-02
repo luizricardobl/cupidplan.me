@@ -105,6 +105,12 @@ io.on("connection", (socket) => {
     socket.join(room);
     console.log(`🟢 User ${socket.id} joined room: ${room}`);
   });
+  
+  socket.on("profileVisibilityChanged", ({ email, hidden }) => {
+    console.log(`👤 Profile visibility changed for ${email}: ${hidden ? "HIDDEN" : "VISIBLE"}`);
+    
+    socket.broadcast.emit("profileVisibilityChanged", { email, hidden });
+  });
 
   socket.on("typing", ({ room, sender }) => {
     socket.to(room).emit("partnerTyping", { sender, room });

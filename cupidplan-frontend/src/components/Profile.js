@@ -5,8 +5,12 @@ import logo from "../assets/cupid-plan-logo-2.png";
 import { useEffect } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import { io } from "socket.io-client";
 
-
+const socket = io("http://localhost:5000", {
+  transports: ["websocket"],
+  withCredentials: true,
+});
 
 const Profile = () => {
   const [editingProfile, setEditingProfile] = useState(false);
@@ -328,6 +332,13 @@ const Profile = () => {
       
       if (key === "showProfile") {
         body.hideProfile = newValue;
+        socket.emit("profileVisibilityChanged", {
+          email:
+            profile.email ||
+            localStorage.getItem("rememberedUser") ||
+            sessionStorage.getItem("loggedInUser"),
+          hidden: newValue,
+        });        
       } else if (key === "aiRecommendations") {
         body.chatNotifications = newValue;
       }
