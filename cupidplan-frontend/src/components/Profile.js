@@ -103,7 +103,7 @@ const Profile = () => {
         }));
         setToggles((prev) => ({
           ...prev, 
-          showProfile: !data.hideProfile,
+          showProfile: !data.hideProfile === false,
           aiRecommendations: !!data.chatNotifications, 
         }));
         
