@@ -42,6 +42,8 @@ app.use(express.json());
 app.use('/api/user', userRoutes);
 app.use("/api/upload", uploadRoute);
 app.use("/api/likes", require("./routes/likeRoutes"));
+app.use("/api/chat", require("./routes/chatRoutes"));
+
 
 // ✅ MongoDB connection
 mongoose.connect(process.env.MONGO_URI)
@@ -72,6 +74,7 @@ app.use("/api/dates", dateRoutes);
 app.use("/api/matches", matchRoutes);
 app.use("/api/chat", chatRoutes);
 app.use("/api/chat", chatHistoryRoutes);
+app.use("/api/messages", chatHistoryRoutes);
 
 // ✅ OTP Verification Route
 app.post("/api/verify-otp", (req, res) => {

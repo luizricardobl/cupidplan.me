@@ -102,19 +102,16 @@ const Matches = () => {
             <p className="match-percent">{currentMatch.matchPercentage}% Match</p>
             <div className="match-buttons">
   <button
-    onClick={() =>
-      navigate("/chat", {
-        state: { selectedUserEmail: currentMatch.email },
-      })
-    }
+    onClick={() => navigate(`/chat/${currentMatch.email}`)}
   >
     Start Chat
   </button>
   <button className="profile-btn">View Profile</button>
   <button className="like-btn" onClick={handleLike}>
     ❤️ Like
-  </button> {/* NEW Like  */}
+  </button>
 </div>
+
 
           </div>
         </div>

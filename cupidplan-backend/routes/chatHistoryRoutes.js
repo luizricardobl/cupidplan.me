@@ -2,6 +2,7 @@ const express = require("express");
 const router = express.Router();
 const Chat = require("../models/Chat");
 const User = require("../models/User");
+const authenticateUser = require('../middleware/auth');
 
 // ✅ GET chat history between two users (by email)
 router.get("/history/:senderEmail/:receiverEmail", async (req, res) => {
@@ -52,4 +53,37 @@ router.delete("/delete/:id", async (req, res) => {
   }
 });
 // ✅ CORRECT EXPORT
+router.get("/unread", authenticateUser, async (req, res) => {
+  try {
+    const currentUser = await User.findById(req.user.id);
+    if (!currentUser) {
+      return res.status(404).json({ success: false, message: "User not found" });
+    }
+
+    if (!currentUser.chatNotifications) {
+      return res.status(200).json({ showNotification: false });
+    }
+
+    const chats = await Chat.find({ participants: currentUser._id }).populate("messages.sender participants");
+
+    const unreadSenders = [];
+
+    for (const chat of chats) {
+      const lastMsg = chat.messages[chat.messages.length - 1];
+      if (lastMsg && String(lastMsg.sender._id) !== String(currentUser._id)) {
+        const sender = chat.participants.find(p => String(p._id) === String(lastMsg.sender._id));
+        if (sender && !unreadSenders.some(s => String(s._id) === String(sender._id))) {
+          unreadSenders.push({ _id: sender._id, name: sender.name, email: sender.email });
+
+        }
+      }
+    }
+
+    return res.status(200).json({ showNotification: true, senders: unreadSenders });
+  } catch (err) {
+    console.error("❌ Error in unread route:", err);
+    res.status(500).json({ success: false, message: "Server error" });
+  }
+});
+
 module.exports = router;

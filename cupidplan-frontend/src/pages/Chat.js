@@ -1,7 +1,9 @@
 import React, { useEffect, useState, useRef } from "react";
-import { useLocation } from "react-router-dom";
+
 import { io } from "socket.io-client";
 import "../styles/Chat.css";
+import { useParams } from "react-router-dom";
+
 
 const socket = io("http://localhost:5000", {
   transports: ["websocket"],
@@ -9,8 +11,9 @@ const socket = io("http://localhost:5000", {
 });
 
 const Chat = () => {
-  const location = useLocation();
-  const selectedUserEmail = location.state?.selectedUserEmail;
+  
+  const { email: selectedUserEmail } = useParams();
+
   const currentUserEmail =
     localStorage.getItem("rememberedUser") || sessionStorage.getItem("loggedInUser");
 
@@ -123,7 +126,14 @@ const Chat = () => {
       console.error("❌ Error deleting message:", err);
     }
   };
+  const { email } = useParams();
 
+  useEffect(() => {
+    console.log("🟢 Chatting with:", email); // ✅ Test to make sure it works
+  
+    // Load messages with this email (optional, depending on your logic)
+  }, [email]);
+  
   return (
     <>
       <div className="chat-container">

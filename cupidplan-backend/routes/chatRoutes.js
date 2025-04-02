@@ -2,6 +2,8 @@ const express = require("express");
 const router = express.Router();
 const Chat = require("../models/Chat");
 const User = require("../models/User");
+const authenticateUser = require('../middleware/auth');
+
 
 // ✅ Create or Get Existing Chat Between Two Users
 router.post("/start", async (req, res) => {
@@ -65,5 +67,37 @@ router.get("/:chatId", async (req, res) => {
     res.status(500).json({ success: false, message: "Error fetching messages" });
   }
 });
+
+router.post("/mark-read", authenticateUser, async (req, res) => {
+  const { senderEmail } = req.body;
+
+  try {
+    const currentUser = await User.findById(req.user.id);
+    const sender = await User.findOne({ email: senderEmail });
+
+    const chat = await Chat.findOne({
+      participants: { $all: [currentUser._id, sender._id] },
+    });
+
+    if (chat) {
+      chat.messages.forEach((msg) => {
+        if (
+          String(msg.sender) === String(sender._id) &&
+          msg.read === false
+        ) {
+          msg.read = true;
+        }
+      });
+
+      await chat.save();
+    }
+
+    return res.json({ success: true });
+  } catch (err) {
+    console.error("❌ Error marking messages as read:", err);
+    res.status(500).json({ success: false });
+  }
+});
+
 
 module.exports = router;

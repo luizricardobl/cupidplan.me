@@ -19,6 +19,10 @@ const ChatSchema = new mongoose.Schema(
           type: Date,
           default: Date.now,
         },
+        read: {
+          type: Boolean,
+          default: false, // 👈 means unread by default
+        },
       },
     ],
   },

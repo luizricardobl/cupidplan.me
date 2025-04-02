@@ -67,6 +67,8 @@ function App() {
         <Route path="/privacy" element={<Privacy />} />
         <Route path="/community" element={<Community />} />
         <Route path="/chat" element={<Chat />} />
+        <Route path="/chat/:email" element={<Chat />} />
+
 
       </Routes>
     </div>

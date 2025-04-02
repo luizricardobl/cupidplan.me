@@ -4,6 +4,9 @@ import profilePic from "../assets/default-profile.jpg";
 import logo from "../assets/cupid-plan-logo-2.png";
 import { useEffect } from "react";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
+
+
 
 const Profile = () => {
   const [editingProfile, setEditingProfile] = useState(false);
@@ -13,7 +16,9 @@ const Profile = () => {
   const [uploadingImage, setUploadingImage] = useState(false);
   const [likesThisWeek, setLikesThisWeek] = useState(0);
   const [prefsChanged, setPrefsChanged] = useState(false);
+  const [unreadSenders, setUnreadSenders] = useState([]);
   const [bioSaved, setBioSaved] = useState(false);
+  const navigate = useNavigate();
   const [toggles, setToggles] = useState({
     showProfile: false,
     aiRecommendations: false,
@@ -51,7 +56,24 @@ const Profile = () => {
     setToggles((prev) => ({ ...prev, darkMode: darkModeStored }));
   }, []);
   
-
+  const fetchUnreadNotifications = async () => {
+    const token = localStorage.getItem("token");
+  
+    try {
+      const res = await axios.get("http://localhost:5000/api/messages/unread", {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+  
+      if (res.data.showNotification) {
+        setUnreadSenders(res.data.senders);
+      } else {
+        setUnreadSenders([]); // hide if none
+      }
+    } catch (err) {
+      console.error("❌ Failed to fetch unread messages:", err);
+    }
+  };
+  
   useEffect(() => {
     const fetchProfile = async () => {
       try {
@@ -109,6 +131,7 @@ const Profile = () => {
   
     fetchProfile();       // ✅ calls the profile fetch
     fetchLikesCount();    // ✅ calls the likes count fetch
+    fetchUnreadNotifications();
   }, []);
   
   useEffect(() => {
@@ -323,6 +346,27 @@ const Profile = () => {
       console.error(`❌ Failed to update setting: ${key}`, err);
     }
   };
+  
+  const goToChat = async (senderEmail) => {
+    try {
+      const token = localStorage.getItem("token");
+  
+      await axios.post(
+        "http://localhost:5000/api/chat/mark-read",
+        { senderEmail },
+        { headers: { Authorization: `Bearer ${token}` } }
+      );
+  
+      // Clear the unread notification
+      setUnreadSenders([]);
+  
+      // Redirect to chat
+      navigate(`/chat/${senderEmail}`);
+    } catch (err) {
+      console.error("❌ Failed to mark messages as read or redirect:", err);
+    }
+  };
+  
   
   
 
@@ -641,13 +685,35 @@ const Profile = () => {
                     <p className="stats-timeframe">This week</p>
                   </div>
                 </div>
-                <div className="stats-box-content">
-                  <i className="fa-solid fa-user-group stats-icon"></i>
-                  <div className="stats-details">
-                    <h3 className="stats-value">10 Matches</h3>
-                    <p className="stats-timeframe">This month</p>
-                  </div>
-                </div>
+                {unreadSenders.length > 0 ? (
+  <div className="stats-box-content chat-alert">
+    <i className="fa-solid fa-message stats-icon"></i>
+    <div className="stats-details">
+      <h3 className="stats-value">New Messages</h3>
+      {unreadSenders.map((sender) => (
+        <div
+          key={sender.email}
+          style={{ marginTop: "6px", cursor: "pointer" }}
+          onClick={() => goToChat(sender.email)}
+        >
+          <strong>{sender.name}</strong> messaged you!
+          <p style={{ color: "blue" }}>Click to chat</p>
+        </div>
+      ))}
+    </div>
+  </div>
+) : (
+  <div className="stats-box-content">
+    <i className="fa-solid fa-user-group stats-icon"></i>
+    <div className="stats-details">
+      <h3 className="stats-value">10 Matches</h3>
+      <p className="stats-timeframe">This month</p>
+    </div>
+  </div>
+)}
+
+
+
                 <button className="vip-upgrade-btn">Upgrade to VIP</button>
               </div>
 
