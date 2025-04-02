@@ -592,3 +592,30 @@ body.dark-mode .stats-icon {
   color: #007bff;
   text-decoration: underline;
 }
+.cute-cupid {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 20px;
+  position: relative;
+}
+
+.cupid-image {
+  width: 150px;       
+  height: auto;
+  border-radius: 15px;
+  animation: cupid-glow 2.5s infinite ease-in-out;
+  box-shadow: 0 0 20px rgba(239, 7, 41, 0.4); 
+}
+
+@keyframes cupid-glow {
+  0% {
+    box-shadow: 0 0 20px rgba(255, 105, 180, 0.4);
+  }
+  50% {
+    box-shadow: 0 0 35px rgba(255, 105, 180, 0.8);
+  }
+  100% {
+    box-shadow: 0 0 20px rgba(255, 105, 180, 0.4);
+  }
+}

@@ -6,6 +6,8 @@ import { useEffect } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { io } from "socket.io-client";
+import cupidPlan from "../assets/cupid-plan.png";
+
 
 const socket = io("http://localhost:5000", {
   transports: ["websocket"],
@@ -741,7 +743,7 @@ useEffect(() => {
                   <div className="stats-details">
                   <h3 className="stats-value">{likesThisWeek} Likes</h3>
 
-                    <p className="stats-timeframe">This week</p>
+                    <p className="stats-timeframe">This Week</p>
                   </div>
                 </div>
                 {unreadSenders.length > 0 && toggles.aiRecommendations ? (
@@ -763,13 +765,10 @@ useEffect(() => {
 </div>
 
 ) : (
-  <div className="stats-box-content">
-    <i className="fa-solid fa-user-group stats-icon"></i>
-    <div className="stats-details">
-      <h3 className="stats-value">10 Matches</h3>
-      <p className="stats-timeframe">This month</p>
-    </div>
-  </div>
+  <div className="stats-box-content cute-cupid">
+  <img src={cupidPlan} alt="Cupid Plan" className="cupid-image" />
+</div>
+
 )}
 
 
