@@ -66,7 +66,9 @@ const dateRoutes = require("./routes/dates");
 const matchRoutes = require("./routes/matchesRoutes");
 const chatRoutes = require("./routes/chatRoutes");
 const chatHistoryRoutes = require("./routes/chatHistoryRoutes");
+const aiRoutes = require('./routes/aiRoutes');
 
+app.use('/api/ai', aiRoutes);
 app.use("/api/auth", authRoutes);
 app.use("/api/dates", dateRoutes);
 app.use("/api/matches", matchRoutes);

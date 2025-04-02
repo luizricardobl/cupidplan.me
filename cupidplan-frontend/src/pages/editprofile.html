@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title>CupidPlan.Me</title>
+        <link rel="icon" type="image/x-icon" href="photos/favicon.ico">
+        <meta charset="UTF-8">
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;500;600;700;800;900&display=swap" rel="stylesheet">
+        <script src="https://kit.fontawesome.com/3661102fc9.js" crossorigin="anonymous"></script>
+        <meta name="viewport" content="width=device-width">
+        <!-- link to style sheet -->
+        <link rel="stylesheet" href="editprofile.css">
+    </head>
+
+    <body> 
+        <header id="header" class="header">
+            <div class="container">
+                <!-- logo format -->
+                <div class="logo">
+                    <a href="index.html" class="logo-img">
+                        <img src="images/cupid-plan-logo-2.png">
+                    </a>
+                    <span class="logo-text">CupidPlan.Me</span>
+                </div>
+                <!-- icons in header -->
+                <div class="buttons">
+                    <button class="btn">
+                        <i class="fa-regular fa-bell icon"></i>
+                    </button>
+                    <button class="btn">
+                        <i class="fa-regular fa-message icon"></i>
+                    </button>
+                    <img src="images/default-profile.jpg" alt="Profile" class="profile-img">
+                </div>
+            </div>
+        </header>
+        <!-- main content -->
+        <div class="main-content">
+            <!-- profile header -->
+            <div class="profile-header">
+                <div class="background-overlay">
+                    <div class="container">
+                        <div class="profile-info">
+                            <!-- profile image -->
+                            <div class="profile-img-container">
+                                <img id="profilePic" src="images/default-profile.jpg" alt="Profile image" class="profile-image">
+                                <button id="cameraButton" class="camera-button">
+                                    <i class="fa-solid fa-camera"></i>
+                                </button>
+                            </div>
+                            <input type="file" id="profilePicInput" accept="image/*" style="display: none;">
+                        </div>
+                        <!-- profile details-->
+                        <div class="profile-details">
+                            <div class="profile-name-container">
+                                <h1 class="profile-name" id="profileName" >User</h1>
+                                <button id="editProfileBtn" class="edit-profile-btn">
+                                    <i class="fa-solid fa-user-pen"></i>
+                                </button> 
+                            </div>
+                            <p class="profile-location-age" id="profileLocationAge">New York, NY • 28 years old</p>
+                        </div>
+                        <!-- popup to edit profile -->
+                        <div id="editProfilePopup" class="popup">
+                            <div class="popup-content">
+                                <h2>Edit Profile</h2>
+                                <label for="newName">Name:</label>
+                                <input type="text" id="newName" placeholder="Enter your name">
+                                <label for="newLocation">Location:</label>
+                                <input type="text" id="newLocation" placeholder="Enter your location" />
+                                <label for="newAge">Age:</label>
+                                <input type="number" id="newAge" placeholder="Enter your age" min="18" />
+                                <div class="popup-buttons">
+                                    <button id="saveProfileBtn" class="save-btn">Save</button>
+                                    <button id="cancelProfileBtn" class="cancel-btn">Cancel</button>
+                                </div>
+                            </div>
+                        </div>
+                        
+                    </div>
+                </div>
+            </div>
+            <!-- profile info -->
+            <div class="profile-container">
+                <div class="profile-grid">
+                    <!-- profile left column -->
+                    <div class="profile-left-col">
+                        <!-- about me section-->
+                        <div class="about-me">
+                            <div class="profile-section">
+                                <h2 class="section-title">About Me</h2>
+                                <button id="editBioBtn" class="edit-bio-btn">
+                                    <i class="fa-regular fa-pen-to-square"></i>
+                                </button>
+                                <p id="aboutMeText" class="about-me-text" style="display: none;"></p>
+                                <textarea id="aboutMeTextarea" class="about-me-textarea" rows="4" placeholder="Share something about yourself..."></textarea>
+                                <p id="charCounter" class="char-counter">0 / 200</p>
+                                <button id="saveBioBtn" class="save-bio-btn">Save</button>
+                                <p id="bioSavedMessage" class="bio-saved-message" style="display:none; color: green; font-size: 14px;">Bio saved!</p>
+                                <div class="interest-tags">
+                                    <div id="tagsContainer">
+                                    </div>
+                                    <button class="add-interest-btn">+ Add Interest</button>
+                                    <input type="text" id="tagInput" class="tag-input" placeholder="Add Interest" style="display: none;">
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- dating preferences section -->
+                         <div class="dating-preferences">
+                            <div class="profile-section">
+                                <h2 class="section-title">Dating Preferences</h2>
+                                <div class="dating-preferences-sec">
+                                    <!-- age range -->
+                                    <div class="age-range">
+                                        <label class="label-block"> Age Range</label>
+                                        <div class="age-range-box">
+                                            <input type="number" id="minAgeInput" placeholder="Min" class="age-input" min="18">
+                                            <span>to</span>
+                                            <input type="number" id="maxAgeInput" placeholder="Max" class="age-input" min="18">
+                                        </div>
+                                    </div>
+                                    <!-- distance -->
+                                    <div class="distance">
+                                        <label class="label-block"> Distance</label>
+                                        <input type="range" id="distanceSlider" class="distance-range" min="0" max="100" value="50">
+                                        <span id="distanceValue" class="distance-text">Within 100 miles</span>
+                                    </div>
+                                    <!-- date types -->
+                                <!--<div class="date-types">
+                                        <label class="label-block"> Date Types</label>
+                                        <div class="date-type-btns">
+                                            <button class="date-type-btn">Casual</button>
+                                            <button class="date-type-btn">Romantic</button>
+                                            <button class="date-type-btn">Adventurous</button>
+                                        </div>                                    
+                                    </div> -->
+
+                                    <div class="date-types-section">
+                                        <label class="label-block"> Date Types</label>
+                                        <div id="dateTypeCheck" class="date-checklist">
+                                            <label class="date-checkbox-label">
+                                                <input type="checkbox" name="date-type" value="casual">Casual
+                                            </label>
+                                            <label class="date-checkbox-label">
+                                                <input type="checkbox" name="date-type" value="romantic">Romantic
+                                            </label>
+                                            <label class="date-checkbox-label">
+                                                <input type="checkbox" name="date-type" value="adventurous"> Adventurous
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- match history section -->
+                        <div class="match-history">
+                            <h2 class="section-title">Recent Matches</h2>
+                            <div class="match-history-grid">
+                                <div class="match-box">
+                                    <div class="match-box-content">
+                                        <img src="images/default-profile.jpg" alt="Match" class="match-profile">
+                                        <div class="match-details">
+                                            <h3 class="match-name">Sarah Parker</h3>
+                                            <p class="match-timeframe">Matched 2 days ago</p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="match-box">
+                                    <div class="match-box-content">
+                                        <img src="images/default-profile.jpg" alt="Match" class="match-profile">
+                                        <div class="match-details">
+                                            <h3 class="match-name">John Smith</h3>
+                                            <p class="match-timeframe">Matched 3 days ago</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                    <!-- left column ends -->
+                    </div>
+                    <!-- profile right column-->
+                    <div class="profile-right-col">
+
+                        <!-- profile stats -->
+                        <div class="stats-container">
+                            <h2 class="section-title">Profile Statistics</h2>
+
+                            <div class="stats-box">
+                                <div class="stats-box-content">
+                                    <i class="fa-solid fa-heart stats-icon"></i>
+                                    <div class="stats-details">
+                                    <h3 class="stats-value">30 Likes</h3>
+                                    <p class="stats-timeframe">This week</p>
+                                    </div>
+                                </div>
+                                <div class="stats-box-content">
+                                    <i class="fa-solid fa-user-group stats-icon"></i>
+                                    <div class="stats-details">
+                                        <h3 class="stats-value">10 Matches</h3>
+                                        <p class="stats-timeframe">This month</p>
+                                    </div>
+                                </div>
+                                <button class="vip-upgrade-btn">
+                                    Upgrade to VIP
+                                </button>
+                                
+                            </div>
+                        </div> <!-- profile stats ends -->
+
+                        <!-- profile settings -->
+                         <div class="profile-settings">
+                            <h2 class="section-title">Settings</h2>
+                            <div class="settings-box">
+                                <div class="settings-box-content">
+                                    <span class="settings-label">Show profile to new users</span>
+                                    <button class="toggle-switch" id="toggleProfile">
+                                        <div class="toggle-circle"></div>
+                                    </button>
+                                </div>
+                                <div class="settings-box-content">
+                                    <span class="settings-label">AI date recommendations</span>
+                                    <button class="toggle-switch" id="toggleAI">
+                                        <div class="toggle-circle"></div>
+                                    </button>
+                                </div>
+                                <div class="settings-box-content">
+                                    <span class="settings-label">Dark mode</span>
+                                    <button class="toggle-switch" id="toggleDarkMode">
+                                        <div class="toggle-circle"></div>
+                                    </button>
+                                </div>
+                            </div>
+                         </div>
+
+
+
+
+                    </div> <!-- right column ends -->
+                </div><!-- profile grid ends -->
+            </div>  <!-- profile content ends -->
+        </div> <!-- main content ends-->
+        <!-- link to javascript file -->
+         <script src="editprofile.js"></script>
+    </body>
+</html>
