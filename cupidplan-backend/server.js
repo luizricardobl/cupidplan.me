@@ -14,6 +14,7 @@ require('dotenv').config();
 console.log('Loading nodemailer...');
 const nodemailer = require('nodemailer');
 const sgMail = require("@sendgrid/mail");
+const apiKeyRoutes = require("./routes/authRoutes");
 sgMail.setApiKey(process.env.SENDGRID_API_KEY);
 const userRoutes = require('./routes/userRoutes');
 const uploadRoute = require("./routes/uploadRoute");
@@ -39,6 +40,7 @@ const io = new Server(server, {
 // ✅ Middleware
 app.use(cors());
 app.use(express.json());
+app.use("/api", apiKeyRoutes);
 app.use('/api/user', userRoutes);
 app.use("/api/upload", uploadRoute);
 app.use("/api/likes", require("./routes/likeRoutes"));

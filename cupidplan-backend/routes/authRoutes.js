@@ -13,7 +13,11 @@ sgMail.setApiKey(process.env.SENDGRID_API_KEY);
 let otpStorage = {};
 
 // 🔑 Google Maps API Key
-const GOOGLE_MAPS_API_KEY = "AIzaSyC4gwNf8YgwW08UYEBjRkT-S08EBbStkp4";
+const googlemapsapikey = process.env.GOOGLE_MAPS_API_KEY;
+
+router.get("/google-maps-api-key", (req, res) => {
+  res.json({ googleApiKey: googlemapsapikey });
+});
 
 // 🔹 1. User Signup & Save in Database
 router.post("/signup", async (req, res) => {
@@ -54,7 +58,7 @@ router.post("/signup", async (req, res) => {
     // ✅ Get geo-coordinates from Google Geocoding API
     let coordinates = [0, 0]; // Default
     try {
-      const geoRes = await fetch(`https://maps.googleapis.com/maps/api/geocode/json?address=${encodeURIComponent(location)}&key=${GOOGLE_MAPS_API_KEY}`);
+      const geoRes = await fetch(`https://maps.googleapis.com/maps/api/geocode/json?address=${encodeURIComponent(location)}&key=${googlemapsapikey}`);
       const geoData = await geoRes.json();
 
       if (
