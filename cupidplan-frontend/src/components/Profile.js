@@ -146,6 +146,21 @@ const Profile = () => {
   }
 }, [toggles.darkMode]);
 
+useEffect(() => {
+  socket.on("chatNotificationsToggled", ({ email, enabled }) => {
+    if (
+      email ===
+      (localStorage.getItem("rememberedUser") ||
+        sessionStorage.getItem("loggedInUser"))
+    ) {
+      setToggles((prev) => ({ ...prev, aiRecommendations: enabled }));
+    }
+  });
+
+  return () => {
+    socket.off("chatNotificationsToggled");
+  };
+}, []);
 
   const handleProfileChange = (e) => {
     const { id, value } = e.target;
@@ -351,7 +366,18 @@ const Profile = () => {
           Authorization: `Bearer ${token}`,
         },
       });
-  
+      if (key === "aiRecommendations") {
+        body.chatNotifications = newValue;
+      
+        socket.emit("chatNotificationsToggled", {
+          email:
+            profile.email ||
+            localStorage.getItem("rememberedUser") ||
+            sessionStorage.getItem("loggedInUser"),
+          enabled: newValue,
+        });
+      }
+      
       console.log(`✅ Updated setting: ${key}`);
     } catch (err) {
       console.error(`❌ Failed to update setting: ${key}`, err);
@@ -696,7 +722,7 @@ const Profile = () => {
                     <p className="stats-timeframe">This week</p>
                   </div>
                 </div>
-                {unreadSenders.length > 0 ? (
+                {unreadSenders.length > 0 && toggles.aiRecommendations ? (
   <div className="stats-box-content chat-alert">
     <i className="fa-solid fa-message stats-icon"></i>
     <div className="stats-details">

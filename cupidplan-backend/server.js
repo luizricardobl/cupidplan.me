@@ -111,7 +111,11 @@ io.on("connection", (socket) => {
     
     socket.broadcast.emit("profileVisibilityChanged", { email, hidden });
   });
-
+  socket.on("chatNotificationsToggled", ({ email, enabled }) => {
+    console.log(`🔔 Chat notifications for ${email}: ${enabled ? "ON" : "OFF"}`);
+    socket.broadcast.emit("chatNotificationsToggled", { email, enabled });
+  });
+  
   socket.on("typing", ({ room, sender }) => {
     socket.to(room).emit("partnerTyping", { sender, room });
   });
