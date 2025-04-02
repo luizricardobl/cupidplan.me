@@ -169,6 +169,15 @@ io.on("connection", (socket) => {
       };
 
       io.to(room).emit("receiveMessage", enrichedMessage);
+      // 🔔 Notify Profile page listeners if receiver has chat notifications enabled
+if (receiverUser.chatNotifications) {
+  io.emit("newChatNotification", {
+    name: senderUser.name,
+    email: receiver,
+    senderEmail: sender,
+  });
+}
+
       console.log("✅ Message saved & emitted:", enrichedMessage);
     } catch (err) {
       console.error("❌ Error saving message:", err);

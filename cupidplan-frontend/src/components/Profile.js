@@ -161,6 +161,28 @@ useEffect(() => {
     socket.off("chatNotificationsToggled");
   };
 }, []);
+useEffect(() => {
+  const currentUserEmail =
+    localStorage.getItem("rememberedUser") ||
+    sessionStorage.getItem("loggedInUser");
+
+  socket.on("newChatNotification", ({ email, name, senderEmail }) => {
+    // Only show if this is the current user & they have notifications on
+    if (email === currentUserEmail && toggles.aiRecommendations) {
+      setUnreadSenders((prev) => {
+        const alreadyExists = prev.some((s) => s.email === senderEmail);
+        if (!alreadyExists) {
+          return [...prev, { name, email: senderEmail }];
+        }
+        return prev;
+      });
+    }
+  });
+
+  return () => {
+    socket.off("newChatNotification");
+  };
+}, [toggles.aiRecommendations]);
 
   const handleProfileChange = (e) => {
     const { id, value } = e.target;
