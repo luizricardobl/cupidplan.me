@@ -39,7 +39,17 @@ const UserSchema = new mongoose.Schema({
     casual: { type: Boolean, default: false },
     romantic: { type: Boolean, default: false },
     adventurous: { type: Boolean, default: false },
+  },
+
+  hideProfile: {
+    type: Boolean,
+    default: false,
+  },
+  chatNotifications: {
+    type: Boolean,
+    default: false,
   }
+  
 });
 
 // ✅ Index geoLocation for spatial queries

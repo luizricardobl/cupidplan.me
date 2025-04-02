@@ -455,3 +455,108 @@ body {
   cursor: pointer;
   font-size: 0.85rem;
 }
+
+/* --------------------------- */
+/* 🌙 Premium Dark Mode Theme */
+/* --------------------------- */
+body.dark-mode {
+  background-color: #0f0f0f;
+  color: #e6e6e6;
+  font-family: "Segoe UI", sans-serif;
+  transition: all 0.3s ease-in-out;
+}
+
+body.dark-mode .profile-page,
+body.dark-mode .main-content {
+  background-color: #1a1a1a;
+}
+
+body.dark-mode .profile-section,
+body.dark-mode .stats-container,
+body.dark-mode .settings-box-content,
+body.dark-mode .profile-container,
+body.dark-mode .popup-content,
+body.dark-mode .match-box-content {
+  background: #242424;
+  border-radius: 12px;
+  padding: 15px;
+  box-shadow: 0 4px 12px rgba(255, 255, 255, 0.05);
+}
+
+body.dark-mode h1,
+body.dark-mode h2,
+body.dark-mode h3,
+body.dark-mode label,
+body.dark-mode .section-title,
+body.dark-mode .profile-name,
+body.dark-mode p,
+body.dark-mode .match-name {
+  color: #f1f1f1;
+}
+
+body.dark-mode input,
+body.dark-mode textarea,
+body.dark-mode select {
+  background-color: #333;
+  color: #fff;
+  border: 1px solid #555;
+  border-radius: 5px;
+  padding: 6px;
+}
+
+body.dark-mode input[type="range"] {
+  accent-color: #ff4081;
+}
+
+body.dark-mode .tag {
+  background-color: #d72638;
+  color: #fff;
+  padding: 6px 10px;
+  border-radius: 20px;
+}
+
+body.dark-mode .remove-tag {
+  color: #fff;
+  font-weight: bold;
+}
+
+body.dark-mode .add-interest-btn,
+body.dark-mode .add-dealbreaker-btn,
+body.dark-mode .save-preferences-btn,
+body.dark-mode .save-bio-btn,
+body.dark-mode .camera-button,
+body.dark-mode .delete-picture-btn,
+body.dark-mode .vip-upgrade-btn {
+  background: linear-gradient(to right, #f72585, #7209b7);
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  transition: transform 0.2s ease;
+}
+
+body.dark-mode .vip-upgrade-btn:hover,
+body.dark-mode .save-preferences-btn:hover {
+  transform: scale(1.03);
+}
+
+body.dark-mode .toggle-switch {
+  background-color: #444;
+}
+
+body.dark-mode .toggle-switch.active {
+  background-color: #00b4d8;
+}
+
+body.dark-mode .match-profile {
+  filter: brightness(0.9);
+}
+
+body.dark-mode .match-timeframe {
+  color: #aaa;
+}
+
+body.dark-mode .stats-icon {
+  color: #f25f5c;
+}
+
+

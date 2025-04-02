@@ -8,7 +8,23 @@ router.get('/me', authenticate, async (req, res) => {
   try {
     const user = await User.findById(req.user.id).select('-password');
     if (!user) return res.status(404).json({ message: 'User not found' });
-    res.json(user);
+    res.json({
+        name: user.name,
+        email: user.email,
+        dob: user.dob,
+        location: user.location,
+        aboutMe: user.aboutMe,
+        profilePicUrl: user.profilePicUrl,
+        hobbies: user.hobbies,
+        dealbreakers: user.dealbreakers,
+        minAge: user.minAge,
+        maxAge: user.maxAge,
+        distance: user.distance,
+        types: user.types,
+        hideProfile: user.hideProfile,           
+        chatNotifications: user.chatNotifications, 
+      });
+      
   } catch (error) {
     console.error('Error fetching user profile:', error);
     res.status(500).json({ message: 'Server error' });
@@ -61,6 +77,30 @@ router.put("/preferences", authenticate, async (req, res) => {
     }
   });
   
+  // PUT /api/user/settings/toggles
+router.put("/settings/toggles", authenticate, async (req, res) => {
+    const { hideProfile, chatNotifications } = req.body;
+  
+    try {
+      const user = await User.findByIdAndUpdate(
+        req.user.id,
+        {
+          ...(hideProfile !== undefined && { hideProfile }),
+          ...(chatNotifications !== undefined && { chatNotifications }),
+        },
+        { new: true }
+      );
+  
+      res.json({
+        message: "Settings updated",
+        hideProfile: user.hideProfile,
+        chatNotifications: user.chatNotifications,
+      });
+    } catch (err) {
+      console.error("Error updating toggle settings:", err);
+      res.status(500).json({ message: "Server error" });
+    }
+  });
   
   
 module.exports = router;

@@ -12,7 +12,19 @@ const Matches = () => {
   const navigate = useNavigate();
   const loggedInEmail =
     localStorage.getItem("rememberedUser") || sessionStorage.getItem("loggedInUser");
-
+    
+    useEffect(() => {
+      const darkModeStored = localStorage.getItem("darkMode") === "true";
+    
+      if (darkModeStored) {
+        document.body.classList.add("dark-mode");
+      } else {
+        document.body.classList.remove("dark-mode");
+      }
+    }, []);
+    
+    
+    
   useEffect(() => {
     const fetchMatches = async () => {
       try {

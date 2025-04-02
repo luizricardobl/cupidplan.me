@@ -40,6 +40,19 @@ const Profile = () => {
   
 
   useEffect(() => {
+    const darkModeStored = localStorage.getItem("darkMode") === "true";
+    
+    if (darkModeStored) {
+      document.body.classList.add("dark-mode");
+    } else {
+      document.body.classList.remove("dark-mode");
+    }
+  
+    setToggles((prev) => ({ ...prev, darkMode: darkModeStored }));
+  }, []);
+  
+
+  useEffect(() => {
     const fetchProfile = async () => {
       try {
         const token = localStorage.getItem("token");
@@ -66,6 +79,13 @@ const Profile = () => {
           distance: data.distance || prev.distance,
           types: data.types || prev.types,
         }));
+        setToggles((prev) => ({
+          ...prev, 
+          showProfile: !data.hideProfile,
+          aiRecommendations: !!data.chatNotifications, 
+        }));
+        
+
       } catch (err) {
         console.error("Failed to fetch profile:", err);
       }
@@ -91,7 +111,14 @@ const Profile = () => {
     fetchLikesCount();    // ✅ calls the likes count fetch
   }, []);
   
-  
+  useEffect(() => {
+  if (toggles.darkMode) {
+    document.body.classList.add("dark-mode");
+  } else {
+    document.body.classList.remove("dark-mode");
+  }
+}, [toggles.darkMode]);
+
 
   const handleProfileChange = (e) => {
     const { id, value } = e.target;
@@ -253,9 +280,49 @@ const Profile = () => {
   
   
 
-  const toggleSetting = (key) => {
-    setToggles((prev) => ({ ...prev, [key]: !prev[key] }));
+  const toggleSetting = async (key) => {
+    const newValue = !toggles[key];
+    setToggles((prev) => ({
+      ...prev,
+      [key]: newValue,
+    }));
+
+  
+    // Save dark mode setting to localStorage
+    if (key === "darkMode") {
+      if (newValue) {
+        document.body.classList.add("dark-mode");
+        localStorage.setItem("darkMode", "true");
+      } else {
+        document.body.classList.remove("dark-mode");
+        localStorage.removeItem("darkMode");
+      }
+    }
+  
+    try {
+      const token = localStorage.getItem("token");
+      const body = {};
+  
+      if (key === "showProfile") {
+        body.hideProfile = !newValue;
+      } else if (key === "aiRecommendations") {
+        body.chatNotifications = newValue;
+      }
+  
+      await axios.put("http://localhost:5000/api/user/settings/toggles", body, {
+
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+  
+      console.log(`✅ Updated setting: ${key}`);
+    } catch (err) {
+      console.error(`❌ Failed to update setting: ${key}`, err);
+    }
   };
+  
+  
 
   return (
     <div className="profile-page">
@@ -585,7 +652,7 @@ const Profile = () => {
               <div className="profile-settings">
                 <h2 className="section-title">Settings</h2>
                 <div className="settings-box-content">
-                  <span className="settings-label">Show profile to new users</span>
+                <span className="settings-label">Hide Profile</span>
                   <button
                     className={`toggle-switch ${
                       toggles.showProfile ? "active" : ""
@@ -596,7 +663,7 @@ const Profile = () => {
                   </button>
                 </div>
                 <div className="settings-box-content">
-                  <span className="settings-label">AI date recommendations</span>
+                <span className="settings-label">Chat Notifications</span>
                   <button
                     className={`toggle-switch ${
                       toggles.aiRecommendations ? "active" : ""
