@@ -45,12 +45,7 @@ function App() {
           </div>
         )}
 
-        {/* Logout Button (Only Show When Logged In) */}
-        {isLoggedIn && (
-          <button className="logout-button" onClick={() => window.location.href = "/"}>
-            Logout
-          </button>
-        )}
+        
       </nav>
 
       {/* Page Routing */}

@@ -1,37 +1,142 @@
+.welcome-text {
+  margin-top: 50px;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+
+/* 🎨 Gradient background tweak for smoother blend */
 .home-container {
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: flex-start;
-  height: 100vh;
-  background: linear-gradient(to bottom, #ff758c, #ff7eb3);
-  text-align: center;
-  color: white;
+  min-height: 100vh;
+  background: linear-gradient(to bottom, #ffeaf2 0%, #ffc1d3 100%);
+  color: black;
   padding: 20px;
 }
 
-/* ✅ Position Logout Button in Top-Right Corner */
+/* 🧱 Cards Grid – Fixed */
+.card-grid {
+  display: grid;
+  gap: 20px;
+  grid-template-columns: 1fr;
+  max-width: 1000px;
+  width: 100%;
+  margin: 30px auto;
+}
+@media (min-width: 768px) {
+  .card-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+.featured-grid {
+  display: grid;
+  gap: 20px;
+  grid-template-columns: 1fr;
+  max-width: 1000px;
+  width: 100%;
+  margin: 20px auto 50px;
+}
+
+@media (min-width: 768px) {
+  .featured-grid {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+/* 🧠 Match Figma padding and box shadow */
+.home-card {
+  background: white;
+  color: black;
+  padding: 20px 24px;
+  border-radius: 12px;
+  text-align: left;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  transition: transform 0.2s ease;
+}
+.home-card:hover {
+  transform: translateY(-3px);
+}
+
+/* 🎯 Center section titles better */
+.featured-header {
+  font-size: 20px;
+  font-weight: 600;
+  margin: 50px 0 20px;
+  text-align: center;
+}
+
+/* 💘 Find Match Button - bolder look */
+.find-match-btn {
+  margin-top: 20px;
+  padding: 14px 36px;
+  font-size: 18px;
+  font-weight: 600;
+  background-color: #ff3366;
+  color: white;
+  border: none;
+  border-radius: 999px;
+  cursor: pointer;
+  transition: 0.3s ease;
+  transition: background-color 0.10s ease;
+}
+.find-match-btn:hover {
+  background-color: #f0145d;
+}
+
+/* 🌟 Featured Date Cards */
+.idea-card {
+  background: white;
+  border-radius: 12px;
+  overflow: hidden;
+  text-align: center;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+}
+.idea-card img {
+  width: 100%;
+  height: 130px;
+  object-fit: cover;
+}
+.idea-card h4 {
+  margin: 10px 0 4px;
+  font-weight: 600;
+  font-size: 16px;
+}
+.idea-card .desc {
+  font-size: 14px;
+  color: #6b7280;
+  margin-bottom: 10px;
+}
+
+/* 🦶 Footer alignment */
+.footer {
+  margin-top: 60px;
+  color: #111827;
+  font-size: 14px;
+  text-align: center;
+}
 .logout-btn {
   position: absolute;
-  top: 20px;
+  top: 10px;
   right: 20px;
-  padding: 15px 15px;
+  padding: 10px 24px; /* 🔁 Smaller height, wider horizontally */
   font-size: 16px;
+  font-weight: 600;
   border: none;
-  background: white;
-  color: #ff4a6e;
-  border-radius: 5px;
+  background: #a40024;
+  color: #fefefe;
+  border-radius: 999px; /* 🔥 Makes it perfectly oval */
   cursor: pointer;
-  transition: 0.3s;
+  transition: background-color 0.3s, color 0.3s;
+  z-index: 999;
 }
 
 .logout-btn:hover {
-  background: #ff4a6e;
+  background-color: #ff4a6e;
   color: white;
 }
 
-/* ✅ Welcome Text at the Top */
-.welcome-text {
-  margin-top: 50px;
-  text-align: center;
-}
