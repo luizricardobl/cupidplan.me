@@ -229,6 +229,11 @@ const Signup = () => {
   
       if (verifyResponse.ok && verifyData.success) {
         alert("🎉 Email verified successfully! Welcome to CupidPlan.Me.");
+      
+        // ✅ Save user login so Home knows who they are
+        localStorage.setItem("rememberedUser", email);
+        sessionStorage.setItem("loggedInUser", email);
+      
         navigate("/home");
       } else {
         alert(verifyData.message || "Invalid OTP. Try again.");
