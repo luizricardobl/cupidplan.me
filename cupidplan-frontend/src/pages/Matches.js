@@ -13,6 +13,20 @@ const Matches = () => {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [loading, setLoading] = useState(true);
 
+  const [selectedUser, setSelectedUser] = useState(null);
+const [showModal, setShowModal] = useState(false);
+
+const handleViewProfile = () => {
+  setSelectedUser(currentMatch);
+  setShowModal(true);
+};
+
+const handleCloseModal = () => {
+  setShowModal(false);
+  setSelectedUser(null);
+};
+
+
   const navigate = useNavigate();
   const loggedInEmail =
     localStorage.getItem("rememberedUser") || sessionStorage.getItem("loggedInUser");
@@ -128,10 +142,68 @@ const Matches = () => {
   >
     Start Chat
   </button>
-  <button className="profile-btn">View Profile</button>
+  <button className="profile-btn" onClick={handleViewProfile}>
+  View Profile
+</button>
+
   <button className="like-btn" onClick={handleLike}>
     ❤️ Like
   </button>
+  {showModal && selectedUser && (
+  <div className="profile-modal-backdrop">
+    <div className="profile-modal-card">
+      <div
+        className="profile-modal-hero"
+        style={{
+          backgroundImage: `url(${selectedUser.profilePicUrl || "/images/default-profile.jpg"})`,
+        }}
+      >
+        <button className="close-btn" onClick={handleCloseModal}>✖</button>
+        <div className="overlay-info">
+          <h2>{selectedUser.name}</h2>
+          <p className="age-line">
+            Age: {selectedUser.age || "Not provided"}
+          </p>
+        </div>
+      </div>
+
+      <div className="profile-modal-content profile-modal"> 
+      <div className="profile-section about-me-section">
+    <h3>About Me</h3>
+    <p>{selectedUser.aboutMe || "Not available."}</p>
+  </div>
+
+  <div className="profile-section">
+    <h3>Interests</h3>
+    <div className="tag-container">
+      {selectedUser.hobbies?.length > 0
+        ? selectedUser.hobbies.map((hobby, i) => (
+            <span key={i} className="tag">
+              {hobby}
+            </span>
+          ))
+        : <p className="tag-placeholder">None listed</p>}
+    </div>
+  </div>
+
+  <div className="profile-section">
+    <h3>Dealbreakers</h3>
+    <div className="tag-container">
+      {selectedUser.dealbreakers?.length > 0
+        ? selectedUser.dealbreakers.map((d, i) => (
+            <span key={i} className="tag tag-red">
+              {d}
+            </span>
+          ))
+        : <p className="tag-placeholder">None listed</p>}
+    </div>
+  </div>
+</div>
+
+    </div>
+  </div>
+)}
+
 </div>
 
 
