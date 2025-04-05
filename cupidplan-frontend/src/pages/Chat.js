@@ -1,9 +1,8 @@
 import React, { useEffect, useState, useRef } from "react";
-
+import axios from "axios";
 import { io } from "socket.io-client";
 import "../styles/Chat.css";
 import { useParams } from "react-router-dom";
-
 
 const socket = io("http://localhost:5000", {
   transports: ["websocket"],
@@ -18,6 +17,7 @@ const Chat = () => {
     localStorage.getItem("rememberedUser") || sessionStorage.getItem("loggedInUser");
 
   const [message, setMessage] = useState("");
+  const [selectedUserName, setSelectedUserName] = useState("");
   const [messages, setMessages] = useState([]);
   const messagesEndRef = useRef(null);
   const [partnerTyping, setPartnerTyping] = useState(false);
@@ -48,6 +48,20 @@ const Chat = () => {
 
     fetchChatHistory();
     socket.emit("joinRoom", roomId);
+
+    const fetchSelectedUserName = async () => {
+      try {
+        const res = await axios.get(`http://localhost:5000/api/user/by-email/${selectedUserEmail}`);
+        if (res.data && res.data.name) {
+          setSelectedUserName(res.data.name);
+        }
+      } catch (err) {
+        console.error("❌ Failed to fetch selected user name:", err);
+      }
+    };
+    
+    fetchSelectedUserName();
+    
 
     const handleReceiveMessage = (data) => {
       const isChatMatch =
@@ -137,7 +151,7 @@ const Chat = () => {
   return (
     <>
       <div className="chat-container">
-        <h2>💬 Chat with {selectedUserEmail}</h2>
+      <h2>💬 Chat with {selectedUserName || selectedUserEmail}</h2>
         <div className="chat-box">
           {messages.map((msg, idx) => {
             const isOwnMessage = msg.sender === currentUserEmail;

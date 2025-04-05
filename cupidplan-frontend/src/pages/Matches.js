@@ -4,6 +4,18 @@ import "../styles/Matches.css";
 import axios from "axios"; 
 import { io } from "socket.io-client";
 
+
+const calculateAge = (dob) => {
+  const birthDate = new Date(dob);
+  const today = new Date();
+  let age = today.getFullYear() - birthDate.getFullYear();
+  const m = today.getMonth() - birthDate.getMonth();
+  if (m < 0 || (m === 0 && today.getDate() < birthDate.getDate())) {
+    age--;
+  }
+  return age;
+};
+
 const socket = io("http://localhost:5000", {
   transports: ["websocket"],
   withCredentials: true,
@@ -162,8 +174,10 @@ const handleCloseModal = () => {
         <div className="overlay-info">
           <h2>{selectedUser.name}</h2>
           <p className="age-line">
-            Age: {selectedUser.age || "Not provided"}
-          </p>
+  Age: {selectedUser.dob ? calculateAge(selectedUser.dob) : "Not provided"}
+</p>
+
+
         </div>
       </div>
 

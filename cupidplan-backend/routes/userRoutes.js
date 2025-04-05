@@ -102,5 +102,18 @@ router.put("/settings/toggles", authenticate, async (req, res) => {
     }
   });
   
+  router.get("/by-email/:email", async (req, res) => {
+    try {
+      const user = await User.findOne({ email: req.params.email });
   
+      if (!user) {
+        return res.status(404).json({ success: false, message: "User not found" });
+      }
+  
+      return res.json({ success: true, name: user.name });
+    } catch (err) {
+      console.error("❌ Error fetching user by email:", err);
+      return res.status(500).json({ success: false, message: "Server error" });
+    }
+  });
 module.exports = router;

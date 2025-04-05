@@ -1,10 +1,12 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import "../styles/Home.css"; // Ensure this file exists
+import axios from "axios"; 
+import "../styles/Home.css"; 
 
 const Home = () => {
   const navigate = useNavigate();
-  const [user, setUser] = useState("");
+  const [user, setUser] = useState({ email: "", name: "" });
+
 
   useEffect(() => {
     const darkModeStored = localStorage.getItem("darkMode") === "true";
@@ -19,13 +21,28 @@ const Home = () => {
   
   
   useEffect(() => {
-    const storedUser = localStorage.getItem("rememberedUser") || sessionStorage.getItem("loggedInUser");
-    if (!storedUser) {
-      navigate("/"); // Redirect to login if user isn't stored
-    } else {
-      setUser(storedUser);
+    const storedEmail = localStorage.getItem("rememberedUser") || sessionStorage.getItem("loggedInUser");
+    const token = localStorage.getItem("token");
+  
+    if (!storedEmail || !token) {
+      navigate("/");
+      return;
     }
+  
+    const fetchUserProfile = async () => {
+      try {
+        const res = await axios.get("http://localhost:5000/api/user/me", {
+          headers: { Authorization: `Bearer ${token}` },
+        });
+        setUser({ email: storedEmail, name: res.data.name });
+      } catch (err) {
+        console.error("❌ Failed to fetch user profile:", err);
+      }
+    };
+  
+    fetchUserProfile();
   }, [navigate]);
+  
 
   // ✅ Logout Function (Clears Login Data & Redirects)
   const handleLogout = () => {
@@ -40,7 +57,7 @@ const Home = () => {
 
   {/* ✅ Welcome */}
   <div className="welcome-text">
-    <h1>Welcome, {user}!</h1>
+  <h1>Welcome, {user.name || user.email}!</h1>
     <p>Start finding your perfect match today.</p>
     <button className="find-match-btn">Find Your Match</button>
   </div>

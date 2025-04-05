@@ -51,6 +51,17 @@ const Profile = () => {
   });
   
 
+const calculateAge = (dob) => {
+  const birthDate = new Date(dob);
+  const today = new Date();
+  let age = today.getFullYear() - birthDate.getFullYear();
+  const m = today.getMonth() - birthDate.getMonth();
+  if (m < 0 || (m === 0 && today.getDate() < birthDate.getDate())) {
+    age--;
+  }
+  return age;
+};
+
   useEffect(() => {
     const darkModeStored = localStorage.getItem("darkMode") === "true";
     
@@ -97,7 +108,7 @@ const Profile = () => {
           ...prev,
           name: data.name || prev.name,
           location: data.location || prev.location,
-          age: data.dob ? new Date().getFullYear() - new Date(data.dob).getFullYear() : prev.age,
+          age: data.dob ? calculateAge(data.dob) : prev.age,
           aboutMe: data.aboutMe || prev.aboutMe,
           profileImage: data.profileImage || "", 
           profilePicUrl: data.profilePicUrl || "", 
