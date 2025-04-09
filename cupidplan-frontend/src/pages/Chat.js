@@ -4,10 +4,17 @@ import { io } from "socket.io-client";
 import "../styles/Chat.css";
 import { useParams } from "react-router-dom";
 
+const currentUserEmail =
+  localStorage.getItem("rememberedUser") || sessionStorage.getItem("loggedInUser");
+
 const socket = io("http://localhost:5000", {
   transports: ["websocket"],
   withCredentials: true,
+  query: {
+    email: currentUserEmail,
+  },
 });
+
 
 const Chat = () => {
   
@@ -25,6 +32,8 @@ const Chat = () => {
   const [receiverData, setReceiverData] = useState(null);
   const [isOnline, setIsOnline] = useState(false);
   const [receiverLastSeen, setReceiverLastSeen] = useState(null);
+  const [lastSeenByReceiver, setLastSeenByReceiver] = useState(false);
+
 
 
 
@@ -108,6 +117,17 @@ const Chat = () => {
     };
 
     socket.on("receiveMessage", handleReceiveMessage);
+
+    socket.on("messageSeen", ({ viewer, sender, room: seenRoom }) => {
+      if (
+        seenRoom === roomId &&
+        sender === currentUserEmail &&
+        viewer === selectedUserEmail
+      ) {
+        setLastSeenByReceiver(true);
+      }
+    });
+    
 
     socket.on("partnerTyping", ({ sender, room }) => {
       if (room === roomId && sender !== currentUserEmail) {
@@ -266,6 +286,10 @@ const Chat = () => {
                   {msg.message || msg.text}
                 </div>
                 <div className="timestamp">{formattedTime}</div>
+                {isOwnMessage && idx === messages.length - 1 && lastSeenByReceiver && (
+  <div className="seen-indicator">👀 Seen</div>
+)}
+
 
                 {isOwnMessage && isSelected && msg._id && (
                   <button

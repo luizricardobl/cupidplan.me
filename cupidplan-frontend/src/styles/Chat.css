@@ -124,3 +124,10 @@
     color: red;
   }
   
+  .seen-indicator {
+    font-size: 0.75rem;
+    color: #0ddc1b;
+    margin-top: 2px;
+    text-align: right;
+  }
+  
