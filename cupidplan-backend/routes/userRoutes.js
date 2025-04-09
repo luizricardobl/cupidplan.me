@@ -16,6 +16,7 @@ router.get('/me', authenticate, async (req, res) => {
         aboutMe: user.aboutMe,
         profilePicUrl: user.profilePicUrl,
         hobbies: user.hobbies,
+        favoriteFood: user.favoriteFood,
         dealbreakers: user.dealbreakers,
         minAge: user.minAge,
         maxAge: user.maxAge,
@@ -33,7 +34,7 @@ router.get('/me', authenticate, async (req, res) => {
 // PUT /api/user/preferences
 router.put("/preferences", authenticate, async (req, res) => {
     try {
-      const { minAge, maxAge, distance, types, hobbies, dealbreakers } = req.body;
+      const { minAge, maxAge, distance, types, hobbies, foodPreferences, dealbreakers } = req.body;
   
       const updatedUser = await User.findByIdAndUpdate(
         req.user.id,
@@ -43,6 +44,7 @@ router.put("/preferences", authenticate, async (req, res) => {
           distance,
           types,
           hobbies,
+          foodPreferences,
           dealbreakers, // ✅ make sure this is here!
         },
         { new: true }
