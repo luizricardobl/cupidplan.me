@@ -24,6 +24,8 @@ const Chat = () => {
   const [selectedMessageId, setSelectedMessageId] = useState(null);
   const [receiverData, setReceiverData] = useState(null);
   const [isOnline, setIsOnline] = useState(false);
+  const [receiverLastSeen, setReceiverLastSeen] = useState(null);
+
 
 
   const roomId = [currentUserEmail, selectedUserEmail].sort().join("_");
@@ -54,9 +56,20 @@ const Chat = () => {
     socket.emit("joinRoom", roomId);
     socket.emit("userOnline", currentUserEmail);
     
-
-    
-
+    const fetchLastSeen = async () => {
+      try {
+        const res = await axios.get(`http://localhost:5000/api/user/last-seen/${selectedUserEmail}`);
+        if (res.data.success) {
+          const date = new Date(res.data.lastSeen);
+          setReceiverLastSeen(date.toLocaleTimeString([], {
+            hour: "2-digit",
+            minute: "2-digit"
+          }));
+        }
+      } catch (err) {
+        console.error("❌ Failed to fetch last seen:", err);
+      }
+    };
 
     const fetchReceiverData = async () => {
       try {
@@ -72,6 +85,7 @@ const Chat = () => {
     
     
     fetchReceiverData(); 
+    fetchLastSeen();
 
     
 
@@ -176,8 +190,24 @@ const Chat = () => {
   }, []);
   
   useEffect(() => {
-    const handleStatusUpdate = (onlineMap) => {
-      setIsOnline(!!onlineMap[selectedUserEmail]);
+    const handleStatusUpdate = async (onlineMap) => {
+      const online = !!onlineMap[selectedUserEmail];
+      setIsOnline(online);
+  
+      if (!online) {
+        try {
+          const res = await axios.get(`http://localhost:5000/api/user/last-seen/${selectedUserEmail}`);
+          if (res.data.success) {
+            const date = new Date(res.data.lastSeen);
+            setReceiverLastSeen(date.toLocaleTimeString([], {
+              hour: "2-digit",
+              minute: "2-digit"
+            }));
+          }
+        } catch (err) {
+          console.error("❌ Failed to fetch real-time last seen:", err);
+        }
+      }
     };
   
     socket.on("updateOnlineStatus", handleStatusUpdate);
@@ -186,6 +216,7 @@ const Chat = () => {
       socket.off("updateOnlineStatus", handleStatusUpdate);
     };
   }, [selectedUserEmail]);
+  
   
   return (
     <>
@@ -199,8 +230,13 @@ const Chat = () => {
   <div className="chat-header-info">
     <h2>{receiverData?.name || selectedUserEmail}</h2>
     <p className={`online-status ${isOnline ? "online" : "offline"}`}>
-      {isOnline ? "Online" : "Offline"}
-    </p>
+  {isOnline
+    ? "Online"
+    : receiverLastSeen
+    ? `Last seen at ${receiverLastSeen}`
+    : "Offline"}
+</p>
+
   </div>
 </div>
 

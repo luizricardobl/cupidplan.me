@@ -116,4 +116,16 @@ router.put("/settings/toggles", authenticate, async (req, res) => {
       return res.status(500).json({ success: false, message: "Server error" });
     }
   });
+
+  // ✅ Get last seen timestamp for a user
+router.get("/last-seen/:email", (req, res) => {
+  const email = req.params.email;
+
+  if (global.lastSeenMap && global.lastSeenMap[email]) {
+    return res.json({ success: true, lastSeen: global.lastSeenMap[email] });
+  } else {
+    return res.json({ success: false, message: "No last seen recorded" });
+  }
+});
+
 module.exports = router;

@@ -18,6 +18,10 @@ sgMail.setApiKey(process.env.SENDGRID_API_KEY);
 const userRoutes = require('./routes/userRoutes');
 const uploadRoute = require("./routes/uploadRoute");
 const swipeRoutes = require("./routes/swipeRoutes");
+const onlineUsers = {};
+const lastSeenMap = {};       
+
+global.lastSeenMap = lastSeenMap; 
 
 console.log('All modules loaded successfully.');
 
@@ -99,7 +103,7 @@ app.post("/api/verify-otp", (req, res) => {
 // ✅ Socket.IO real-time chat
 const ChatModel = require("./models/Chat");
 const User = require("./models/User");
-const onlineUsers = {}; 
+
 
 
 io.on("connection", (socket) => {
@@ -107,6 +111,7 @@ io.on("connection", (socket) => {
   socket.on("userOnline", (email) => {
     if (email) {
       onlineUsers[email] = socket.id;
+      delete lastSeenMap[email]; 
       console.log(`✅ ${email} is now online`);
       io.emit("updateOnlineStatus", onlineUsers); // Broadcast to all
     }
@@ -204,9 +209,11 @@ if (receiverUser.chatNotifications) {
       if (onlineUsers[email] === socket.id) {
         console.log(`🔴 ${email} went offline`);
         delete onlineUsers[email];
+        lastSeenMap[email] = new Date().toISOString(); // ✅ Save last seen timestamp
         break;
       }
     }
+    
   
     io.emit("updateOnlineStatus", onlineUsers); 
   });
