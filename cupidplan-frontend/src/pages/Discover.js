@@ -5,6 +5,8 @@ import "../styles/Discover.css"; // Rename your CSS file
 import axios from "axios";
 import { io } from "socket.io-client";
 import confetti from "canvas-confetti";
+import { motion } from "framer-motion";
+
 
 const calculateAge = (dob) => {
   const birthDate = new Date(dob);
@@ -131,29 +133,37 @@ const [showMatchModal, setShowMatchModal] = useState(false);
       <h1>CupidPlan.Me - Discover</h1>
 
       {loading ? (
-        <p>Loading profiles...</p>
-      ) : currentProfile ? (
-        <div className="match-card">
-          <img
-            src={currentProfile.profilePicUrl || "/images/default-profile.jpg"}
-            alt="Profile"
-            className="match-img"
-          />
-          <div className="match-info">
-            <h2>{currentProfile.name}</h2>
-            <p>{currentProfile.aboutMe || "No bio available."}</p>
-            <p>{currentProfile.location || "Location not provided"}</p>
-            <p className="match-percent">{currentProfile.matchPercentage}% Match</p>
-            <div className="match-buttons">
-              <button onClick={() => handleSwipe("left")}>❌ Pass</button>
-              <button onClick={handleViewProfile}>View Profile</button>
-              <button onClick={() => handleSwipe("right")}>❤️ Like</button>
-            </div>
-          </div>
-        </div>
-      ) : (
-        <p>No more profiles to show.</p>
-      )}
+  <p>Loading profiles...</p>
+) : currentProfile ? (
+  <motion.div
+    className="match-card"
+    key={currentProfile.email}
+    initial={{ opacity: 0, y: 40 }}
+    animate={{ opacity: 1, y: 0 }}
+    exit={{ opacity: 0, y: -40 }}
+    transition={{ duration: 0.4 }}
+  >
+    <img
+      src={currentProfile.profilePicUrl || "/images/default-profile.jpg"}
+      alt="Profile"
+      className="match-img"
+    />
+    <div className="match-info">
+      <h2>{currentProfile.name}</h2>
+      <p>{currentProfile.aboutMe || "No bio available."}</p>
+      <p>{currentProfile.location || "Location not provided"}</p>
+      <p className="match-percent">{currentProfile.matchPercentage}% Match</p>
+      <div className="match-buttons">
+        <button onClick={() => handleSwipe("left")}>❌ Pass</button>
+        <button onClick={handleViewProfile}>View Profile</button>
+        <button onClick={() => handleSwipe("right")}>❤️ Like</button>
+      </div>
+    </div>
+  </motion.div>
+) : (
+  <p>No more profiles to show.</p>
+)}
+
 
       {showModal && selectedUser && (
         <div className="profile-modal-backdrop">
