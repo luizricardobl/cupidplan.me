@@ -260,7 +260,7 @@ const Chat = () => {
   </div>
 </div>
 
-      <h2>💬 Chat with {selectedUserName || selectedUserEmail}</h2>
+    
         <div className="chat-box">
           {messages.map((msg, idx) => {
             const isOwnMessage = msg.sender === currentUserEmail;
@@ -282,7 +282,8 @@ const Chat = () => {
                 style={{ cursor: isOwnMessage && msg._id ? "pointer" : "default" }}
               >
                 <div>
-                  <strong>{isOwnMessage ? "You" : msg.sender.split("@")[0]}:</strong>{" "}
+                
+                {"  "}
                   {msg.message || msg.text}
                 </div>
                 <div className="timestamp">{formattedTime}</div>
