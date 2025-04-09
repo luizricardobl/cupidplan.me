@@ -1,138 +1,192 @@
+/* General container for the discover page */
 .matches-container {
-    max-width: 600px;
-    margin: 40px auto;
-    padding: 20px;
-    background-color: #fafafa;
-    border: 1px solid #ddd;
-    border-radius: 12px;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-    text-align: center;
-    font-family: 'Inter', sans-serif;
-  }
-  
-  .matches-container h1 {
-    margin-bottom: 20px;
-    color: #3f20fb;
-  }
-  
-  .match-info h2 {
-  color: #2c2c2c;
-  font-size: 24px;
-  margin-bottom: 6px;
+  max-width: 500px; /* Adjusted max-width for a more card-like feel */
+  margin: 40px auto;
+  padding: 30px; /* Increased padding */
+  background-color: #fff; /* Clean white background */
+  border-radius: 16px; /* More pronounced rounded corners */
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15); /* Softer, larger shadow for depth */
+  text-align: center;
+  font-family: 'Inter', sans-serif;
+  transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out; /* Smooth hover effect */
+}
+
+.matches-container:hover {
+  transform: translateY(-5px); /* Slight lift on hover */
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.2);
+}
+
+.matches-container h1 {
+  margin-bottom: 25px;
+  color: #e91e63; /* A more vibrant primary color (pink) */
+  font-size: 2.5em; /* Larger title */
+  font-weight: 700;
+  letter-spacing: -0.5px;
+}
+
+/* Information about the displayed profile */
+.match-info {
+  margin-bottom: 20px;
+  text-align: center; /* Center the information within the card */
+}
+
+.match-info h2 {
+  color: #333;
+  font-size: 2.2em; /* Slightly larger name */
+  margin-bottom: 5px;
+  font-weight: 700; /* Make the name bolder */
+  letter-spacing: -0.8px; /* Adjust letter spacing for a cleaner look */
 }
 
 .match-info p {
-  color: #555;
-  font-size: 15px;
-  margin: 4px 0;
+  color: #777; /* Slightly softer color for general info */
+  font-size: 1em;
+  margin: 3px 0;
 }
 
 .match-percent {
-  color: #10b981;
+  color: #2196F3; /* A more vibrant color for the percentage */
   font-weight: bold;
-  margin-top: 10px;
-  font-size: 16px;
+  margin-top: 15px;
+  font-size: 1.5em;
 }
 
-  
-  .match-buttons {
-    margin-top: 16px;
-  }
-  
-  .pagination {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    gap: 20px;
-    margin-top: 12px;
-  }
-  
-  .pagination button {
-    padding: 8px 14px;
-    border: none;
-    background-color: #e5e7eb;
-    border-radius: 8px;
-    cursor: pointer;
-    font-weight: 500;
-  }
-  
-  .pagination button:disabled {
-    background-color: #ccc;
-    cursor: not-allowed;
-  }
-  .like-btn {
-    background-color: #ff5c5c;
-    color: white;
-    border: none;
-    border-radius: 6px;
-    padding: 6px 10px;
-    margin-top: 5px;
-    cursor: pointer;
-    font-weight: bold;
-  }
-  
-  .profile-modal-backdrop {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: rgba(0, 0, 0, 0.6);
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    z-index: 999;
-    padding: 20px;
-  }
-  
-  .profile-modal-card {
-    background: white;
-    width: 100%;
-    max-width: 400px;
-    border-radius: 16px;
-    overflow: hidden;
-    box-shadow: 0 0 20px rgba(0, 0, 0, 0.3);
-    display: flex;
-    flex-direction: column;
-    position: relative;
-  }
-  
-  .profile-modal-hero {
-    background-size: contain;
-    background-repeat: no-repeat;
-    background-position: center top;
-    height: 260px;
-    position: relative;
-  }
-  
-  .overlay-info {
-    background: rgba(0, 0, 0, 0.65);
-    backdrop-filter: blur(4px);
-    -webkit-backdrop-filter: blur(4px);
-    border-radius: 12px;
-    padding: 10px 15px;
-    width: 85%;
-    margin: 0 auto;
-    position: absolute;
-    bottom: 12px;
-    left: 50%;
-    transform: translateX(-50%);
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
-    color: #fff;
-  }
-  
-  .overlay-info h2 {
-    font-size: 22px;
-    margin: 0;
-    font-weight: 600;
-    color: #fff;
-  }
-  
- 
+/* Container for the action buttons (Pass/Like) */
+.match-buttons {
+  margin-top: 25px;
+  display: flex;
+  justify-content: center;
+  gap: 15px; /* Space between buttons */
+}
+
+.match-buttons button {
+  padding: 12px 24px;
+  border: none;
+  border-radius: 10px;
+  font-size: 1.1em;
+  font-weight: 600;
+  cursor: pointer;
+  transition: transform 0.15s ease-in-out;
+}
+
+.match-buttons button:hover {
+  transform: scale(1.05);
+}
+
+/* "Pass" button styling */
+.match-buttons .pass-btn {
+  background-color: #f44336; /* Red for "Pass" */
+  color: white;
+  box-shadow: 0 4px 8px rgba(244, 67, 54, 0.3);
+}
+
+.match-buttons .pass-btn:hover {
+  background-color: #d32f2f;
+}
+
+/* "Like" button styling */
+.match-buttons .like-btn {
+  background-color: #4caf50; /* Green for "Like" */
+  color: white;
+  box-shadow: 0 4px 8px rgba(76, 175, 80, 0.3);
+}
+
+.match-buttons .like-btn:hover {
+  background-color: #388e3c;
+}
+
+/* Pagination (if you have multiple profiles to swipe through) */
+.pagination {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 15px;
+  margin-top: 25px;
+}
+
+.pagination button {
+  padding: 10px 18px;
+  border: 1px solid #ddd;
+  background-color: #f9f9f9;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 500;
+  transition: background-color 0.2s ease;
+}
+
+.pagination button:hover:enabled {
+  background-color: transparent; /* Removed the grey hover */
+}
+
+.pagination button:disabled {
+  background-color: #eee;
+  color: #999;
+  cursor: not-allowed;
+  border-color: #eee;
+}
+
+/* --- Modal Styles (modified to remove the grey backdrop) --- */
+.profile-modal-backdrop {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: transparent; /* Changed background to transparent */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 999;
+  padding: 20px;
+}
+
+.profile-modal-card {
+  background: white;
+  width: 100%;
+  max-width: 400px;
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.3);
+  display: flex;
+  flex-direction: column;
+  position: relative;
+}
+
+.profile-modal-hero {
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center top;
+  height: 260px;
+  position: relative;
+}
+
+.overlay-info {
+  background: rgba(0, 0, 0, 0.65);
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+  border-radius: 12px;
+  padding: 10px 15px;
+  width: 85%;
+  margin: 0 auto;
+  position: absolute;
+  bottom: 12px;
+  left: 50%;
+  transform: translateX(-50%);
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+  color: #fff;
+}
+
+.overlay-info h2 {
+  font-size: 22px;
+  margin: 0;
+  font-weight: 600;
+  color: #fff;
+}
+
 .age-line {
   font-size: 14px;
   margin-top: 4px;
-  color: #ffffff !important;  /* ✅ Force white */
+  color: #ffffff !important; /* Force white */
 }
 
 /* Restyle the close (X) button for a modern pill-like look */
@@ -150,7 +204,7 @@
   font-weight: bold;
   cursor: pointer;
   z-index: 1001;
-  transition: background-color 0.3s ease;
+  transition: background-color 0.3s ease, transform 0.2s ease;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -162,167 +216,174 @@
   transform: scale(1.05);
 }
 
-  
-  /* Scrollable modal content */
-  .profile-modal-content {
-    padding: 20px;
-    max-height: 320px;
-    overflow-y: auto;
-    font-size: 15px;
-    line-height: 1.5;
-    scroll-behavior: smooth;
+/* Scrollable modal content */
+.profile-modal-content {
+  padding: 20px;
+  max-height: 320px;
+  overflow-y: auto;
+  font-size: 15px;
+  line-height: 1.5;
+  scroll-behavior: smooth;
+}
+
+.profile-modal-content::-webkit-scrollbar {
+  width: 6px;
+}
+.profile-modal-content::-webkit-scrollbar-thumb {
+  background: #ccc;
+  border-radius: 4px;
+}
+
+.profile-modal-content p {
+  margin-bottom: 16px;
+}
+
+/* About Me box styling */
+.profile-modal .about-me-card {
+  background-color: #fff0f5;
+  border-radius: 12px;
+  padding: 15px;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.05);
+  font-size: 14.5px;
+  color: #444;
+  line-height: 1.7;
+  font-family: "Segoe UI", "Roboto", sans-serif;
+  white-space: pre-line;
+  margin-bottom: 20px;
+}
+
+/* Tags and sections */
+.profile-modal .profile-section {
+  margin-bottom: 24px;
+}
+
+.profile-modal .profile-section h3 {
+  font-size: 16px;
+  margin-bottom: 10px;
+  color: #333;
+}
+
+.profile-modal .tag-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.profile-modal .tag {
+  background-color: #a90329;
+  color: white;
+  padding: 6px 12px;
+  font-size: 13px;
+  border-radius: 999px;
+}
+
+.profile-modal .tag-placeholder {
+  font-style: italic;
+  color: #777;
+}
+
+/* --- Match Popup Styles (slightly adjusted) --- */
+.match-popup-backdrop {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0,0,0,0.7); /* Slightly darker backdrop */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 999;
+}
+
+.match-popup {
+  background: white;
+  padding: 30px;
+  border-radius: 25px;
+  text-align: center;
+  max-width: 400px;
+  width: 90%;
+  box-shadow: 0 20px 40px rgba(0,0,0,0.4); /* Stronger shadow */
+  animation: popup 0.4s ease-in-out; /* Slightly slower animation */
+}
+
+@keyframes popup {
+  0% {
+    transform: scale(0.7);
+    opacity: 0;
   }
-  
-  .profile-modal-content::-webkit-scrollbar {
-    width: 6px;
+  100% {
+    transform: scale(1);
+    opacity: 1;
   }
-  .profile-modal-content::-webkit-scrollbar-thumb {
-    background: #ccc;
-    border-radius: 4px;
-  }
-  
-  .profile-modal-content p {
-    margin-bottom: 16px;
-  }
-  
-  /* About Me box styling */
-  .profile-modal .about-me-card {
-    background-color: #fff0f5;
-    border-radius: 12px;
-    padding: 15px;
-    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.05);
-    font-size: 14.5px;
-    color: #444;
-    line-height: 1.7;
-    font-family: "Segoe UI", "Roboto", sans-serif;
-    white-space: pre-line;
-    margin-bottom: 20px;
-  }
-  
-  /* Tags and sections */
-  .profile-modal .profile-section {
-    margin-bottom: 24px;
-  }
-  
-  .profile-modal .profile-section h3 {
-    font-size: 16px;
-    margin-bottom: 10px;
-    color: #333;
-  }
-  
-  .profile-modal .tag-container {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 8px;
-  }
-  
-  .profile-modal .tag {
-    background-color: #a90329;
-    color: white;
-    padding: 6px 12px;
-    font-size: 13px;
-    border-radius: 999px;
-  }
-  
-  .profile-modal .tag-placeholder {
-    font-style: italic;
-    color: #777;
-  }
-  
+}
+
+.match-img-popup {
+  width: 120px; /* Slightly larger image */
+  height: 120px;
+  object-fit: cover;
+  border-radius: 50%;
+  margin: 15px 0;
+  border: 3px solid #4caf50; /* Highlight the match */
+}
+
+/* --- Match Card Styles (you might not be using this directly on the discover page) --- */
+.match-card {
+  background: #fff;
+  padding: 24px;
+  border-radius: 20px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
+  max-width: 500px;
+  margin: 20px auto; /* Added some top/bottom margin */
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.match-card:hover {
+  transform: translateY(-8px); /* Reduced lift on hover for this card */
+  box-shadow: 0 10px 24px rgba(0, 0, 0, 0.12);
+}
+.match-img {
+  width: 100px; /* Adjusted size */
+  height: 100px;
+  border-radius: 50%;
+  border: 3px solid #e91e63; /* Consistent primary color */
+  object-fit: cover;
+  margin-bottom: 16px;
+}
+
+/* --- Overall Matches Container (adjustments for consistency) --- */
+.matches-container {
+  background: rgba(255, 255, 255, 0.96);
+  padding: 30px;
+  border-radius: 18px;
+  box-shadow: 0 12px 24px rgba(0, 0, 0, 0.08);
+  transition: all 0.3s ease-in-out;
+  max-width: 500px; /* Consistent max-width */
+  margin: 40px auto; /* Consistent margin */
+}
+
+.match-buttons button {
+  margin: 10px 8px 0;
+  padding: 12px 24px; /* Consistent padding */
+  border-radius: 10px;
+  font-size: 1.1em; /* Consistent font size */
+  font-weight: 600;
+  border: none;
+  cursor: pointer;
+  transition: background 0.3s ease, transform 0.2s ease;
+}
+
+.match-buttons button:hover {
+  transform: scale(1.05);
+}
+
+.match-buttons .like-btn {
+  background-color: #4caf50;
+  color: white;
+}
+
+.match-buttons .like-btn:hover {
+  background-color: #388e3c;
+} 
 
 
-  .match-popup-backdrop {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: rgba(0,0,0,0.6);
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    z-index: 999;
-  }
-  
-  .match-popup {
-    background: white;
-    padding: 30px;
-    border-radius: 25px;
-    text-align: center;
-    max-width: 400px;
-    width: 90%;
-    box-shadow: 0 20px 40px rgba(0,0,0,0.3);
-    animation: popup 0.3s ease-in-out;
-  }
-  
-  @keyframes popup {
-    0% {
-      transform: scale(0.6);
-      opacity: 0;
-    }
-    100% {
-      transform: scale(1);
-      opacity: 1;
-    }
-  }
-  
-  .match-img-popup {
-    width: 100px;
-    height: 100px;
-    object-fit: cover;
-    border-radius: 50%;
-    margin: 10px 0;
-  }
-  
-  
-
-  .match-card {
-    background: #fff;
-    padding: 24px;
-    border-radius: 20px;
-    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
-    max-width: 500px;
-    margin: auto;
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
-  }
-  
-  .match-card:hover {
-    transform: translateY(-100px);
-    box-shadow: 0 14px 32px rgba(0, 0, 0, 0.12);
-  }
-  .match-img {
-    width: 130px;
-    height: 130px;
-    border-radius: 50%;
-    border: 4px solid #9d2417;
-    object-fit: cover;
-    margin-bottom: 16px;
-  }
-  
-  
-  .matches-container {
-    background: rgba(255, 255, 255, 0.96);
-    padding: 30px;
-    border-radius: 18px;
-    box-shadow: 0 12px 24px rgba(0, 0, 0, 0.08);
-    transition: all 0.3s ease-in-out;
-  }
-  
-  .match-buttons button {
-    margin: 10px 8px 0;
-    padding: 10px 20px;
-    border-radius: 10px;
-    font-size: 15px;
-    font-weight: 600;
-    background-color: #5b0806;
-    color: white;
-    border: none;
-    cursor: pointer;
-    transition: background 0.3s ease, transform 0.2s ease;
-  }
-  
-  .match-buttons button:hover {
-    background-color: #a21f13;
-    transform: scale(1.05);
-  }
-  
