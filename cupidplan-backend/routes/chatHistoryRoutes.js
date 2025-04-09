@@ -70,14 +70,20 @@ router.get("/unread", authenticateUser, async (req, res) => {
 
     for (const chat of chats) {
       const lastMsg = chat.messages[chat.messages.length - 1];
-      if (lastMsg && String(lastMsg.sender._id) !== String(currentUser._id)) {
+      
+      if (
+        lastMsg &&
+        lastMsg.sender &&
+        lastMsg.sender._id &&
+        String(lastMsg.sender._id) !== String(currentUser._id)
+      ) {
         const sender = chat.participants.find(p => String(p._id) === String(lastMsg.sender._id));
         if (sender && !unreadSenders.some(s => String(s._id) === String(sender._id))) {
           unreadSenders.push({ _id: sender._id, name: sender.name, email: sender.email });
-
         }
       }
     }
+    
 
     return res.status(200).json({ showNotification: true, senders: unreadSenders });
   } catch (err) {
