@@ -22,6 +22,9 @@ const Chat = () => {
   const messagesEndRef = useRef(null);
   const [partnerTyping, setPartnerTyping] = useState(false);
   const [selectedMessageId, setSelectedMessageId] = useState(null);
+  const [receiverData, setReceiverData] = useState(null);
+  const [isOnline, setIsOnline] = useState(false);
+
 
   const roomId = [currentUserEmail, selectedUserEmail].sort().join("_");
 
@@ -29,6 +32,7 @@ const Chat = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages]);
 
+  
   useEffect(() => {
     if (!currentUserEmail || !selectedUserEmail) return;
 
@@ -48,19 +52,27 @@ const Chat = () => {
 
     fetchChatHistory();
     socket.emit("joinRoom", roomId);
+    socket.emit("userOnline", currentUserEmail);
+    
 
-    const fetchSelectedUserName = async () => {
+    
+
+
+    const fetchReceiverData = async () => {
       try {
         const res = await axios.get(`http://localhost:5000/api/user/by-email/${selectedUserEmail}`);
-        if (res.data && res.data.name) {
-          setSelectedUserName(res.data.name);
+        if (res.data) {
+          setReceiverData(res.data);
+          setSelectedUserName(res.data.name); 
         }
       } catch (err) {
-        console.error("❌ Failed to fetch selected user name:", err);
+        console.error("❌ Failed to fetch selected user data:", err);
       }
     };
     
-    fetchSelectedUserName();
+    
+    fetchReceiverData(); 
+
     
 
     const handleReceiveMessage = (data) => {
@@ -100,8 +112,11 @@ const Chat = () => {
 
     return () => {
       socket.off("receiveMessage", handleReceiveMessage);
-      socket.off("messageDeleted"); // ✅ Clean up listener
+      socket.off("messageDeleted"); 
       socket.emit("leaveRoom", roomId);
+      
+
+
     };
   }, [roomId, currentUserEmail, selectedUserEmail]);
 
@@ -116,7 +131,7 @@ const Chat = () => {
         timestamp: new Date().toISOString(),
       };
   
-      // ✅ No need to setMessages here — wait for receiveMessage event
+      
       setMessage("");
       socket.emit("sendMessage", messageData);
     }
@@ -141,16 +156,54 @@ const Chat = () => {
     }
   };
   const { email } = useParams();
-
-  useEffect(() => {
-    console.log("🟢 Chatting with:", email); // ✅ Test to make sure it works
   
-    // Load messages with this email (optional, depending on your logic)
+  useEffect(() => {
+    console.log("🟢 Chatting with:", email);
+  
+    // Load messages with this email 
   }, [email]);
+  
+  useEffect(() => {
+    const handleUnload = () => {
+      socket.disconnect();
+    };
+  
+    window.addEventListener("beforeunload", handleUnload);
+  
+    return () => {
+      window.removeEventListener("beforeunload", handleUnload);
+    };
+  }, []);
+  
+  useEffect(() => {
+    const handleStatusUpdate = (onlineMap) => {
+      setIsOnline(!!onlineMap[selectedUserEmail]);
+    };
+  
+    socket.on("updateOnlineStatus", handleStatusUpdate);
+  
+    return () => {
+      socket.off("updateOnlineStatus", handleStatusUpdate);
+    };
+  }, [selectedUserEmail]);
   
   return (
     <>
       <div className="chat-container">
+      <div className="chat-header">
+  <img
+    src={receiverData?.profilePicUrl || "/images/default-profile.jpg"}
+    alt={receiverData?.name}
+    className="chat-profile-pic"
+  />
+  <div className="chat-header-info">
+    <h2>{receiverData?.name || selectedUserEmail}</h2>
+    <p className={`online-status ${isOnline ? "online" : "offline"}`}>
+      {isOnline ? "Online" : "Offline"}
+    </p>
+  </div>
+</div>
+
       <h2>💬 Chat with {selectedUserName || selectedUserEmail}</h2>
         <div className="chat-box">
           {messages.map((msg, idx) => {

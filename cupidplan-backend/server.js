@@ -99,9 +99,19 @@ app.post("/api/verify-otp", (req, res) => {
 // ✅ Socket.IO real-time chat
 const ChatModel = require("./models/Chat");
 const User = require("./models/User");
+const onlineUsers = {}; 
+
 
 io.on("connection", (socket) => {
   console.log("🔌 New user connected:", socket.id);
+  socket.on("userOnline", (email) => {
+    if (email) {
+      onlineUsers[email] = socket.id;
+      console.log(`✅ ${email} is now online`);
+      io.emit("updateOnlineStatus", onlineUsers); // Broadcast to all
+    }
+  });
+  
 
   socket.on("joinRoom", (room) => {
     socket.join(room);
@@ -188,7 +198,19 @@ if (receiverUser.chatNotifications) {
 
   socket.on("disconnect", () => {
     console.log("❌ User disconnected:", socket.id);
+  
+    // Remove user from online list
+    for (const email in onlineUsers) {
+      if (onlineUsers[email] === socket.id) {
+        console.log(`🔴 ${email} went offline`);
+        delete onlineUsers[email];
+        break;
+      }
+    }
+  
+    io.emit("updateOnlineStatus", onlineUsers); 
   });
+  
 });
 
 // ✅ Start server
