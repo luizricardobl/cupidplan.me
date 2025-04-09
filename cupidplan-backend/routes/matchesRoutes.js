@@ -198,4 +198,36 @@ router.get("/discover/:email", async (req, res) => {
   }
 });
 
+
+// ✅ GET /api/matches/confirmed/:email
+router.get("/confirmed/:email", async (req, res) => {
+  const { email } = req.params;
+
+  try {
+    const rightSwipes = await Swipe.find({ swiperEmail: email, direction: "right" });
+
+    const mutualMatches = [];
+
+    for (const swipe of rightSwipes) {
+      const matchBack = await Swipe.findOne({
+        swiperEmail: swipe.swipeeEmail,
+        swipeeEmail: email,
+        direction: "right",
+      });
+
+      if (matchBack) {
+        const matchedUser = await User.findOne({ email: swipe.swipeeEmail });
+        if (matchedUser && (!matchedUser.hideProfile || matchedUser.hideProfile === false)) {
+          mutualMatches.push(matchedUser);
+        }
+      }
+    }
+
+    res.status(200).json({ success: true, matches: mutualMatches });
+  } catch (err) {
+    console.error("Error fetching confirmed matches:", err);
+    res.status(500).json({ success: false, message: "Server error" });
+  }
+});
+
 module.exports = router;

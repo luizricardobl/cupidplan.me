@@ -6,6 +6,7 @@ import Home from './pages/Home';
 import Profile from './components/Profile';
 import Discover from './pages/Discover';
 import Dates from './pages/Dates';
+import ConfirmedMatches from "./pages/ConfirmedMatches";
 import Help from './pages/Help';
 import About from './pages/About';
 import Terms from './pages/Terms';
@@ -33,6 +34,9 @@ function App() {
               <Link to="/profile" className="nav-button">Profile</Link>
               <Link to="/discover" className="nav-button">Discover</Link>
               <Link to="/dates" className="nav-button">Dates</Link>
+              <Link to="/matches" className="nav-button">My Matches</Link>
+
+
             </>
           )}
         </div>
@@ -63,6 +67,8 @@ function App() {
         <Route path="/community" element={<Community />} />
         <Route path="/chat" element={<Chat />} />
         <Route path="/chat/:email" element={<Chat />} />
+        <Route path="/matches" element={<ConfirmedMatches />} />
+
 
 
       </Routes>
