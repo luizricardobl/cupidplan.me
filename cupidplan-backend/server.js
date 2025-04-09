@@ -17,6 +17,7 @@ const sgMail = require("@sendgrid/mail");
 sgMail.setApiKey(process.env.SENDGRID_API_KEY);
 const userRoutes = require('./routes/userRoutes');
 const uploadRoute = require("./routes/uploadRoute");
+const swipeRoutes = require("./routes/swipeRoutes");
 
 console.log('All modules loaded successfully.');
 
@@ -43,6 +44,7 @@ app.use('/api/user', userRoutes);
 app.use("/api/upload", uploadRoute);
 app.use("/api/likes", require("./routes/likeRoutes"));
 app.use("/api/chat", require("./routes/chatRoutes"));
+app.use("/api/swipes", swipeRoutes);
 
 
 // ✅ MongoDB connection

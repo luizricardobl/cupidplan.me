@@ -1,6 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const User = require("../models/User");
+const Swipe = require("../models/Swipe");
 
 // 🔧 Helper: Calculate distance-based score (0-100)
 const calculateDistanceScore = (current, other) => {
@@ -128,6 +129,71 @@ router.get("/:email", async (req, res) => {
     res.status(200).json({ success: true, matches });
   } catch (error) {
     console.error("❌ Error fetching matches:", error);
+    res.status(500).json({ success: false, message: "Server error" });
+  }
+});
+
+// 🔍 GET /api/matches/discover/:email
+router.get("/discover/:email", async (req, res) => {
+  const { email } = req.params;
+
+  try {
+    const currentUser = await User.findOne({ email });
+    if (!currentUser) return res.status(404).json({ success: false, message: "User not found" });
+
+    // ✅ Get users already swiped on (left or right)
+    const swipes = await Swipe.find({ swiperEmail: email });
+    const swipedEmails = swipes.map((s) => s.swipeeEmail);
+
+    // ✅ Filter out users already swiped and self
+    const allUsers = await User.find({
+      email: { $ne: email, $nin: swipedEmails },
+      $or: [{ hideProfile: { $exists: false } }, { hideProfile: false }]
+    });
+
+    // ✅ Match logic (like your current /:email route but simplified)
+    const matches = allUsers.map((user) => {
+      const sharedHobbies = (user.hobbies || []).filter((hobby) =>
+        (currentUser.hobbies || []).includes(hobby)
+      );
+
+      const sharedDealbreakers = (user.dealbreakers || []).filter((d) =>
+        (currentUser.dealbreakers || []).includes(d)
+      );
+      const dealbreakerPenalty = sharedDealbreakers.length * 10;
+
+      const sharedTypes = Object.entries(currentUser.types || {}).filter(
+        ([key, value]) => value && user.types && user.types[key]
+      ).length;
+
+      const typeScore = sharedTypes * 20;
+
+      const hobbyScore = (sharedHobbies.length / (currentUser.hobbies?.length || 1)) * 100;
+
+      let locationScore = 0;
+      if (currentUser.geoLocation && user.geoLocation) {
+        locationScore = calculateDistanceScore(currentUser.geoLocation, user.geoLocation);
+      }
+
+      const matchPercentage = Math.max(
+        Math.round(
+          0.4 * typeScore +
+          0.35 * hobbyScore +
+          0.15 * locationScore -
+          dealbreakerPenalty
+        ),
+        0
+      );
+
+      return {
+        ...user.toObject(),
+        matchPercentage,
+      };
+    });
+
+    res.status(200).json({ success: true, matches });
+  } catch (error) {
+    console.error("❌ Error in /discover route:", error);
     res.status(500).json({ success: false, message: "Server error" });
   }
 });

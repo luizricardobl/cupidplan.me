@@ -4,7 +4,7 @@ import Login from './pages/Login';
 import Signup from "./pages/Signup";
 import Home from './pages/Home';
 import Profile from './components/Profile';
-import Matches from './pages/Matches';
+import Discover from './pages/Discover';
 import Dates from './pages/Dates';
 import Help from './pages/Help';
 import About from './pages/About';
@@ -31,7 +31,7 @@ function App() {
           {isLoggedIn && (
             <>
               <Link to="/profile" className="nav-button">Profile</Link>
-              <Link to="/matches" className="nav-button">Matches</Link>
+              <Link to="/discover" className="nav-button">Discover</Link>
               <Link to="/dates" className="nav-button">Dates</Link>
             </>
           )}
@@ -54,7 +54,7 @@ function App() {
         <Route path="/signup" element={<Signup />} />
         <Route path="/home" element={<Home />} />
         <Route path="/profile" element={<Profile />} />
-        <Route path="/matches" element={<Matches />} />
+        <Route path="/discover" element={<Discover />} />
         <Route path="/dates" element={<Dates />} />
         <Route path="/help" element={<Help />} />
         <Route path="/about" element={<About />} />
