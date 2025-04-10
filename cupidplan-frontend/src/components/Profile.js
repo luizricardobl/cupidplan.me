@@ -513,11 +513,16 @@ useEffect(() => {
             <div className="container">
               <div className="profile-info">
               <div className="profile-img-container">
-  <img
-    src={profile.profilePicUrl || profilePic}
-    alt="Profile"
-    className="profile-image"
-  />
+              <img
+  src={profile.profilePicUrl || profilePic}
+  onError={(e) => {
+    e.target.onerror = null;
+    e.target.src = profilePic; // fallback to default
+  }}
+  alt="Profile"
+  className="profile-image"
+/>
+
 
 <button
   className="camera-button"
@@ -785,11 +790,19 @@ useEffect(() => {
 
             <div className="profile-right-col">
               <div className="stats-container">
+                <div className="photo-album-btn-container">
+                <button className="photo-album-btn" onClick={() => navigate("/album")}>
+  📷 Photo Album
+</button>
+
+</div>
+
                 <h2 className="section-title">Profile Statistics</h2>
                 <div className="stats-box-content">
                   <i className="fa-solid fa-heart stats-icon"></i>
                   <div className="stats-details">
                   <h3 className="stats-value">{likesThisWeek} Likes</h3>
+                  
 
                     <p className="stats-timeframe">This Week</p>
                   </div>

@@ -128,4 +128,18 @@ router.get("/last-seen/:email", (req, res) => {
   }
 });
 
+// ✅ Get photo album by email
+router.get("/album/:email", async (req, res) => {
+  try {
+    const user = await User.findOne({ email: req.params.email });
+    if (!user) {
+      return res.status(404).json({ success: false, message: "User not found" });
+    }
+
+    res.json({ success: true, album: user.album || [] });
+  } catch (err) {
+    console.error("❌ Failed to fetch album:", err);
+    res.status(500).json({ success: false, message: "Server error" });
+  }
+});
 module.exports = router;

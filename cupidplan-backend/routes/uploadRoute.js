@@ -8,6 +8,7 @@ const router = express.Router();
 const storage = multer.memoryStorage();
 const upload = multer({ storage });
 
+// ✅ Upload Profile Picture
 router.post("/upload-profile-pic", authenticate, upload.single("image"), async (req, res) => {
   try {
     const User = require("../models/User");
@@ -40,7 +41,6 @@ router.post("/upload-profile-pic", authenticate, upload.single("image"), async (
   }
 });
 
-
 // ✅ DELETE profile picture
 router.delete("/delete-profile-pic", authenticate, async (req, res) => {
   try {
@@ -62,6 +62,79 @@ router.delete("/delete-profile-pic", authenticate, async (req, res) => {
     return res.status(200).json({ success: true, message: "Deleted successfully" });
   } catch (err) {
     console.error("❌ Error deleting profile picture:", err);
+    return res.status(500).json({ success: false, message: "Server error" });
+  }
+});
+
+// ✅ Upload Photo Album (NEW)
+router.post("/photo-album", upload.array("photos", 10), async (req, res) => {
+  try {
+    const { email } = req.body;
+    const files = req.files;
+
+    if (!email || !files || files.length === 0) {
+      return res.status(400).json({ error: "Missing email or files" });
+    }
+
+    const uploadedUrls = [];
+    const User = require("../models/User");
+
+    for (const file of files) {
+      const stream = cloudinary.uploader.upload_stream(
+        { folder: "CupidPlan/Album" },
+        async (error, result) => {
+          if (error) throw error;
+          uploadedUrls.push(result.secure_url);
+
+          if (uploadedUrls.length === files.length) {
+            // Save all images to user's album
+            const updatedUser = await User.findOneAndUpdate(
+              { email },
+              { $push: { album: { $each: uploadedUrls } } },
+              { new: true }
+            );
+
+            return res.json({ success: true, album: updatedUser.album });
+          }
+        }
+      );
+      streamifier.createReadStream(file.buffer).pipe(stream);
+    }
+  } catch (err) {
+    console.error("❌ Error uploading album:", err);
+    res.status(500).json({ error: "Album upload failed" });
+  }
+});
+// DELETE photo from album
+router.delete("/photo-album/delete", authenticate, async (req, res) => {
+  try {
+    const { email, photoUrl } = req.body;
+    if (!email || !photoUrl) {
+      return res.status(400).json({ success: false, message: "Missing email or photoUrl" });
+    }
+
+    const User = require("../models/User");
+    const user = await User.findOne({ email });
+
+    if (!user) {
+      return res.status(404).json({ success: false, message: "User not found" });
+    }
+
+    // Extract public_id from URL
+    const segments = photoUrl.split("/");
+    const fileName = segments[segments.length - 1];
+    const publicId = `cupidplan/album/${fileName.split(".")[0]}`;
+
+    // Delete from Cloudinary
+    await cloudinary.uploader.destroy(publicId);
+
+    // Remove from user's album array
+    user.album = user.album.filter((url) => url !== photoUrl);
+    await user.save();
+
+    return res.json({ success: true, message: "Photo deleted" });
+  } catch (err) {
+    console.error("❌ Error deleting album photo:", err);
     return res.status(500).json({ success: false, message: "Server error" });
   }
 });

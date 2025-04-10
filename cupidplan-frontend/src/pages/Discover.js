@@ -34,6 +34,9 @@ const Discover = () => {
     const [showModal, setShowModal] = useState(false);
     const [matchedUser, setMatchedUser] = useState(null); // 🆕 new state
     const [showMatchModal, setShowMatchModal] = useState(false);
+    const [lightboxOpen, setLightboxOpen] = useState(false);
+const [selectedPhoto, setSelectedPhoto] = useState(null);
+
 
     const navigate = useNavigate();
     const loggedInEmail =
@@ -233,6 +236,32 @@ const Discover = () => {
                                         : <p className="tag-placeholder">None listed</p>}
                                 </div>
                             </div>
+                            {selectedUser.album && selectedUser.album.length > 0 && (
+  <div className="profile-section">
+    <h3>📸 Photo Album</h3>
+    <div className="album-preview-grid">
+      {selectedUser.album.map((url, idx) => (
+        <img
+          key={idx}
+          src={url}
+          alt={`Photo ${idx + 1}`}
+          className="public-album-photo"
+          onClick={() => {
+            setSelectedPhoto(url);
+            setLightboxOpen(true);
+          }}
+        />
+      ))}
+      {lightboxOpen && selectedPhoto && (
+  <div className="lightbox-backdrop" onClick={() => setLightboxOpen(false)}>
+    <img src={selectedPhoto} alt="Enlarged" className="lightbox-img" />
+  </div>
+)}
+
+    </div>
+  </div>
+)}
+
                         </div>
                     </div>
                 </div>

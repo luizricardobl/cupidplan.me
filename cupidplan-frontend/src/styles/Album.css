@@ -1,0 +1,87 @@
+.album-upload-container {
+    max-width: 600px;
+    margin: 40px auto;
+    padding: 20px;
+    text-align: center;
+    font-family: "Segoe UI", sans-serif;
+  }
+  
+  .album-upload-container h2 {
+    margin-bottom: 16px;
+    color: #a246ef;
+  }
+  
+  input[type="file"] {
+    margin-bottom: 20px;
+  }
+  
+  .album-preview-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    justify-content: center;
+    margin-bottom: 20px;
+  }
+  
+  .album-preview-img {
+    width: 100px;
+    height: 100px;
+    object-fit: cover;
+    border-radius: 8px;
+    border: 2px solid #9f3eef;
+  }
+  
+  button {
+    background-color: #6b0b0b;
+    color: white;
+    padding: 10px 20px;
+    font-weight: bold;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+  }
+  
+  button:hover {
+    background-color: #000000;
+  }
+  
+  .success-msg {
+    color: green;
+    font-weight: bold;
+    margin-top: 10px;
+    text-align: center;
+  }
+  
+  
+
+  .album-photo {
+    width: 120px;
+    height: 120px;
+    object-fit: cover;
+    border-radius: 8px;
+    margin: 10px;
+    cursor: pointer;
+    transition: transform 0.2s ease-in-out;
+  }
+  .album-photo:hover {
+    transform: scale(1.05);
+  }
+  .lightbox-backdrop {
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 100%;
+    
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 999;
+  }
+  .lightbox-image {
+    max-width: 90%;
+    max-height: 90%;
+    border-radius: 12px;
+    box-shadow: 0 0 20px #000;
+  }
+  

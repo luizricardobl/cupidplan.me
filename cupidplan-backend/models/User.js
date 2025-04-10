@@ -48,8 +48,13 @@ const UserSchema = new mongoose.Schema({
   chatNotifications: {
     type: Boolean,
     default: false,
-  }
-  
+  },
+  album: {
+  type: [String], // Array of image URLs
+  default: [],
+}
+
+
 });
 
 // ✅ Index geoLocation for spatial queries

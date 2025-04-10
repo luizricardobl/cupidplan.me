@@ -4,6 +4,7 @@ import Login from './pages/Login';
 import Signup from "./pages/Signup";
 import Home from './pages/Home';
 import Profile from './components/Profile';
+import Album from "./pages/Album";
 import Discover from './pages/Discover';
 import Dates from './pages/Dates';
 import ConfirmedMatches from "./pages/ConfirmedMatches";
@@ -58,6 +59,7 @@ function App() {
         <Route path="/signup" element={<Signup />} />
         <Route path="/home" element={<Home />} />
         <Route path="/profile" element={<Profile />} />
+        <Route path="/album" element={<Album />} />
         <Route path="/discover" element={<Discover />} />
         <Route path="/dates" element={<Dates />} />
         <Route path="/help" element={<Help />} />
