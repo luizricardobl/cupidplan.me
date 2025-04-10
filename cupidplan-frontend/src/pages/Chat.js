@@ -15,6 +15,36 @@ const socket = io("http://localhost:5000", {
   },
 });
 
+const getDateLabel = (dateString) => {
+  const messageDate = new Date(dateString);
+  const today = new Date();
+  const yesterday = new Date();
+  yesterday.setDate(today.getDate() - 1);
+
+  const isSameDay = (d1, d2) =>
+    d1.getFullYear() === d2.getFullYear() &&
+    d1.getMonth() === d2.getMonth() &&
+    d1.getDate() === d2.getDate();
+
+  if (isSameDay(messageDate, today)) return null;
+  if (isSameDay(messageDate, yesterday))
+    return `Yesterday • ${messageDate.toLocaleTimeString([], {
+      hour: "numeric",
+      minute: "2-digit",
+    })}`;
+
+  return `${messageDate.toLocaleDateString(undefined, {
+    weekday: "short",
+    month: "short",
+    day: "numeric",
+    year: "numeric",
+  })} • ${messageDate.toLocaleTimeString([], {
+    hour: "numeric",
+    minute: "2-digit",
+  })}`;
+};
+
+
 
 const Chat = () => {
   
@@ -262,50 +292,68 @@ const Chat = () => {
 
     
         <div className="chat-box">
-          {messages.map((msg, idx) => {
-            const isOwnMessage = msg.sender === currentUserEmail;
-            const formattedTime = msg.timestamp
-              ? new Date(msg.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
-              : "";
-            const messageId = msg._id || `${msg.timestamp}_${idx}`;
-            const isSelected = selectedMessageId === messageId;
+        {messages.map((msg, idx) => {
+  const isOwnMessage = msg.sender === currentUserEmail;
+  const formattedTime = msg.timestamp
+    ? new Date(msg.timestamp).toLocaleTimeString([], {
+        hour: "2-digit",
+        minute: "2-digit",
+      })
+    : "";
 
-            return (
-              <div
-                key={messageId}
-                className={`chat-bubble ${isOwnMessage ? "own" : "other"}`}
-                onClick={() =>
-                  isOwnMessage && msg._id
-                    ? setSelectedMessageId(isSelected ? null : messageId)
-                    : null
-                }
-                style={{ cursor: isOwnMessage && msg._id ? "pointer" : "default" }}
-              >
-                <div>
-                
-                {"  "}
-                  {msg.message || msg.text}
-                </div>
-                <div className="timestamp">{formattedTime}</div>
-                {isOwnMessage && idx === messages.length - 1 && lastSeenByReceiver && (
-  <div className="seen-indicator">👀 Seen</div>
+  const messageId = msg._id || `${msg.timestamp}_${idx}`;
+  const isSelected = selectedMessageId === messageId;
+
+  const showDateSeparator =
+    idx === 0 ||
+    new Date(msg.timestamp).toDateString() !==
+      new Date(messages[idx - 1]?.timestamp).toDateString();
+
+  const dateLabel = getDateLabel(msg.timestamp);
+
+  return (
+    <React.Fragment key={messageId}>
+      {showDateSeparator && dateLabel && (
+  <div style={{ display: "flex", justifyContent: "center" }}>
+    <div className="date-separator">🕒 {dateLabel}</div>
+  </div>
 )}
 
 
-                {isOwnMessage && isSelected && msg._id && (
-                  <button
-                    className="delete-button"
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      handleDeleteMessage(msg._id);
-                    }}
-                  >
-                    🗑️ Delete
-                  </button>
-                )}
-              </div>
-            );
-          })}
+      <div
+        className={`chat-bubble ${isOwnMessage ? "own" : "other"}`}
+        onClick={() =>
+          isOwnMessage && msg._id
+            ? setSelectedMessageId(isSelected ? null : messageId)
+            : null
+        }
+        style={{
+          cursor: isOwnMessage && msg._id ? "pointer" : "default",
+        }}
+      >
+        <div>{msg.message || msg.text}</div>
+        <div className="timestamp">{formattedTime}</div>
+
+        {isOwnMessage &&
+          idx === messages.length - 1 &&
+          lastSeenByReceiver && <div className="seen-indicator">👀 Seen</div>}
+
+        {isOwnMessage && isSelected && msg._id && (
+          <button
+            className="delete-button"
+            onClick={(e) => {
+              e.stopPropagation();
+              handleDeleteMessage(msg._id);
+            }}
+          >
+            🗑️ Delete
+          </button>
+        )}
+      </div>
+    </React.Fragment>
+  );
+})}
+
 
           {partnerTyping && (
             <div
