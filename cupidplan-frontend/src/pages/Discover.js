@@ -73,12 +73,26 @@ const [selectedPhoto, setSelectedPhoto] = useState(null);
         }
 
         socket.on("profileVisibilityChanged", ({ email, hidden }) => {
+            socket.on("userInfoUpdated", (updatedUser) => {
+                setMatches((prevMatches) =>
+                  prevMatches.map((match) =>
+                    match.email === updatedUser.email
+                      ? { ...match, name: updatedUser.name, location: updatedUser.location }
+                      : match
+                  )
+                );
+              });
+              
             console.log(`🔄 Visibility update: ${email} is now ${hidden ? "hidden" : "visible"}`);
             if (!hidden) fetchMatches(); // Refresh if profile is now visible again
             else setMatches((prev) => prev.filter((match) => match.email !== email));
         });
 
-        return () => socket.off("profileVisibilityChanged");
+        return () => {
+            socket.off("profileVisibilityChanged");
+            socket.off("userInfoUpdated");
+          };
+          
     }, [loggedInEmail]);
 
     const currentProfile = matches[currentIndex];

@@ -142,4 +142,32 @@ router.get("/album/:email", async (req, res) => {
     res.status(500).json({ success: false, message: "Server error" });
   }
 });
+
+
+// ✅ Update name and location
+router.put("/update-basic-info", authenticate, async (req, res) => {
+  try {
+    const { name, location } = req.body;
+    const user = await User.findById(req.user.id);
+    const io = req.app.get("io");
+
+    if (name) user.name = name;
+    if (location) user.location = location;
+
+    await user.save();
+    io.emit("userInfoUpdated", {
+      email: user.email,
+      name: user.name,
+      location: user.location,
+    });
+    
+    res.status(200).json({ success: true, message: "Basic info updated" });
+  } catch (err) {
+    console.error("❌ Failed to update basic info:", err);
+    res.status(500).json({ success: false, message: "Server error" });
+  }
+});
+
+
+
 module.exports = router;

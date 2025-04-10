@@ -249,13 +249,35 @@ useEffect(() => {
     try {
       const token = localStorage.getItem("token");
   
+      // Update name and location in database
+      await axios.put(
+        "http://localhost:5000/api/user/update-basic-info",
+        {
+          name: profile.name,
+          location: profile.location,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+  
+      // Update preferences like distance, age, etc.
       await axios.put(
         "http://localhost:5000/api/user/preferences",
         {
           minAge: profile.minAge,
           maxAge: profile.maxAge,
           distance: profile.distance,
-          relationshipGoal: profile.types.casual ? "casual" : profile.types.romantic ? "romantic" : profile.types.adventurous ? "adventurous" : "",
+          relationshipGoal:
+            profile.types.casual
+              ? "casual"
+              : profile.types.romantic
+              ? "romantic"
+              : profile.types.adventurous
+              ? "adventurous"
+              : "",
           types: profile.types,
           dealbreakers: profile.dealbreakers,
         },
@@ -268,9 +290,10 @@ useEffect(() => {
   
       setEditingProfile(false);
     } catch (error) {
-      console.error("Error saving profile preferences:", error);
+      console.error("❌ Error saving profile:", error);
     }
   };
+  
 
   const handleAboutChange = (e) => {
     const { value } = e.target;
@@ -601,13 +624,15 @@ useEffect(() => {
                 onChange={handleProfileChange}
               />
               <label htmlFor="age">Age:</label>
-              <input
-                type="number"
-                id="age"
-                value={profile.age}
-                min="18"
-                onChange={handleProfileChange}
-              />
+<input
+  type="number"
+  id="age"
+  value={profile.age}
+  readOnly
+  disabled
+  style={{ backgroundColor: "#f5f5f5", cursor: "not-allowed" }}
+/>
+
               <div className="popup-buttons">
                 <button className="save-btn" onClick={saveProfile}>
                   Save
