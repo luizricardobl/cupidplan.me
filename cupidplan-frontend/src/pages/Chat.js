@@ -30,6 +30,8 @@ const Chat = () => {
   const [partnerTyping, setPartnerTyping] = useState(false);
   const [selectedMessageId, setSelectedMessageId] = useState(null);
   const [receiverData, setReceiverData] = useState(null);
+  const [currentUserPreferences, setCurrentUserPreferences] = useState(null);
+  const [receiverPreferences, setReceiverPreferences] = useState(null);
   const [isOnline, setIsOnline] = useState(false);
   const [receiverLastSeen, setReceiverLastSeen] = useState(null);
   const [lastSeenByReceiver, setLastSeenByReceiver] = useState(false);
@@ -236,7 +238,63 @@ const Chat = () => {
       socket.off("updateOnlineStatus", handleStatusUpdate);
     };
   }, [selectedUserEmail]);
-  
+
+  const fetchCurrentUserPreferences = async () => {
+    try {
+      const res = await axios.get(`http://localhost:5000/api/user/by-email/${currentUserEmail}`);
+      if (res.data.success) {
+        const { hobbies, favoriteFood, location } = res.data.data;
+        setCurrentUserPreferences({ hobbies, favoriteFood, location });
+      } else {
+        console.error("❌ Failed to fetch current user preferences:", res.data.message);
+      }
+    } catch (err) {
+      console.error("❌ Error fetching current user preferences:", err);
+    }
+  };
+
+  const fetchReceiverData = async () => {
+    try {
+      const res = await axios.get(`http://localhost:5000/api/user/by-email/${selectedUserEmail}`);
+      if (res.data.success) {
+        setReceiverData(res.data.data); // Store full user data
+        setSelectedUserName(res.data.data.name);
+
+        // Extract and store preferences
+        const { hobbies, favoriteFood, location } = res.data.data;
+        setReceiverPreferences({ hobbies, favoriteFood, location });
+      } else {
+        console.error("❌ Failed to fetch receiver details:", res.data.message);
+      }
+    } catch (err) {
+      console.error("❌ Failed to fetch selected user data:", err);
+    }
+  };
+
+  const combineUserPreferences = () => {
+    if (!currentUserPreferences || !receiverPreferences) {
+      console.error("❌ Preferences are not fully loaded yet.");
+      return;
+    }
+
+    const combinedPreferences = {
+      hobbies: [
+        ...(currentUserPreferences.hobbies || []),
+        ...(receiverPreferences.hobbies || []),
+      ],
+      favoriteFood: [
+        ...(currentUserPreferences.favoriteFood || []),
+        ...(receiverPreferences.favoriteFood || []),
+      ],
+      location: [
+        ...(currentUserPreferences.location ? [currentUserPreferences.location] : []),
+        ...(receiverPreferences.location ? [receiverPreferences.location] : []),
+      ],
+    };
+
+    console.log("Combined Preferences:", combinedPreferences);
+    return combinedPreferences;
+  };
   
   return (
     <>
@@ -339,6 +397,30 @@ const Chat = () => {
         />
         <button type="submit">Send</button>
       </form>
+      <button
+          onClick={async () => {
+            await fetchCurrentUserPreferences();
+            console.log("User Preferences:", currentUserPreferences);
+          }}
+          className="fetch-preferences-button"
+      >
+        Fetch User Preferences
+      </button>
+      <button
+          onClick={async () => {
+            await fetchReceiverData();
+            console.log("Receiver Preferences:", receiverPreferences);
+          }}
+          className="fetch-preferences-button"
+      >
+        Fetch Receiver Preferences
+      </button>
+      <button
+          onClick={combineUserPreferences}
+          className="combine-preferences-button"
+      >
+        Combine Preferences
+      </button>
     </>
   );
 };
