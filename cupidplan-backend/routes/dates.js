@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const { generateDateIdea } = require('../services/aiService');
+const { generateDateIdea } = require('../../shared/aiService');
 
 // Generate a date idea
 router.post('/generate', async (req, res) => {

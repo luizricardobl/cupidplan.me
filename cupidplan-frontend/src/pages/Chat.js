@@ -295,7 +295,7 @@ const Chat = () => {
     console.log("Combined Preferences:", combinedPreferences);
     return combinedPreferences;
   };
-  
+
   return (
     <>
       <div className="chat-container">
@@ -400,26 +400,30 @@ const Chat = () => {
       <button
           onClick={async () => {
             await fetchCurrentUserPreferences();
-            console.log("User Preferences:", currentUserPreferences);
-          }}
-          className="fetch-preferences-button"
-      >
-        Fetch User Preferences
-      </button>
-      <button
-          onClick={async () => {
             await fetchReceiverData();
-            console.log("Receiver Preferences:", receiverPreferences);
+            const combinedPreferences = combineUserPreferences();
+            if (!combinedPreferences) {
+              console.error("❌ Unable to combine preferences.");
+              return;
+            }
+
+            try {
+              const response = await axios.post("http://localhost:5000/api/dates/generate", {
+                preferences: combinedPreferences,
+              });
+
+              if (response.status === 200) {
+                console.log("Generated Date Idea:", response.data.dateIdea);
+              } else {
+                console.error("❌ Failed to generate date idea:", response.data.message);
+              }
+            } catch (error) {
+              console.error("❌ Error calling /generate route:", error.message);
+            }
           }}
-          className="fetch-preferences-button"
+          className="generate-date-button"
       >
-        Fetch Receiver Preferences
-      </button>
-      <button
-          onClick={combineUserPreferences}
-          className="combine-preferences-button"
-      >
-        Combine Preferences
+        Generate Date Idea
       </button>
     </>
   );
