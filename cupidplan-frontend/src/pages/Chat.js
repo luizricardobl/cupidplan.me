@@ -292,7 +292,6 @@ const Chat = () => {
       ],
     };
 
-    console.log("Combined Preferences:", combinedPreferences);
     return combinedPreferences;
   };
 
@@ -397,34 +396,46 @@ const Chat = () => {
         />
         <button type="submit">Send</button>
       </form>
-      <button
-          onClick={async () => {
-            await fetchCurrentUserPreferences();
-            await fetchReceiverData();
-            const combinedPreferences = combineUserPreferences();
-            if (!combinedPreferences) {
-              console.error("❌ Unable to combine preferences.");
-              return;
-            }
+<button
+  onClick={async () => {
+    await fetchCurrentUserPreferences();
+    await fetchReceiverData();
+    const combinedPreferences = combineUserPreferences();
+    if (!combinedPreferences) {
+      console.error("❌ Unable to combine preferences.");
+      return;
+    }
 
-            try {
-              const response = await axios.post("http://localhost:5000/api/dates/generate", {
-                preferences: combinedPreferences,
-              });
+    try {
+      const response = await axios.post("http://localhost:5000/api/dates/generate", {
+        preferences: combinedPreferences,
+      });
 
-              if (response.status === 200) {
-                console.log("Generated Date Idea:", response.data.dateIdea);
-              } else {
-                console.error("❌ Failed to generate date idea:", response.data.message);
-              }
-            } catch (error) {
-              console.error("❌ Error calling /generate route:", error.message);
-            }
-          }}
-          className="generate-date-button"
-      >
-        Generate Date Idea
-      </button>
+      if (response.status === 200) {
+        const dateIdea = response.data.dateIdea;
+
+        // Emit the generated idea as a message
+        const messageData = {
+          room: roomId,
+          sender: currentUserEmail,
+          receiver: selectedUserEmail,
+          message: dateIdea,
+          timestamp: new Date().toISOString(),
+        };
+
+        setMessages((prev) => [...prev, messageData]);
+        socket.emit("sendMessage", messageData);
+      } else {
+        console.error("❌ Failed to generate date idea:", response.data.message);
+      }
+    } catch (error) {
+      console.error("❌ Error calling /generate route:", error.message);
+    }
+  }}
+  className="generate-date-button"
+>
+  Generate Date Idea
+</button>
     </>
   );
 };
