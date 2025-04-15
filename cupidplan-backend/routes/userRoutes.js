@@ -31,6 +31,24 @@ router.get('/me', authenticate, async (req, res) => {
     res.status(500).json({ message: 'Server error' });
   }
 });
+
+// GET /api/user/by-email/:email
+router.get("/by-email/:email", async (req, res) => {
+    const { email } = req.params;
+
+    try {
+        const user = await User.findOne({ email }, "hobbies favoriteFood location");
+        if (!user) {
+            return res.status(404).json({ success: false, message: "User not found" });
+        }
+
+        res.status(200).json({ success: true, data: user });
+    } catch (error) {
+        console.error("❌ Error fetching user data:", error);
+        res.status(500).json({ success: false, message: "Server error" });
+    }
+});
+
 // PUT /api/user/preferences
 router.put("/preferences", authenticate, async (req, res) => {
     try {

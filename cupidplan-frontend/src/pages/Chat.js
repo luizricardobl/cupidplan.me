@@ -30,6 +30,8 @@ const Chat = () => {
   const [partnerTyping, setPartnerTyping] = useState(false);
   const [selectedMessageId, setSelectedMessageId] = useState(null);
   const [receiverData, setReceiverData] = useState(null);
+  const [currentUserPreferences, setCurrentUserPreferences] = useState(null);
+  const [receiverPreferences, setReceiverPreferences] = useState(null);
   const [isOnline, setIsOnline] = useState(false);
   const [receiverLastSeen, setReceiverLastSeen] = useState(null);
   const [lastSeenByReceiver, setLastSeenByReceiver] = useState(false);
@@ -236,8 +238,63 @@ const Chat = () => {
       socket.off("updateOnlineStatus", handleStatusUpdate);
     };
   }, [selectedUserEmail]);
-  
-  
+
+  const fetchCurrentUserPreferences = async () => {
+    try {
+      const res = await axios.get(`http://localhost:5000/api/user/by-email/${currentUserEmail}`);
+      if (res.data.success) {
+        const { hobbies, favoriteFood, location } = res.data.data;
+        setCurrentUserPreferences({ hobbies, favoriteFood, location });
+      } else {
+        console.error("❌ Failed to fetch current user preferences:", res.data.message);
+      }
+    } catch (err) {
+      console.error("❌ Error fetching current user preferences:", err);
+    }
+  };
+
+  const fetchReceiverData = async () => {
+    try {
+      const res = await axios.get(`http://localhost:5000/api/user/by-email/${selectedUserEmail}`);
+      if (res.data.success) {
+        setReceiverData(res.data.data); // Store full user data
+        setSelectedUserName(res.data.data.name);
+
+        // Extract and store preferences
+        const { hobbies, favoriteFood, location } = res.data.data;
+        setReceiverPreferences({ hobbies, favoriteFood, location });
+      } else {
+        console.error("❌ Failed to fetch receiver details:", res.data.message);
+      }
+    } catch (err) {
+      console.error("❌ Failed to fetch selected user data:", err);
+    }
+  };
+
+  const combineUserPreferences = () => {
+    if (!currentUserPreferences || !receiverPreferences) {
+      console.error("❌ Preferences are not fully loaded yet.");
+      return;
+    }
+
+    const combinedPreferences = {
+      hobbies: [
+        ...(currentUserPreferences.hobbies || []),
+        ...(receiverPreferences.hobbies || []),
+      ],
+      favoriteFood: [
+        ...(currentUserPreferences.favoriteFood || []),
+        ...(receiverPreferences.favoriteFood || []),
+      ],
+      location: [
+        ...(currentUserPreferences.location ? [currentUserPreferences.location] : []),
+        ...(receiverPreferences.location ? [receiverPreferences.location] : []),
+      ],
+    };
+
+    return combinedPreferences;
+  };
+
   return (
     <>
       <div className="chat-container">
@@ -339,6 +396,46 @@ const Chat = () => {
         />
         <button type="submit">Send</button>
       </form>
+<button
+  onClick={async () => {
+    await fetchCurrentUserPreferences();
+    await fetchReceiverData();
+    const combinedPreferences = combineUserPreferences();
+    if (!combinedPreferences) {
+      console.error("❌ Unable to combine preferences.");
+      return;
+    }
+
+    try {
+      const response = await axios.post("http://localhost:5000/api/dates/generate", {
+        preferences: combinedPreferences,
+      });
+
+      if (response.status === 200) {
+        const dateIdea = response.data.dateIdea;
+
+        // Emit the generated idea as a message
+        const messageData = {
+          room: roomId,
+          sender: currentUserEmail,
+          receiver: selectedUserEmail,
+          message: dateIdea,
+          timestamp: new Date().toISOString(),
+        };
+
+        setMessages((prev) => [...prev, messageData]);
+        socket.emit("sendMessage", messageData);
+      } else {
+        console.error("❌ Failed to generate date idea:", response.data.message);
+      }
+    } catch (error) {
+      console.error("❌ Error calling /generate route:", error.message);
+    }
+  }}
+  className="generate-date-button"
+>
+  Generate Date Idea
+</button>
     </>
   );
 };
