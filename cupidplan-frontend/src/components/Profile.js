@@ -540,11 +540,31 @@ useEffect(() => {
   src={profile.profilePicUrl || profilePic}
   onError={(e) => {
     e.target.onerror = null;
-    e.target.src = profilePic; // fallback to default
+    e.target.src = profilePic;
+
+    
+    axios
+      .delete("http://localhost:5000/api/upload/delete-profile-pic", {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
+      })
+      .then(() => {
+        console.log(" Invalid profilePic cleaned from DB.");
+        
+        setProfile((prev) => ({
+          ...prev,
+          profilePicUrl: "",
+        }));
+      })
+      .catch((err) => {
+        console.error(" Cleanup failed:", err);
+      });
   }}
   alt="Profile"
   className="profile-image"
 />
+
 
 
 <button
