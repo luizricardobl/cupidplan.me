@@ -26,6 +26,7 @@ const UserSchema = new mongoose.Schema({
   aboutMe: { type: String },
   relationshipGoal: { type: String, required: true },
   hobbies: [String],
+  favoriteFood: [String],
   dealbreakers: [String],
   verified: { type: Boolean, default: false },
 
