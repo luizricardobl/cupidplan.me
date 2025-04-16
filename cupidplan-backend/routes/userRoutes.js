@@ -33,21 +33,28 @@ router.get('/me', authenticate, async (req, res) => {
 });
 
 // GET /api/user/by-email/:email
+// ✅ Fixed: /api/user/by-email/:email
 router.get("/by-email/:email", async (req, res) => {
-    const { email } = req.params;
+  try {
+    const user = await User.findOne(
+      { email: req.params.email },
+      "name email hobbies favoriteFood location profilePicUrl"
+    );
 
-    try {
-        const user = await User.findOne({ email }, "hobbies favoriteFood location");
-        if (!user) {
-            return res.status(404).json({ success: false, message: "User not found" });
-        }
-
-        res.status(200).json({ success: true, data: user });
-    } catch (error) {
-        console.error("❌ Error fetching user data:", error);
-        res.status(500).json({ success: false, message: "Server error" });
+    if (!user) {
+      return res.status(404).json({ success: false, message: "User not found" });
     }
+
+    return res.status(200).json({
+      success: true,
+      data: user, // ✅ Now includes name, email, etc.
+    });
+  } catch (err) {
+    console.error("❌ Error fetching user by email:", err);
+    return res.status(500).json({ success: false, message: "Server error" });
+  }
 });
+
 
 // PUT /api/user/preferences
 router.put("/preferences", authenticate, async (req, res) => {
@@ -122,20 +129,28 @@ router.put("/settings/toggles", authenticate, async (req, res) => {
     }
   });
   
-  router.get("/by-email/:email", async (req, res) => {
-    try {
-      const user = await User.findOne({ email: req.params.email });
-  
-      if (!user) {
-        return res.status(404).json({ success: false, message: "User not found" });
-      }
-  
-      return res.json({ success: true, name: user.name });
-    } catch (err) {
-      console.error("❌ Error fetching user by email:", err);
-      return res.status(500).json({ success: false, message: "Server error" });
+  // ✅ Fixed: /api/user/by-email/:email
+router.get("/by-email/:email", async (req, res) => {
+  try {
+    const user = await User.findOne(
+      { email: req.params.email },
+      "name email hobbies favoriteFood location profilePicUrl"
+    );
+
+    if (!user) {
+      return res.status(404).json({ success: false, message: "User not found" });
     }
-  });
+
+    return res.status(200).json({
+      success: true,
+      data: user, // ✅ Now includes name, email, etc.
+    });
+  } catch (err) {
+    console.error("❌ Error fetching user by email:", err);
+    return res.status(500).json({ success: false, message: "Server error" });
+  }
+});
+
 
   // ✅ Get last seen timestamp for a user
 router.get("/last-seen/:email", (req, res) => {
