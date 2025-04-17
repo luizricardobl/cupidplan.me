@@ -1,5 +1,3 @@
-// helpers/venueMapper.js
-
 const hobbyToVenueMap = {
     gaming: "gaming cafe",
     cooking: "cooking class",
@@ -23,9 +21,9 @@ const hobbyToVenueMap = {
   
     const keywords = hobbies
       .map(hobby => hobbyToVenueMap[hobby.toLowerCase()])
-      .filter(Boolean); // Remove any undefined matches
+      .filter(Boolean); 
   
-    return [...new Set(keywords)]; // Ensure uniqueness
+    return [...new Set(keywords)]; 
   };
   
   module.exports = { getVenueKeywordsForPreferences };

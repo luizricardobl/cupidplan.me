@@ -25,7 +25,7 @@ router.get("/history/:senderEmail/:receiverEmail", async (req, res) => {
     }
 
     const messages = chat.messages.map((msg) => ({
-      _id: msg._id, // ✅ include _id
+      _id: msg._id, 
       sender: msg.sender.email,
       message: msg.text,
       timestamp: msg.timestamp,

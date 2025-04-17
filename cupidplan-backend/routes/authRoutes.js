@@ -168,7 +168,7 @@ router.post("/verify-otp", async (req, res) => {
     return res.status(200).json({
       success: true,
       message: "Email verified successfully",
-      token, // ⬅️ send this back to frontend
+      token, 
     });
 
   } catch (error) {

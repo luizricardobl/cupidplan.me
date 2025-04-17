@@ -390,9 +390,11 @@ const Chat = () => {
         />
         <button type="submit">Send</button>
       </form>
-      <button onClick={handleGenerateDateIdea} className="generate-date-button">
-        Generate Date Idea
-      </button>
+      <button onClick={handleGenerateDateIdea} className="heart-generate-button">
+  ❤️<br />Generate<br />Date
+</button>
+
+
       {showDateModal && (
   <div className="date-modal-overlay">
     <div className="date-modal">

@@ -1,6 +1,6 @@
 .dates-page {
     padding: 50px 20px;
-    background: linear-gradient(to bottom right, #ffe3ec, #fff5f8);
+    background: linear-gradient(to bottom right, #faf0f3, #fff5f8);
     font-family: "Segoe UI", sans-serif;
     min-height: 100vh;
     color: #333;
@@ -9,7 +9,7 @@
   
   .dates-page h1 {
     font-size: 2.6rem;
-    color: #e6005c;
+    color: #47041f;
     margin-bottom: 35px;
     display: flex;
     justify-content: center;
@@ -129,5 +129,187 @@
   
   .close-modal-button:hover {
     background-color: #c3004e;
+  }
+  
+
+
+
+
+  .folder-list {
+    max-width: 800px;
+    margin: 0 auto;
+  }
+  
+  .folder-card {
+    position: relative;
+    margin: 30px auto;
+    background: #ffffff;
+    border: 2px solid #a40024;
+    border-radius: 12px;
+    padding-top: 80px; /* envelope flap space */
+    box-shadow: 0 10px 20px rgba(255, 182, 193, 0.3);
+    overflow: hidden;
+    transition: all 0.3s ease;
+  }
+  
+  .folder-card::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 80px;
+    width: 100%;
+    background: linear-gradient(to bottom right, #ffe6ec, #ffc9d6);
+    clip-path: polygon(0 0, 100% 0, 50% 100%);
+    transform-origin: top center;
+    transition: transform 0.4s ease;
+    z-index: 1;
+  }
+  .folder-card.open::before {
+    transform: rotateX(120deg);
+    transform-origin: top;
+    transition: transform 0.5s ease;
+  }
+  
+  
+  
+  /* Header inside envelope */
+  .folder-header {
+    position: relative;
+    background: transparent;
+    padding: 0 24px 20px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    font-weight: bold;
+    font-size: 18px;
+    color: #d61c4e;
+    cursor: pointer;
+    z-index: 2;
+    transition: all 0.3s ease;
+  }
+  
+  .folder-header:hover {
+    transform: translateY(-2px);
+  }
+  
+  /* Icon + text */
+  .folder-header span {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    position: relative;
+    z-index: 2;
+  }
+  
+  /* Arrow toggle */
+  .folder-header .arrow {
+    font-size: 20px;
+    transform: rotate(0deg);
+    transition: transform 0.3s ease;
+  }
+  
+  .folder-header.open .arrow {
+    transform: rotate(-90deg);
+  }
+  
+  /* Contents */
+  .folder-content {
+    max-height: 0;
+    overflow: hidden;
+    padding: 0 20px;
+    transition: max-height 0.4s ease, padding 0.3s ease;
+  }
+  
+  .folder-content.open {
+    max-height: 1000px;
+    padding: 20px;
+    animation: popOpen 0.3s ease-out;
+  }
+  
+  .folder-content .date-item {
+    background: #ffffff;
+    border-radius: 8px;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.06);
+    padding: 14px 20px;
+    margin-bottom: 12px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 15px;
+  }
+  
+  .folder-content .date-item:last-child {
+    margin-bottom: 0;
+  }
+  
+  .view-date-button {
+    background-color: #ff4d6d;
+    color: #fff;
+    border: none;
+    padding: 8px 14px;
+    border-radius: 6px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background 0.3s;
+  }
+  
+  .view-date-button:hover {
+    background-color: #e43b58;
+  }
+  
+  /* Animation for reveal */
+  @keyframes popOpen {
+    0% {
+      transform: scaleY(0.95);
+      opacity: 0;
+    }
+    100% {
+      transform: scaleY(1);
+      opacity: 1;
+    }
+  }
+  
+  /* Animate name with soft gradient fade */
+.folder-header span.name-animated {
+    background: linear-gradient(270deg,
+  #ffccd9, #ff4d6d, #ff7597, #a83250, #ffc9de,
+  #ff6f91, #8b0033, #ff85a1, #ffa3b1, #5b0e2d,
+  #ffd6e0, #ff2e63, #b3003c, #ffa6b9, #fcb0c9,
+  #590d22, #ffb3c6, #a6123f, #f191b3, #660033
+);
+
+    background-size: 600% 600%;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    animation: gradientFade 6s ease infinite;
+    font-weight: bold;
+  }
+  
+  @keyframes gradientFade {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+  }
+  
+  /* Lift effect for date content (feels like pulling paper out) */
+  .folder-content.open {
+    animation: slideUpPop 0.4s ease;
+  }
+  
+  @keyframes slideUpPop {
+    0% {
+      transform: translateY(20px);
+      opacity: 0;
+    }
+    100% {
+      transform: translateY(0px);
+      opacity: 1;
+    }
+  }
+  
+  /* Optional: glow effect when open */
+  .folder-card.open {
+    box-shadow: 0 0 12px rgba(255, 105, 130, 0.4), 0 0 24px rgba(255, 105, 130, 0.2);
   }
   

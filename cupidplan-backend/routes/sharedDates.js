@@ -30,37 +30,49 @@ router.post("/create", async (req, res) => {
 });
 
 // Fetch shared dates for user
+// 📁 Grouped fetch: Shared dates grouped by chat partner
 router.get("/for/:email", async (req, res) => {
     try {
-      const user = await User.findOne({ email: req.params.email });
-  
-      if (!user) {
+      const currentUser = await User.findOne({ email: req.params.email });
+      if (!currentUser) {
         return res.status(404).json({ success: false, message: "User not found" });
       }
   
-      const dates = await SharedDate.find({ participants: user._id })
-      .populate("participants", "name email")
-      .populate("sender", "name email") // 🟢 Include the sender
-      .sort({ createdAt: -1 });
-
+      const dates = await SharedDate.find({ participants: currentUser._id })
+        .populate("participants", "name email")
+        .populate("sender", "name email")
+        .sort({ createdAt: -1 });
   
-      const formattedDates = dates.map((d) => {
-        return {
+      // 🔄 Group by chat partner
+      const groupedDates = {};
+  
+      for (const d of dates) {
+        const otherUser = d.participants.find((p) => p.email !== req.params.email);
+        const otherKey = otherUser?.email || "Unknown";
+        const otherName = otherUser?.name || "Unknown";
+  
+        if (!groupedDates[otherKey]) {
+          groupedDates[otherKey] = {
+            partnerName: otherName,
+            partnerEmail: otherKey,
+            dates: [],
+          };
+        }
+  
+        groupedDates[otherKey].dates.push({
           message: d.message,
-          senderEmail: d.sender?.email || "Unknown",
-          senderName: d.sender?.name || "Unknown",
-          isFromCurrentUser: d.sender?.email === req.params.email,
           createdAt: d.createdAt,
-        };
-      });
-      
+          isFromCurrentUser: d.sender.email === req.params.email,
+        });
+      }
   
-      res.status(200).json({ success: true, dates: formattedDates });
+      res.status(200).json({ success: true, grouped: Object.values(groupedDates) });
     } catch (err) {
-      console.error("❌ Failed to fetch shared dates:", err);
+      console.error("❌ Failed to group shared dates:", err);
       res.status(500).json({ success: false, message: "Server error" });
     }
   });
+  
   
 
 module.exports = router;
