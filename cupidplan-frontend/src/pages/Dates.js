@@ -73,7 +73,7 @@ const Dates = () => {
   
   return (
     <div className="dates-page">
-      <h1>📅 Shared Date Plans</h1>
+      <h1>📝💕 Shared Date Plans</h1>
 
       {loading ? (
         <p>Loading...</p>
