@@ -81,6 +81,8 @@ app.use("/api/matches", matchRoutes);
 app.use("/api/chat", chatRoutes);
 app.use("/api/chat", chatHistoryRoutes);
 app.use("/api/messages", chatHistoryRoutes);
+app.use("/api/shared-dates", require("./routes/sharedDates"));
+
 
 // ✅ OTP Verification Route
 app.post("/api/verify-otp", (req, res) => {
@@ -175,6 +177,7 @@ io.on("connection", (socket) => {
         sender: senderUser._id,
         text: message,
         timestamp,
+        
       };
 
       if (chat) {

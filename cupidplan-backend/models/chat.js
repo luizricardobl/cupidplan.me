@@ -21,10 +21,19 @@ const ChatSchema = new mongoose.Schema(
         },
         read: {
           type: Boolean,
-          default: false, // 👈 means unread by default
+          default: false,
+        },
+        isDateSuggestion: {
+          type: Boolean,
+          default: false,
+        },
+        fullDateIdea: {
+          type: String,
+          default: null,
         },
       },
     ],
+    
   },
   { timestamps: true }
 );

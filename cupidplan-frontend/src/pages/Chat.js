@@ -21,6 +21,9 @@ const Chat = () => {
   const [receiverLastSeen, setReceiverLastSeen] = useState(null);
   const [lastSeenByReceiver, setLastSeenByReceiver] = useState(false);
   const [socket, setSocket] = useState(null);
+  const [activeDateIdea, setActiveDateIdea] = useState(null);
+  const [showDateModal, setShowDateModal] = useState(false);
+
 
   const roomId = [currentUserEmail, selectedUserEmail].sort().join("_");
 
@@ -118,12 +121,25 @@ const Chat = () => {
           room: roomId,
           sender: currentUserEmail,
           receiver: selectedUserEmail,
-          message: `✨ **Custom Date Idea for You Two** ✨\n\n${response.data.dateIdea}\n\nHope you love this! 💖`,
+          message: "✨ Your custom date idea has been generated! 📅 Tap below to check it out. Then Head to Dates To view.",
           timestamp: new Date().toISOString(),
-          isDateSuggestion: true
+          isDateSuggestion: true,
+          fullDateIdea: response.data.dateIdea 
         };
+        
         setMessages((prev) => [...prev, messageData]);
+        setActiveDateIdea(response.data.dateIdea); 
         socket.emit("sendMessage", messageData);
+        
+        const formattedDateIdea = `✨ **Custom Date Idea for You Two** ✨\n\n${response.data.dateIdea}\n\nHope you love this! 💖`;
+
+        await axios.post("http://localhost:5000/api/shared-dates/create", {
+          senderEmail: currentUserEmail,
+          receiverEmail: selectedUserEmail,
+          message: formattedDateIdea,
+        });
+        
+        
       }
     } catch (error) {
       if (socket) {
@@ -149,7 +165,16 @@ const Chat = () => {
         const res = await fetch(`http://localhost:5000/api/chat/history/${currentUserEmail}/${selectedUserEmail}`);
         if (res.ok) {
           const data = await res.json();
-          data.success && setMessages(data.messages);
+          if (data.success) {
+            setMessages(data.messages);
+          
+            // Look for the most recent date suggestion and restore its content
+            const lastDateMsg = [...data.messages].reverse().find((msg) => msg.isDateSuggestion && msg.fullDateIdea);
+            if (lastDateMsg && lastDateMsg.fullDateIdea) {
+              setActiveDateIdea(lastDateMsg.fullDateIdea);
+            }
+          }
+          
         }
       } catch (err) {
         console.error("❌ Error fetching chat history:", err);
@@ -182,6 +207,10 @@ const Chat = () => {
         );
         return isDuplicate ? prev : [...prev, data];
       });
+      if (data.isDateSuggestion && data.fullDateIdea) {
+        setActiveDateIdea(data.fullDateIdea); 
+      }
+      
     };
 
     fetchChatHistory();
@@ -301,14 +330,23 @@ const Chat = () => {
                   onClick={() => isOwnMessage && msg._id && setSelectedMessageId(isSelected ? null : messageId)}
                   style={{ cursor: isOwnMessage && msg._id ? "pointer" : "default" }}
                 >
-                  {msg.message.includes("✨ **Custom Date Idea") ? (
-                    <>
-                      <div className="date-suggestion-title">Date Night Idea 💡</div>
-                      <div>{msg.message.replace("✨ **Custom Date Idea for You Two** ✨", "")}</div>
-                    </>
-                  ) : (
-                    <div>{msg.message}</div>
-                  )}
+                  {msg.isDateSuggestion ? (
+  <>
+    <div>{msg.message}</div>
+    <button
+      className="view-date-button"
+      onClick={() => {
+        setActiveDateIdea(msg.fullDateIdea || msg.message);
+        setShowDateModal(true);
+      }}
+    >
+      View Date Plan
+    </button>
+  </>
+) : (
+  <div>{msg.message}</div>
+)}
+
                   <div className="timestamp">{formattedTime}</div>
 
                   {isOwnMessage && idx === messages.length - 1 && lastSeenByReceiver && (
@@ -355,6 +393,18 @@ const Chat = () => {
       <button onClick={handleGenerateDateIdea} className="generate-date-button">
         Generate Date Idea
       </button>
+      {showDateModal && (
+  <div className="date-modal-overlay">
+    <div className="date-modal">
+      <h3>💖 Custom Date Plan</h3>
+      <p style={{ whiteSpace: "pre-wrap" }}>{activeDateIdea}</p>
+      <button onClick={() => setShowDateModal(false)} className="close-modal-button">
+        Close
+      </button>
+    </div>
+  </div>
+)}
+
     </>
   );
 };
