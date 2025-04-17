@@ -201,30 +201,27 @@
   }
   
   
-
   .heart-generate-button {
-    position: fixed;
+    position: absolute; 
     left: 200px;
     top: 50%;
     transform: translateY(-50%);
-    background: #8d0f26;
+    background: #a10e2a;
     color: white;
     border: none;
     cursor: pointer;
     font-weight: bold;
     text-align: center;
-    font-size: 14px;
-    width: 100px;
-    height: 90px;
+    font-size: 0.9vw;
+    width: 6vw;
+    height: 5.5vw;
     border-radius: 50% 50% 40% 40%;
     box-shadow: 0 10px 18px rgba(255, 77, 109, 0.4);
-    z-index: 1000;
-  
+    z-index: 10;
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
-  
     animation: heartbeat 1.5s infinite;
   }
   
@@ -232,21 +229,21 @@
   .heart-generate-button::after {
     content: "";
     position: absolute;
-    width: 100px;
-    height: 90px;
-    background: #8d0f26;
+    width: 6vw;
+    height: 5.5vw;
+    background: #a10e2a;
     border-radius: 50%;
     z-index: -1;
   }
   
   .heart-generate-button::before {
-    top: -45px;
-    left: -50px;
+    top: -2.75vw;
+    left: -3vw;
   }
   
   .heart-generate-button::after {
-    top: -45px;
-    left: 50px;
+    top: -2.75vw;
+    left: 3vw;
   }
   
   .heart-generate-button span {
@@ -254,25 +251,42 @@
     padding-top: 5px;
   }
   
-  .heart-generate-button:hover {
-    transform: translateY(-50%) scale(1.08);
-    background: #8d0f26;
-    box-shadow: 0 12px 24px rgba(255, 77, 109, 0.6);
-  }
-  
-  /* ❤️ Pulse Animation */
   @keyframes heartbeat {
     0%, 100% {
       transform: translateY(-50%) scale(1);
     }
-    25% {
-      transform: translateY(-50%) scale(1.06);
-    }
     50% {
-      transform: translateY(-50%) scale(0.97);
+      transform: translateY(-50%) scale(1.08);
     }
-    75% {
-      transform: translateY(-50%) scale(1.04);
+  }
+  
+  @media (max-width: 600px) {
+    .heart-generate-button {
+      font-size: 3vw;
+      width: 16vw;
+      height: 15vw;
     }
+  
+    .heart-generate-button::before,
+    .heart-generate-button::after {
+      width: 16vw;
+      height: 15vw;
+    }
+  
+    .heart-generate-button::before {
+      top: -7vw;
+      left: -8vw;
+    }
+  
+    .heart-generate-button::after {
+      top: -7vw;
+      left: 8vw;
+    }
+  }
+  
+  .heart-generate-button:hover {
+    transform: translateY(-50%) scale(1.08);
+    background: #a10e2a;
+    box-shadow: 0 12px 24px rgba(255, 77, 109, 0.6);
   }
   

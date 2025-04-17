@@ -377,6 +377,13 @@ const Chat = () => {
           <div ref={messagesEndRef} />
         </div>
       </div>
+      <button
+  onClick={handleGenerateDateIdea}
+  className="heart-generate-button"
+>
+  <span>❤️</span>
+  <span>Generate<br />Date</span>
+</button>
 
       <form onSubmit={handleSend} className="chat-form">
         <input
@@ -390,9 +397,6 @@ const Chat = () => {
         />
         <button type="submit">Send</button>
       </form>
-      <button onClick={handleGenerateDateIdea} className="heart-generate-button">
-  ❤️<br />Generate<br />Date
-</button>
 
 
       {showDateModal && (
