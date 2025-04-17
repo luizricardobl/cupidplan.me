@@ -258,7 +258,7 @@
     background-color: #e43b58;
   }
   
-  /* Animation for reveal */
+ 
   @keyframes popOpen {
     0% {
       transform: scaleY(0.95);
@@ -270,7 +270,7 @@
     }
   }
   
-  /* Animate name with soft gradient fade */
+  
 .folder-header span.name-animated {
     background: linear-gradient(270deg,
   #ffccd9, #ff4d6d, #ff7597, #a83250, #ffc9de,
@@ -292,7 +292,7 @@
     100% { background-position: 0% 50%; }
   }
   
-  /* Lift effect for date content (feels like pulling paper out) */
+  
   .folder-content.open {
     animation: slideUpPop 0.4s ease;
   }
@@ -308,8 +308,31 @@
     }
   }
   
-  /* Optional: glow effect when open */
+  
   .folder-card.open {
     box-shadow: 0 0 12px rgba(255, 105, 130, 0.4), 0 0 24px rgba(255, 105, 130, 0.2);
+  }
+  
+
+  .date-actions {
+    display: flex;
+    gap: 10px;
+    margin-top: 6px;
+  }
+  
+  .delete-date-button {
+    background-color: #ccc;
+    color: #222;
+    border: none;
+    padding: 6px 12px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-weight: bold;
+    transition: all 0.2s ease;
+  }
+  
+  .delete-date-button:hover {
+    background-color: #e74c3c;
+    color: white;
   }
   

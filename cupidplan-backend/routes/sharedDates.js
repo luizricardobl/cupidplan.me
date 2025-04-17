@@ -43,14 +43,14 @@ router.get("/for/:email", async (req, res) => {
         .populate("sender", "name email")
         .sort({ createdAt: -1 });
   
-      // 🔄 Group by chat partner
+      
       const groupedDates = {};
   
       for (const d of dates) {
         const otherUser = d.participants.find((p) => p.email !== req.params.email);
         const otherKey = otherUser?.email || "Unknown";
         const otherName = otherUser?.name || "Unknown";
-  
+      
         if (!groupedDates[otherKey]) {
           groupedDates[otherKey] = {
             partnerName: otherName,
@@ -58,13 +58,15 @@ router.get("/for/:email", async (req, res) => {
             dates: [],
           };
         }
-  
+      
         groupedDates[otherKey].dates.push({
+          _id: d._id, 
           message: d.message,
           createdAt: d.createdAt,
           isFromCurrentUser: d.sender.email === req.params.email,
         });
       }
+      
   
       res.status(200).json({ success: true, grouped: Object.values(groupedDates) });
     } catch (err) {
@@ -73,6 +75,20 @@ router.get("/for/:email", async (req, res) => {
     }
   });
   
+  // DELETE /api/shared-dates/delete/:id
+router.delete("/delete/:id", async (req, res) => {
+    try {
+      const { id } = req.params;
+      const deleted = await SharedDate.findByIdAndDelete(id);
+      if (!deleted) {
+        return res.status(404).json({ success: false, message: "Date not found." });
+      }
+      res.json({ success: true, message: "Date deleted." });
+    } catch (err) {
+      console.error("❌ Error deleting shared date:", err);
+      res.status(500).json({ success: false, message: "Server error." });
+    }
+  });
   
 
 module.exports = router;
