@@ -55,41 +55,34 @@ const Home = () => {
     <div className="home-container">
   <button className="logout-btn" onClick={handleLogout}>Logout</button>
 
-  {/* ✅ Welcome */}
+  {/* ✅ Welcome Text + Button */}
   <div className="welcome-text">
-  <h1>Welcome, {user.name || user.email}!</h1>
+    <h1>Welcome, {user.name || user.email}!</h1>
     <p>Start finding your perfect match today.</p>
-    <button className="find-match-btn">Find Your Match</button>
+    <button className="find-match-btn" onClick={() => navigate("/discover")}>
+      Find Your Match
+    </button>
   </div>
 
-  {/* ✅ Cards Grid */}
-  <div className="card-grid">
-    {/* Upcoming Dates */}
-    <div className="home-card">
-      <h3>📅 Upcoming Dates</h3>
-      <p><strong>Coffee with Alex</strong></p>
-      <p>Tomorrow, 2:00 PM</p>
-      <p className="subtle">Starbucks, Downtown</p>
-    </div>
-
-    {/* AI-Suggested Dates */}
-    <div className="home-card">
-      <h3>🤖 AI-Suggested Dates</h3>
-      <p><strong>Wine Tasting Experience</strong></p>
-      <p className="desc">Based on your interest in culinary adventures</p>
-      <p><strong>Sunset Beach Picnic</strong></p>
-      <p className="desc">Matches your preference for outdoor activities</p>
-    </div>
-
-    {/* Recent Activity */}
-    <div className="home-card">
-      <h3>🔔 Recent Activity</h3>
-      <p><strong>Michael</strong> liked your profile</p>
-      <p className="timestamp">2 hours ago</p>
-      <p><strong>Emma</strong> sent you a message</p>
-      <p className="timestamp">5 hours ago</p>
-    </div>
+  <div className="video-wrapper">
+  <div className="video-responsive">
+    <video
+      controls
+      autoPlay
+      muted
+      loop
+      playsInline
+      className="local-video"
+    >
+      <source src="/videos/cupidplan_intro.mp4" type="video/mp4" />
+      Your browser does not support the video tag.
+    </video>
   </div>
+</div>
+
+
+
+  
 
   {/* ✅ Featured Date Ideas */}
   <h2 className="featured-header">Featured Date Ideas</h2>

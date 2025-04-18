@@ -1,13 +1,4 @@
-.welcome-text {
-  margin-top: 50px;
-  text-align: center;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-}
-
-
-/* 🎨 Gradient background tweak for smoother blend */
+/* 🌅 Home Container */
 .home-container {
   display: flex;
   flex-direction: column;
@@ -19,21 +10,91 @@
   padding: 20px;
 }
 
-/* 🧱 Cards Grid – Fixed */
-.card-grid {
-  display: grid;
-  gap: 20px;
-  grid-template-columns: 1fr;
-  max-width: 1000px;
-  width: 100%;
-  margin: 30px auto;
-}
-@media (min-width: 768px) {
-  .card-grid {
-    grid-template-columns: repeat(3, 1fr);
-  }
+/* 🚪 Logout Button */
+.logout-btn {
+  position: absolute;
+  top: 10px;
+  right: 20px;
+  padding: 10px 24px;
+  font-size: 16px;
+  font-weight: 600;
+  border: none;
+  background: #a40024;
+  color: #fefefe;
+  border-radius: 999px;
+  cursor: pointer;
+  transition: background-color 0.3s, color 0.3s;
+  z-index: 999;
 }
 
+.logout-btn:hover {
+  background-color: #ff4a6e;
+  color: white;
+}
+
+/* 💖 Welcome Section */
+.welcome-text {
+  margin-top: 10px;
+  margin-bottom: 10px; /* 👈 was 20px */
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+
+/* 💘 Find Match Button */
+.find-match-btn {
+  margin-top: 20px;
+  padding: 14px 36px;
+  font-size: 18px;
+  font-weight: 600;
+  background-color: #ff3366;
+  color: white;
+  border: none;
+  border-radius: 999px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.find-match-btn:hover {
+  background-color: #e9436e;
+}
+
+/* 📺 Video Wrapper */
+.video-wrapper {
+  width: 90%;
+  max-width: 880px;
+  margin: 20px auto 40px auto;
+  padding: 0 20px;
+}
+
+
+.video-responsive {
+  position: relative;
+  width: 100%;
+  overflow: hidden;
+  border-radius: 16px;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.1);
+}
+
+.local-video {
+  width: 100%;
+  height: auto;
+  border-radius: 16px;
+  display: block;
+}
+
+/* 🎯 Section Title */
+.featured-header {
+  font-size: 20px;
+  font-weight: 600;
+  margin: 30px 0 15px; /* 👈 tighter top/bottom spacing */
+  text-align: center;
+}
+
+
+/* 🎠 Featured Grid */
 .featured-grid {
   display: grid;
   gap: 20px;
@@ -48,45 +109,6 @@
     grid-template-columns: repeat(4, 1fr);
   }
 }
-/* 🧠 Match Figma padding and box shadow */
-.home-card {
-  background: white;
-  color: black;
-  padding: 20px 24px;
-  border-radius: 12px;
-  text-align: left;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
-  transition: transform 0.2s ease;
-}
-.home-card:hover {
-  transform: translateY(-3px);
-}
-
-/* 🎯 Center section titles better */
-.featured-header {
-  font-size: 20px;
-  font-weight: 600;
-  margin: 50px 0 20px;
-  text-align: center;
-}
-
-/* 💘 Find Match Button - bolder look */
-.find-match-btn {
-  margin-top: 20px;
-  padding: 14px 36px;
-  font-size: 18px;
-  font-weight: 600;
-  background-color: #ff3366;
-  color: white;
-  border: none;
-  border-radius: 999px;
-  cursor: pointer;
-  transition: 0.3s ease;
-  transition: background-color 0.10s ease;
-}
-.find-match-btn:hover {
-  background-color: #f0145d;
-}
 
 /* 🌟 Featured Date Cards */
 .idea-card {
@@ -95,48 +117,50 @@
   overflow: hidden;
   text-align: center;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  transition: transform 0.2s ease;
 }
+
+.idea-card:hover {
+  transform: translateY(-3px);
+}
+
 .idea-card img {
   width: 100%;
   height: 130px;
   object-fit: cover;
 }
+
 .idea-card h4 {
   margin: 10px 0 4px;
   font-weight: 600;
   font-size: 16px;
 }
+
 .idea-card .desc {
   font-size: 14px;
   color: #6b7280;
   margin-bottom: 10px;
 }
 
-/* 🦶 Footer alignment */
+/* Footer */
 .footer {
   margin-top: 60px;
   color: #111827;
   font-size: 14px;
   text-align: center;
 }
-.logout-btn {
-  position: absolute;
-  top: 10px;
-  right: 20px;
-  padding: 10px 24px; 
-  font-size: 16px;
-  font-weight: 600;
-  border: none;
-  background: #a40024;
-  color: #fefefe;
-  border-radius: 999px; 
-  cursor: pointer;
-  transition: background-color 0.3s, color 0.3s;
-  z-index: 999;
-}
+@media (max-width: 480px) {
+  .find-match-btn {
+    margin-top: 12px;
+    padding: 12px 28px;
+    font-size: 16px;
+  }
 
-.logout-btn:hover {
-  background-color: #ff4a6e;
-  color: white;
-}
+  .welcome-text h1 {
+    font-size: 24px;
+  }
 
+  .video-wrapper {
+    margin: 15px auto 30px auto;
+  }
+}
