@@ -266,11 +266,7 @@ const [selectedPhoto, setSelectedPhoto] = useState(null);
           }}
         />
       ))}
-      {lightboxOpen && selectedPhoto && (
-  <div className="lightbox-backdrop" onClick={() => setLightboxOpen(false)}>
-    <img src={selectedPhoto} alt="Enlarged" className="lightbox-img" />
-  </div>
-)}
+      
 
     </div>
   </div>
@@ -280,6 +276,11 @@ const [selectedPhoto, setSelectedPhoto] = useState(null);
                     </div>
                 </div>
             )}
+            {lightboxOpen && selectedPhoto && (
+  <div className="lightbox-backdrop" onClick={() => setLightboxOpen(false)}>
+    <img src={selectedPhoto} alt="Enlarged" className="lightbox-img" />
+  </div>
+)}
             {showMatchModal && matchedUser && (
                 <div className="match-popup-backdrop">
                     <div className="match-popup">

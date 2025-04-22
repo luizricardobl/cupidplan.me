@@ -641,7 +641,9 @@ useEffect(() => {
                 type="text"
                 id="location"
                 value={profile.location}
-                onChange={handleProfileChange}
+                readOnly
+                disabled
+                style={{ backgroundColor: "#f5f5f5", cursor: "not-allowed" }}
               />
               <label htmlFor="age">Age:</label>
 <input
@@ -842,16 +844,15 @@ useEffect(() => {
 
 </div>
 
-                <h2 className="section-title">Profile Statistics</h2>
-                <div className="stats-box-content">
-                  <i className="fa-solid fa-heart stats-icon"></i>
-                  <div className="stats-details">
-                  <h3 className="stats-value">{likesThisWeek} Likes</h3>
-                  
+<h2 className="section-title">💡Match Tip</h2>
+<div className="stats-box-content">
+  <i className="fa-solid fa-heart-circle-bolt stats-icon"></i>
+  <div className="stats-details">
+    <h3 className="stats-value">Add more interests</h3>
+    <p className="stats-timeframe">More shared vibes = better matches</p>
+  </div>
+</div>
 
-                    <p className="stats-timeframe">This Week</p>
-                  </div>
-                </div>
                 {unreadSenders.length > 0 && toggles.aiRecommendations ? (
   <div className="stats-box-content chat-alert">
   <i className="fa-solid fa-message stats-icon"></i>
