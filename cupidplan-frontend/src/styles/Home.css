@@ -1,16 +1,14 @@
-/* 🌅 Home Container */
 .home-container {
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: flex-start;
   min-height: 100vh;
-  background: linear-gradient(to bottom, #ffeaf2 0%, #ffc1d3 100%);
+  background: linear-gradient(to bottom, #f5b7cc 0%, #fee2ff 100%);
   color: black;
   padding: 20px;
 }
 
-/* 🚪 Logout Button */
 .logout-btn {
   position: absolute;
   top: 10px;
@@ -32,24 +30,26 @@
   color: white;
 }
 
-/* 💖 Welcome Section */
 .welcome-text {
-  margin-top: 10px;
-  margin-bottom: 10px; /* 👈 was 20px */
+  margin-top: 40px;
   text-align: center;
   display: flex;
   flex-direction: column;
   align-items: center;
+  background: rgba(255, 255, 255, 0.15);
+  padding: 30px 40px;
+  border-radius: 24px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+  backdrop-filter: blur(8px);
+  animation: fadeIn 1.2s ease;
 }
 
-
-/* 💘 Find Match Button */
 .find-match-btn {
   margin-top: 20px;
   padding: 14px 36px;
   font-size: 18px;
   font-weight: 600;
-  background-color: #ff3366;
+  background-color: #a40024;
   color: white;
   border: none;
   border-radius: 999px;
@@ -58,17 +58,15 @@
 }
 
 .find-match-btn:hover {
-  background-color: #e9436e;
+  background-color: #a40024;
 }
 
-/* 📺 Video Wrapper */
 .video-wrapper {
   width: 90%;
   max-width: 880px;
   margin: 20px auto 40px auto;
   padding: 0 20px;
 }
-
 
 .video-responsive {
   position: relative;
@@ -85,70 +83,6 @@
   display: block;
 }
 
-/* 🎯 Section Title */
-.featured-header {
-  font-size: 20px;
-  font-weight: 600;
-  margin: 30px 0 15px; 
-  text-align: center;
-}
-
-
-/* 🎠 Featured Grid */
-.featured-grid {
-  display: grid;
-  gap: 20px;
-  grid-template-columns: 1fr;
-  max-width: 1000px;
-  width: 100%;
-  margin: 20px auto 50px;
-}
-
-@media (min-width: 768px) {
-  .featured-grid {
-    grid-template-columns: repeat(4, 1fr);
-  }
-}
-
-/* 🌟 Featured Date Cards */
-.idea-card {
-  background: white;
-  border-radius: 12px;
-  overflow: hidden;
-  text-align: center;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
-  transition: transform 0.2s ease;
-}
-
-.idea-card:hover {
-  transform: translateY(-3px);
-}
-
-.idea-card img {
-  width: 100%;
-  height: 130px;
-  object-fit: cover;
-}
-
-.idea-card h4 {
-  margin: 10px 0 4px;
-  font-weight: 600;
-  font-size: 16px;
-}
-
-.idea-card .desc {
-  font-size: 14px;
-  color: #6b7280;
-  margin-bottom: 10px;
-}
-
-/* Footer */
-.footer {
-  margin-top: 60px;
-  color: #111827;
-  font-size: 14px;
-  text-align: center;
-}
 @media (max-width: 480px) {
   .find-match-btn {
     margin-top: 12px;
@@ -165,53 +99,83 @@
   }
 }
 
-/* Sides */
-.vertical-slideshow {
-  position: fixed;
-  top: 0;
-  height: 100%;
-  width: 200px;
+/* Bottom Slideshow Section */
+.slideshow-footer {
+  width: 100%;
   overflow: hidden;
-  pointer-events: auto;
-  z-index: 1;
-}
-
-.left-slide {
-  left: 10px;
-  padding-left: 20px;
-}
-
-.right-slide {
-  right: 10px;
-  padding-right: 20px;
-}
-
-/* Track that slides up */
-.slide-track {
+  padding: 40px 0;
+  background: linear-gradient(to top, #ffe0eb, #ffd1e0);
   display: flex;
   flex-direction: column;
-  animation-name: scrollDown;
-  animation-duration: 30s;
+  gap: 30px;
+  margin-top: 30px;
+}
+
+.slideshow-row {
+  width: 100%;
+  overflow: hidden;
+  position: relative;
+  height: 160px;
+}
+
+.slide-track {
+  display: flex;
+  width: max-content;
   animation-timing-function: linear;
   animation-iteration-count: infinite;
   animation-play-state: running;
 }
 
+.scroll-left .slide-track {
+  animation-name: scrollLeftLoop;
+  animation-duration: 25s;
+}
 
-.vertical-slideshow:hover .slide-track {
+.scroll-right .slide-track {
+  animation-name: scrollRightLoop;
+  animation-duration: 25s;
+  flex-direction: row-reverse;
+}
+
+.scroll-left:hover .slide-track,
+.scroll-right:hover .slide-track {
   animation-play-state: paused;
   cursor: pointer;
 }
 
-/* Individual cards */
+@keyframes scrollLeftLoop {
+  0% {
+    transform: translateX(0%);
+  }
+  100% {
+    transform: translateX(-50%);
+  }
+}
+
+@keyframes scrollRightLoop {
+  0% {
+    transform: translateX(-50%);
+  }
+  100% {
+    transform: translateX(0%);
+  }
+}
+
+/* 🃏 Card style */
 .slide-card {
-  width: 200px;
-  margin: 14px 0;
+  flex: 0 0 auto;
+  width: 180px;
+  margin-right: 16px;
   background: white;
   border-radius: 12px;
+  overflow: hidden;
   text-align: center;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
-  overflow: hidden;
+  transition: transform 0.3s ease;
+}
+
+.slide-card:hover {
+  transform: scale(1.05);
 }
 
 .slide-card img {
@@ -227,22 +191,103 @@
   padding: 6px;
 }
 
-@keyframes scrollDown {
-  0% {
-    transform: translateY(-50%);
+
+
+
+.about-cupid-section {
+  background: #fff;
+  padding: 30px 40px;
+  margin-top: 30px;
+  border-radius: 18px;
+  max-width: 900px;
+  max-height: 340px;
+  overflow-y: auto;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.12);
+  font-size: 15px;
+  line-height: 1.7;
+  scroll-behavior: smooth;
+}
+
+
+.about-cupid-section h2,
+.about-cupid-section h3 {
+  margin-top: 12px;
+  margin-bottom: 6px;
+  font-size: 18px;
+  color: #c30045;
+}
+
+.about-cupid-section p {
+  margin-bottom: 14px;
+}
+
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
   }
-  100% {
-    transform: translateY(0%);
+  to {
+    opacity: 1;
+    transform: translateY(0);
   }
 }
 
 
-@media (min-width: 1400px) {
-  .left-slide {
-    left: 40px;
-  }
 
-  .right-slide {
-    right: 40px;
+.side-labels-container {
+  position: relative;
+  width: 100%;
+  height: 0;
+  margin-top: 20px; 
+}
+
+.side-label {
+  position: absolute;
+  top: 80px; 
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  color: #a40024;
+  font-weight: bold;
+  font-size: 20px;
+}
+
+.side-arrow {
+  font-size: 100px;
+  animation: bounceDown 1.6s infinite ease-in-out;
+  margin-bottom: 8px;
+  filter: drop-shadow(0 0 6px rgba(255, 51, 102, 0.5));
+  transition: transform 0.3s ease;
+}
+
+.side-arrow:hover {
+  transform: scale(1.2);
+}
+
+.side-text {
+  text-align: center;
+  line-height: 1.2;
+  font-size: 25px;
+  font-weight: bold;
+  color: #a40024;
+  text-shadow: 0 1px 2px rgba(0,0,0,0.1);
+}
+
+
+.left-label {
+  left: -350px;
+}
+
+.right-label {
+  right: -350px;
+}
+
+@keyframes bounceDown {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(10px);
   }
 }
