@@ -1,33 +1,40 @@
-/* General container for the discover page */
+body {
+  background: linear-gradient(to bottom right, #fff0f5, #ffe4ec);
+  min-height: 100vh;
+}
+
+
+
 .matches-container {
-  max-width: 500px; /* Adjusted max-width for a more card-like feel */
+  max-width: 500px; 
   margin: 40px auto;
-  padding: 30px; /* Increased padding */
-  background-color: #fff; /* Clean white background */
-  border-radius: 16px; /* More pronounced rounded corners */
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15); /* Softer, larger shadow for depth */
+  padding: 30px; 
+  background-color: #fff; 
+  border-radius: 16px; 
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
   text-align: center;
   font-family: 'Inter', sans-serif;
-  transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out; /* Smooth hover effect */
+  transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out; 
 }
 
 .matches-container:hover {
-  transform: translateY(-5px); /* Slight lift on hover */
+  transform: translateY(-5px); 
   box-shadow: 0 12px 32px rgba(0, 0, 0, 0.2);
 }
 
 .matches-container h1 {
   margin-bottom: 25px;
-  color: #e91e63; /* A more vibrant primary color (pink) */
-  font-size: 2.5em; /* Larger title */
+  color: #e91e63; 
+  font-size: 2.5em; 
   font-weight: 700;
   letter-spacing: -0.5px;
+  text-shadow: 1px 1px 2px rgba(0,0,0,0.15);
 }
 
 /* Information about the displayed profile */
 .match-info {
   margin-bottom: 20px;
-  text-align: center; /* Center the information within the card */
+  text-align: center; 
 }
 
 .match-info h2 {
@@ -327,16 +334,16 @@
   border: 3px solid #4caf50; /* Highlight the match */
 }
 
-/* --- Match Card Styles (you might not be using this directly on the discover page) --- */
+/* --- Match Card Styles -- */
 .match-card {
   background: #fff;
-  padding: 24px;
-  border-radius: 20px;
-  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
-  max-width: 500px;
-  margin: 20px auto; /* Added some top/bottom margin */
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  padding: 32px 24px;
+  border-radius: 25px;
+  box-shadow: 0 16px 32px rgba(0,0,0,0.1);
+  transition: all 0.4s ease;
+  position: relative;
 }
+
 
 .match-card:hover {
   transform: translateY(-8px); /* Reduced lift on hover for this card */
