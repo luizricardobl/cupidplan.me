@@ -1,10 +1,19 @@
 .chat-container {
-  position: relative;
-    padding: 20px;
-    max-width: 800px;
-    margin: auto;
-  }
-  
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  height: 75vh; /* ⬅️ Taller height */
+  max-height: 85vh;
+  margin: 0 auto;
+  padding: 10px;
+  width: 100%;
+  max-width: 900px;
+  background-color: #fff;
+  border-radius: 16px;
+  box-shadow: 0 0 12px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+}
+
   .chat-box {
     border: 1px solid #ccc;
     border-radius: 10px;
@@ -44,27 +53,43 @@
   }
   
   .chat-form {
-    display: flex;
-    margin-top: 10px;
+    width: 100%;
+    padding: 12px 20px;
+    background: #fff;
+    border-top: 1px solid #ddd;
+    box-sizing: border-box;
   }
   
-  .chat-form input {
+  
+  .chat-form input[type="text"] {
     flex: 1;
-    padding: 10px;
-    font-size: 15px;
-    border-radius: 6px;
+    padding: 14px 16px;
+    border-radius: 30px;
     border: 1px solid #ccc;
+    font-size: 16px;
+    outline: none;
+    background: #f9f9f9;
   }
   
+  .chat-form button:hover {
+    background-color: #ff3b72;
+  }
   .chat-form button {
-    padding: 10px 16px;
-    background-color: #ff4b7d;
+    padding: 12px 20px;
+    background-color: #ff5c8d;
     color: white;
     border: none;
-    border-radius: 6px;
-    margin-left: 10px;
+    border-radius: 30px;
+    font-weight: bold;
+    font-size: 15px;
     cursor: pointer;
+    transition: background-color 0.2s ease;
   }
+  
+  .chat-form button:hover {
+    background-color: #ff3b72;
+  }
+  
   .timestamp {
     font-size: 12px;
     margin-top: 4px;
@@ -288,5 +313,28 @@
     transform: translateY(-50%) scale(1.08);
     background: #a10e2a;
     box-shadow: 0 12px 24px rgba(255, 77, 109, 0.6);
+  }
+  
+
+  .chat-input-wrapper {
+    display: flex;
+    align-items: center;
+    position: relative;
+  }
+  
+  .emoji-toggle-btn {
+    font-size: 22px;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    margin-right: 5px;
+  }
+  
+  
+  .emoji-picker-container {
+    position: absolute;
+    bottom: 50px;
+    left: 0;
+    z-index: 10;
   }
   

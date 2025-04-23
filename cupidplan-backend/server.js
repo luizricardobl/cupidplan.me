@@ -20,6 +20,7 @@ const uploadRoute = require("./routes/uploadRoute");
 const swipeRoutes = require("./routes/swipeRoutes");
 const onlineUsers = {};
 const lastSeenMap = {};       
+const feedbackRoutes = require("./routes/feedbackRoutes");
 
 global.lastSeenMap = lastSeenMap; 
 
@@ -82,6 +83,7 @@ app.use("/api/chat", chatRoutes);
 app.use("/api/chat", chatHistoryRoutes);
 app.use("/api/messages", chatHistoryRoutes);
 app.use("/api/shared-dates", require("./routes/sharedDates"));
+app.use("/api/feedback", feedbackRoutes);
 
 
 // ✅ OTP Verification Route

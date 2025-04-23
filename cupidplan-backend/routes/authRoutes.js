@@ -119,7 +119,7 @@ router.post("/send-otp", async (req, res) => {
 
     const msg = {
       to: email,
-      from: process.env.EMAIL_SENDER,
+      from: "cupidplan42@gmail.com",
       subject: "CupidPlan.Me OTP Code",
       text: `Your OTP is: ${otp}. It is valid for 5 minutes.`,
     };

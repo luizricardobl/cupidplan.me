@@ -58,7 +58,7 @@ const Help = () => {
       <p><strong>A:</strong> Try clearing your browser cache, disabling extensions, or using a different browser. If the issue persists, contact support.</p>
 
       <p><strong>Q:</strong> I found a bug or issue. How do I report it?</p>
-      <p><strong>A:</strong> Please email us at <a href="mailto:steeven.jolicoeur001@umb.edu">steeven.jolicoeur001@umb.edu</a> with a description of the issue and screenshots if possible.</p>
+      <p><strong>A:</strong> Please email us at <a href="mailto:cupidplan42@gmail.com">cupidplan42@gmail.com</a> with a description of the issue and screenshots if possible.</p>
 
       {/* Billing & Subscription */}
       <h3>Billing & Subscription</h3>
@@ -73,7 +73,7 @@ const Help = () => {
 
       {/* Contact Support */}
       <h2>Contact Support</h2>
-      <p>📧 Email: <a href="mailto:steeven.jolicoeur001@umb.edu">steeven.jolicoeur001@umb.edu</a></p>
+      <p>📧 Email: <a href="mailto:cupidplan42@gmail.com">cupidplan42@gmail.com</a></p>
       <p>📍 Support Hours: Monday – Friday, 9 AM – 6 PM (EST)</p>
 
       {/* Additional Resources */}

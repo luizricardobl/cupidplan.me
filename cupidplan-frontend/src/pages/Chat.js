@@ -3,9 +3,12 @@ import axios from "axios";
 import { io } from "socket.io-client";
 import "../styles/Chat.css";
 import { useParams } from "react-router-dom";
+import Picker from '@emoji-mart/react';
+import data from '@emoji-mart/data';
+import { useLocation } from "react-router-dom";
 
 const getDateLabel = (dateString) => {
-  // ... (keep your existing date label function)
+ 
 };
 
 const Chat = () => {
@@ -23,6 +26,13 @@ const Chat = () => {
   const [socket, setSocket] = useState(null);
   const [activeDateIdea, setActiveDateIdea] = useState(null);
   const [showDateModal, setShowDateModal] = useState(false);
+  const [showEmojiPicker, setShowEmojiPicker] = useState(false);
+  const notificationSound = new Audio("/sounds/mixkit-correct-answer-tone-2870.wav");
+  const location = useLocation();
+
+
+  
+  
 
 
   const roomId = [currentUserEmail, selectedUserEmail].sort().join("_");
@@ -76,6 +86,15 @@ const Chat = () => {
       socket.emit("sendMessage", messageData);
     }
   }, [message, roomId, currentUserEmail, selectedUserEmail, socket]);
+
+  const toggleEmojiPicker = () => {
+    setShowEmojiPicker(!showEmojiPicker);
+  };
+  
+  const addEmoji = (emoji) => {
+    setMessage((prev) => prev + emoji.native);
+  };
+  
 
   // Handle deleting messages
   const handleDeleteMessage = useCallback(async (messageId) => {
@@ -207,6 +226,18 @@ const Chat = () => {
         );
         return isDuplicate ? prev : [...prev, data];
       });
+      
+      const isOnChatPage = location.pathname.includes("/chat");
+
+      if (data.sender !== currentUserEmail && !isOnChatPage) {
+        notificationSound.play().catch((err) => {
+          console.warn("🔇 Sound blocked:", err);
+        });
+      }
+      
+
+
+
       if (data.isDateSuggestion && data.fullDateIdea) {
         setActiveDateIdea(data.fullDateIdea); 
       }
@@ -385,18 +416,37 @@ const Chat = () => {
   <span>Generate<br />Date</span>
 </button>
 
-      <form onSubmit={handleSend} className="chat-form">
-        <input
-          type="text"
-          placeholder="Type your message..."
-          value={message}
-          onChange={(e) => {
-            setMessage(e.target.value);
-            socket && socket.emit("typing", { room: roomId, sender: currentUserEmail });
-          }}
-        />
-        <button type="submit">Send</button>
-      </form>
+<form onSubmit={handleSend} className="chat-form">
+  <div className="chat-input-wrapper">
+    <button
+      type="button"
+      className="emoji-toggle-btn"
+      onClick={toggleEmojiPicker}
+    >
+      😊
+    </button>
+
+    {showEmojiPicker && (
+  <div className="emoji-picker-container">
+    <Picker data={data} onEmojiSelect={addEmoji} />
+  </div>
+)}
+
+
+    <input
+      type="text"
+      placeholder="Type your message..."
+      value={message}
+      onChange={(e) => {
+        setMessage(e.target.value);
+        socket && socket.emit("typing", { room: roomId, sender: currentUserEmail });
+      }}
+    />
+
+    <button type="submit">Send</button>
+  </div>
+</form>
+
 
 
       {showDateModal && (

@@ -203,6 +203,25 @@ router.put("/update-basic-info", authenticate, async (req, res) => {
   }
 });
 
+// ✅ Get user by email (for feedback, profile, etc.)
+router.get("/:email", async (req, res) => {
+  const email = req.params.email;
+
+  try {
+    const user = await User.findOne({ email });
+
+    if (!user) {
+      return res.status(404).json({ success: false, message: "User not found" });
+    }
+
+    res.json({ success: true, user });
+  } catch (err) {
+    console.error("❌ Error getting user:", err);
+    res.status(500).json({ success: false, message: "Server error" });
+  }
+});
+
+
 
 
 module.exports = router;

@@ -15,6 +15,10 @@ import Privacy from './pages/Privacy';
 import Community from './pages/Community';
 import Chat from "./pages/Chat";
 import "./styles/NavBar.css"; 
+import Feedback from "./pages/Feedback";
+import { io } from "socket.io-client";
+import { useEffect } from "react";
+
 
 function App() {
   const location = useLocation(); 
@@ -22,7 +26,42 @@ function App() {
   const isSignupPage = location.pathname === "/signup"; 
   const isRestrictedPage = ["/help", "/about", "/terms", "/privacy", "/community"].includes(location.pathname); 
   const isLoggedIn = !isLoginPage && !isSignupPage && !isRestrictedPage; 
-
+  
+  const socket = io("http://localhost:5000", {
+    transports: ["websocket"],
+    withCredentials: true,
+    query: {
+      email: localStorage.getItem("rememberedUser") || sessionStorage.getItem("loggedInUser"),
+    },
+  });
+  
+  useEffect(() => {
+    const currentUserEmail = localStorage.getItem("rememberedUser") || sessionStorage.getItem("loggedInUser");
+    if (!currentUserEmail) return;
+  
+    const notificationSound = new Audio("/sounds/mixkit-correct-answer-tone-2870.wav");
+  
+    const receiveHandler = (data) => {
+      const isOnChatPage = location.pathname.includes("/chat");
+      if (data.sender !== currentUserEmail && !isOnChatPage) {
+        console.log("🔔 Incoming message!", data);
+        console.log("👀 You are currently on:", location.pathname);
+        console.log("🎯 Should play sound:", data.sender !== currentUserEmail && !isOnChatPage);
+  
+        notificationSound.play().catch((err) => {
+          console.warn("🔇 Sound blocked until user interaction:", err);
+        });
+      }
+    };
+  
+    socket.on("receiveMessage", receiveHandler);
+  
+    return () => {
+      socket.off("receiveMessage", receiveHandler);
+    };
+  }, [location.pathname]);
+  
+  
   return (
     <div className="app-container">
       {/* Navigation Bar */}
@@ -36,6 +75,8 @@ function App() {
               <Link to="/discover" className="nav-button">Discover</Link>
               <Link to="/dates" className="nav-button">Dates</Link>
               <Link to="/matches" className="nav-button">My Matches</Link>
+              <Link to="/feedback" className="nav-button">Feedback</Link>
+
 
 
             </>
@@ -70,6 +111,7 @@ function App() {
         <Route path="/chat" element={<Chat />} />
         <Route path="/chat/:email" element={<Chat />} />
         <Route path="/matches" element={<ConfirmedMatches />} />
+        <Route path="/feedback" element={<Feedback />} />
 
 
 

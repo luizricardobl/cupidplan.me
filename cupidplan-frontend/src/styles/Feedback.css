@@ -1,0 +1,83 @@
+.feedback-container {
+    max-width: 600px;
+    margin: 50px auto;
+    padding: 30px;
+    background: #fff0f5;
+    border-radius: 16px;
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.08);
+    font-family: "Inter", sans-serif;
+  }
+  
+  .feedback-container h1 {
+    text-align: center;
+    margin-bottom: 30px;
+    color: #e91e63;
+  }
+  
+  .feedback-form {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+  }
+  
+.feedback-form select,
+.feedback-form input,
+.feedback-form textarea {
+  margin-bottom: 15px;
+  padding: 10px;
+  width: 100%;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+  font-size: 1rem;
+}
+
+.feedback-form textarea {
+    resize: vertical;
+    min-height: 100px;
+  }
+  
+  .char-count {
+    text-align: right;
+    font-size: 0.85rem;
+    color: #888;
+    margin-bottom: 10px;
+  }
+  
+  .success-visual {
+    background: #fff0f5;
+    padding: 30px;
+    border-radius: 16px;
+    text-align: center;
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+  }
+  .feedback-form button {
+    background-color: #e91e63;
+    color: white;
+    padding: 12px;
+    font-weight: bold;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+  }
+  
+  .feedback-form button:hover {
+    background-color: #c2185b;
+  }
+  
+  .testimonials {
+    margin-top: 40px;
+  }
+  
+  .testimonial-card {
+    background: white;
+    padding: 20px;
+    border-left: 5px solid #e91e63;
+    border-radius: 10px;
+    margin-bottom: 20px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+  }
+  .readonly-name {
+    background-color: #f2f2f2;
+    cursor: not-allowed;
+  }
+  
