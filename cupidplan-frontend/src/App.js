@@ -18,6 +18,7 @@ import "./styles/NavBar.css";
 import Feedback from "./pages/Feedback";
 import { io } from "socket.io-client";
 import { useEffect } from "react";
+import AIDateGenerator from "./pages/AIDateGenerator";
 
 
 function App() {
@@ -26,7 +27,8 @@ function App() {
   const isSignupPage = location.pathname === "/signup"; 
   const isRestrictedPage = ["/help", "/about", "/terms", "/privacy", "/community"].includes(location.pathname); 
   const isLoggedIn = !isLoginPage && !isSignupPage && !isRestrictedPage; 
-  
+  const isDateGeneratorPage = location.pathname === "/generatedate";
+
   const socket = io("http://localhost:5000", {
     transports: ["websocket"],
     withCredentials: true,
@@ -66,33 +68,35 @@ function App() {
     <div className="app-container">
       {/* Navigation Bar */}
       <nav className="nav-bar">
-        {/* Always Show Home Button */}
-        <div className="nav-links">
-          <Link to="/home" className="nav-button">Home</Link>
-          {isLoggedIn && (
-            <>
-              <Link to="/profile" className="nav-button">Profile</Link>
-              <Link to="/discover" className="nav-button">Discover</Link>
-              <Link to="/dates" className="nav-button">Dates</Link>
-              <Link to="/matches" className="nav-button">My Matches</Link>
-              <Link to="/feedback" className="nav-button">Feedback</Link>
+  <div className="nav-links">
+    <Link to="/home" className="nav-button">Home</Link>
 
+    {/* Show AI Date Generator on the left ONLY on login page */}
+    {isLoginPage && (
+      <Link to="/generatedate" className="nav-button">AI Date Generator</Link>
+    )}
 
+    {/* Show logged-in buttons except on /generatedate */}
+    {isLoggedIn && !isDateGeneratorPage && (
+      <>
+        <Link to="/profile" className="nav-button">Profile</Link>
+        <Link to="/discover" className="nav-button">Discover</Link>
+        <Link to="/dates" className="nav-button">Dates</Link>
+        <Link to="/matches" className="nav-button">My Matches</Link>
+        <Link to="/feedback" className="nav-button">Feedback</Link>
+      </>
+    )}
+  </div>
 
-            </>
-          )}
-        </div>
+  {/* Show Help & About ONLY on Login or Restricted Pages and not on /generatedate */}
+  {(isLoginPage || isRestrictedPage) && !isDateGeneratorPage && (
+    <div className="top-right-buttons">
+      <Link to="/help" className="top-button">Help</Link>
+      <Link to="/about" className="top-button">About</Link>
+    </div>
+  )}
+</nav>
 
-        {/* Show Help & About ONLY on Login or Restricted Pages */}
-        {(isLoginPage || isRestrictedPage) && (
-          <div className="top-right-buttons">
-            <Link to="/help" className="top-button">Help</Link>
-            <Link to="/about" className="top-button">About</Link>
-          </div>
-        )}
-
-        
-      </nav>
 
       {/* Page Routing */}
       <Routes>
@@ -112,6 +116,8 @@ function App() {
         <Route path="/chat/:email" element={<Chat />} />
         <Route path="/matches" element={<ConfirmedMatches />} />
         <Route path="/feedback" element={<Feedback />} />
+        <Route path="/generatedate" element={<AIDateGenerator />} />
+
 
 
 

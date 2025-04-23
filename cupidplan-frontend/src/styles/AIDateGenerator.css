@@ -1,0 +1,160 @@
+.ai-date-generator {
+    max-width: 800px;
+    margin: 80px auto;
+    padding: 50px;
+    background: linear-gradient(to bottom right, #fff1f7, #ffe2ea);
+    border-radius: 30px;
+    box-shadow: 0 8px 40px rgba(255, 145, 170, 0.25);
+    font-family: 'Poppins', sans-serif;
+    text-align: center;
+    transition: all 0.3s ease;
+  }
+  
+  .ai-date-generator h2 {
+    font-size: 32px;
+    color: #e91e63;
+    margin-bottom: 25px;
+    font-weight: 800;
+    letter-spacing: 0.5px;
+  }
+  
+  .ai-date-generator p {
+    font-size: 17px;
+    margin: 20px 0 12px;
+    color: #333;
+    font-weight: 500;
+  }
+  
+  /* Inputs */
+  .ai-date-generator input[type="text"],
+  .ai-date-generator input[type="email"] {
+    padding: 14px;
+    width: 90%;
+    max-width: 500px;
+    margin: 12px auto;
+    display: block;
+    border-radius: 12px;
+    border: 1px solid #ddd;
+    font-size: 16px;
+    outline: none;
+    transition: border 0.3s ease, box-shadow 0.3s ease;
+    background-color: #fff;
+  }
+  
+  .ai-date-generator input[type="text"]:focus {
+    border-color: #ff7ca3;
+    box-shadow: 0 0 6px rgba(255, 105, 135, 0.3);
+  }
+  
+  /* Option Buttons (Selectable) */
+  .selectable-option {
+    background-color: #e91e63;
+    border: none;
+    color: #fff;
+    font-weight: 600;
+    padding: 12px 22px;
+    margin: 10px;
+    border-radius: 16px;
+    cursor: pointer;
+    transition: all 0.25s ease;
+    font-size: 15px;
+  }
+  
+  .selectable-option:hover {
+    background-color: #c2185b;
+    transform: scale(1.05);
+  }
+  
+  .selectable-option.selected {
+    background-color: #ad1457;
+    box-shadow: 0 0 0 3px rgba(255, 105, 135, 0.25);
+  }
+  
+  /* Navigation Buttons */
+  .nav-btns {
+    margin-top: 35px;
+  }
+  
+  .nav-btns button {
+    padding: 13px 28px;
+    margin: 12px;
+    background-color: #ff7ca3;
+    color: white;
+    border: none;
+    border-radius: 18px;
+    font-weight: 700;
+    font-size: 16px;
+    cursor: pointer;
+    transition: all 0.25s ease;
+    letter-spacing: 0.5px;
+    box-shadow: 0 4px 12px rgba(255, 105, 135, 0.3);
+  }
+  
+  .nav-btns button:hover {
+    background-color: #ff4f84;
+    transform: scale(1.05);
+  }
+  
+  .nav-btns button:disabled {
+    background-color: #fcb3c9;
+    cursor: not-allowed;
+    opacity: 0.75;
+  }
+  
+  /* Final Result Styling */
+  .result {
+    background: #fff0f5;
+    border: 2px dashed #ffb6c1;
+    padding: 35px;
+    border-radius: 20px;
+    margin-top: 30px;
+    animation: fadeIn 0.5s ease-in-out;
+  }
+  
+  .result h3 {
+    color: #d81b60;
+    font-size: 22px;
+    margin-bottom: 15px;
+    font-weight: 700;
+  }
+  
+  .result p {
+    color: #444;
+    line-height: 1.7;
+    font-size: 17px;
+    white-space: pre-line;
+  }
+  
+  /* Fade In Animation for Result */
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+      transform: translateY(10px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+  
+  /* Responsive Love 💘 */
+  @media (max-width: 600px) {
+    .ai-date-generator {
+      padding: 30px 20px;
+    }
+  
+    .selectable-option {
+      width: 100%;
+      max-width: 300px;
+    }
+  
+    .nav-btns button {
+      width: 90%;
+      max-width: 300px;
+    }
+  
+    .result {
+      padding: 20px;
+    }
+  }
+  

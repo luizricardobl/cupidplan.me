@@ -21,6 +21,7 @@ const swipeRoutes = require("./routes/swipeRoutes");
 const onlineUsers = {};
 const lastSeenMap = {};       
 const feedbackRoutes = require("./routes/feedbackRoutes");
+const dateIdeaRoutes = require("./routes/dateIdeaRoutes");
 
 global.lastSeenMap = lastSeenMap; 
 
@@ -84,7 +85,8 @@ app.use("/api/chat", chatHistoryRoutes);
 app.use("/api/messages", chatHistoryRoutes);
 app.use("/api/shared-dates", require("./routes/sharedDates"));
 app.use("/api/feedback", feedbackRoutes);
-
+app.use("/api/date-generator", require("./routes/dateIdeaRoutes"));
+app.use("/api/date-generator", dateIdeaRoutes);
 
 // ✅ OTP Verification Route
 app.post("/api/verify-otp", (req, res) => {
