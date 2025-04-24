@@ -157,4 +157,19 @@
       padding: 20px;
     }
   }
+  .custom-input {
+    padding: 10px;
+    width: 80%;
+    margin-top: 10px;
+    border-radius: 10px;
+    border: 1px solid #ccc;
+    font-size: 15px;
+    outline: none;
+    transition: 0.2s ease-in-out;
+  }
+  
+  .custom-input:focus {
+    border-color: #ff91aa;
+    box-shadow: 0 0 4px rgba(255, 105, 135, 0.3);
+  }
   

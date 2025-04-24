@@ -1,8 +1,7 @@
 // routes/dateIdeaRoutes.js
 const express = require("express");
 const router = express.Router();
-const { generateDateIdea } = require("../shared/aiService");
-
+const { generateGuestDateIdea } = require("../shared/guestDateService"); // ✅ NEW service for guest page
 
 router.post("/", async (req, res) => {
   const {
@@ -17,26 +16,26 @@ router.post("/", async (req, res) => {
     budget,
   } = req.body;
 
-  console.log("🎯 Received AI Date Generator input:", req.body);
+  console.log("🎯 Received Guest Date Generator input:", req.body);
 
-  // ✅ Format input to match what aiService.js expects
-  const aiPreferences = {
-    location: city,
-    hobbies: [...activities, ...vibe],
-    favoriteFood: [], // Optional: you can add this later via form
-    relationshipStage: "dating", // Optional: can make this user-selectable later
-    budget: budget || "moderate",
-    dateFrequency: "occasional", // Optional default
-    specialOccasion: occasion || false,
-    preferences, // Free-form user notes (e.g. vegan, accessibility, etc.)
+  const guestPreferences = {
+    gender,
+    setting,
+    occasion,
+    timing,
+    vibe,
+    activities,
+    city,
+    preferences,
+    budget,
   };
 
   try {
-    const idea = await generateDateIdea(aiPreferences);
+    const idea = await generateGuestDateIdea(guestPreferences);
     res.json({ success: true, idea });
   } catch (error) {
-    console.error("❌ Failed to generate AI date idea:", error);
-    res.status(500).json({ success: false, message: "AI generation failed." });
+    console.error("💥 Failed to generate guest date idea:", error);
+    res.status(500).json({ success: false, message: "AI date generation failed." });
   }
 });
 

@@ -3,17 +3,21 @@ import "../styles/AIDateGenerator.css";
 import axios from "axios";
 
 const AIDateGenerator = () => {
-  const [formData, setFormData] = useState({
-    gender: "",
-    setting: "",
-    occasion: "",
-    timing: "",
-    vibe: [],
-    activities: [],
-    city: "",
-    preferences: "",
-    budget: "",
-  });
+    const [formData, setFormData] = useState({
+        gender: "",
+        setting: "",
+        occasion: "",
+        timing: "",
+        vibe: [],
+        activities: [],
+        city: "",
+        state: "",             
+        preferences: "",
+        budget: "",
+        customVibe: "",        
+        customActivity: "",    
+      });
+      
 
   const [generatedIdea, setGeneratedIdea] = useState("");
   const [step, setStep] = useState(1);
@@ -34,8 +38,33 @@ const AIDateGenerator = () => {
 
   const handleSubmit = async () => {
     setLoading(true);
+  
+    // Combine selected and custom vibes/activities
+    const combinedVibes = [...formData.vibe];
+    if (formData.customVibe) combinedVibes.push(formData.customVibe.trim());
+  
+    const combinedActivities = [...formData.activities];
+    if (formData.customActivity) combinedActivities.push(formData.customActivity.trim());
+  
+    // Add full location
+    const location = formData.state
+      ? `${formData.city}, ${formData.state}`
+      : formData.city;
+  
+    const payload = {
+      gender: formData.gender,
+      setting: formData.setting,
+      occasion: formData.occasion,
+      timing: formData.timing,
+      vibe: combinedVibes,
+      activities: combinedActivities,
+      city: location,
+      preferences: formData.preferences,
+      budget: formData.budget,
+    };
+  
     try {
-      const res = await axios.post("http://localhost:5000/api/date-generator", formData);
+      const res = await axios.post("http://localhost:5000/api/date-generator", payload);
       setGeneratedIdea(res.data.idea);
     } catch (err) {
       alert("Something went wrong.");
@@ -43,6 +72,7 @@ const AIDateGenerator = () => {
       setLoading(false);
     }
   };
+  
 
   const next = () => setStep((s) => s + 1);
   const back = () => setStep((s) => s - 1);
@@ -108,8 +138,22 @@ const AIDateGenerator = () => {
             <div>
               <p>Select the vibe:</p>
               {["Romantic", "Adventurous", "Chill", "Creative", "Funny", "Relaxing"].map((v) => (
-                <SelectableButton key={v} field="vibe" value={v} isArray />
-              ))}
+  <button
+    key={v}
+    className={`selectable-option ${formData.vibe.includes(v) ? "selected" : ""}`}
+    onClick={() => toggleArrayField("vibe", v)}
+  >
+    {v}
+  </button>
+))}
+<input
+  type="text"
+  placeholder="Add your own vibe (e.g., cozy, wild...)"
+  value={formData.customVibe || ""}
+  onChange={(e) => handleInput("customVibe", e.target.value)}
+  className="custom-input"
+/>
+
             </div>
           )}
 
@@ -132,12 +176,21 @@ const AIDateGenerator = () => {
           {step === 5 && (
             <div>
               <p>Which city are you in?</p>
-              <input
-                type="text"
-                value={formData.city}
-                onChange={(e) => handleInput("city", e.target.value)}
-                placeholder="e.g., Boston"
-              />
+<input
+  type="text"
+  value={formData.city}
+  onChange={(e) => handleInput("city", e.target.value)}
+  placeholder="e.g., Cambridge"
+/>
+
+<p>What state or region?</p>
+<input
+  type="text"
+  value={formData.state}
+  onChange={(e) => handleInput("state", e.target.value)}
+  placeholder="e.g., Massachusetts"
+/>
+
             </div>
           )}
 
