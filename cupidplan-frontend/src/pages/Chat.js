@@ -29,7 +29,7 @@ const Chat = () => {
   const [showEmojiPicker, setShowEmojiPicker] = useState(false);
   const notificationSound = new Audio("/sounds/mixkit-correct-answer-tone-2870.wav");
   const location = useLocation();
-
+  const API_BASE_URL = process.env.REACT_APP_API_BASE_URL;
 
   
   
@@ -39,7 +39,7 @@ const Chat = () => {
 
   // Initialize socket connection
   useEffect(() => {
-    const newSocket = io("http://localhost:5000", {
+    const newSocket = io(`${API_BASE_URL}`, {
       transports: ["websocket"],
       withCredentials: true,
       query: { email: currentUserEmail },
@@ -54,7 +54,7 @@ const Chat = () => {
   // Fetch user data with memoization
   const fetchUserData = useCallback(async (email) => {
     try {
-      const res = await axios.get(`http://localhost:5000/api/user/by-email/${email}`);
+      const res = await axios.get(`${API_BASE_URL}/api/user/by-email/${email}`);
       return res.data.success ? res.data.data : null;
     } catch (err) {
       console.error(`❌ Failed to fetch user data for ${email}:`, err);
@@ -99,7 +99,7 @@ const Chat = () => {
   // Handle deleting messages
   const handleDeleteMessage = useCallback(async (messageId) => {
     try {
-      const res = await fetch(`http://localhost:5000/api/chat/delete/${messageId}`, {
+      const res = await fetch(`${API_BASE_URL}/api/chat/delete/${messageId}`, {
         method: "DELETE",
       });
       if (res.ok && socket) {
@@ -128,7 +128,7 @@ const Chat = () => {
         specialOccasion: currentData.specialOccasion || null,
       };
 
-      const response = await axios.post("http://localhost:5000/api/dates/generate", {
+      const response = await axios.post(`${API_BASE_URL}/api/dates/generate`, {
         preferences: combinedPreferences,
         userEmail: currentUserEmail,
         partnerName: receiverData.name || "your partner",
@@ -152,7 +152,7 @@ const Chat = () => {
         
         const formattedDateIdea = `✨ **Custom Date Idea for You Two** ✨\n\n${response.data.dateIdea}\n\nHope you love this! 💖`;
 
-        await axios.post("http://localhost:5000/api/shared-dates/create", {
+        await axios.post(`${API_BASE_URL}/api/shared-dates/create`, {
           senderEmail: currentUserEmail,
           receiverEmail: selectedUserEmail,
           message: formattedDateIdea,
@@ -181,7 +181,7 @@ const Chat = () => {
 
     const fetchChatHistory = async () => {
       try {
-        const res = await fetch(`http://localhost:5000/api/chat/history/${currentUserEmail}/${selectedUserEmail}`);
+        const res = await fetch(`${API_BASE_URL}/api/chat/history/${currentUserEmail}/${selectedUserEmail}`);
         if (res.ok) {
           const data = await res.json();
           if (data.success) {
@@ -202,7 +202,7 @@ const Chat = () => {
 
     const fetchLastSeen = async () => {
       try {
-        const res = await axios.get(`http://localhost:5000/api/user/last-seen/${selectedUserEmail}`);
+        const res = await axios.get(`${API_BASE_URL}/api/user/last-seen/${selectedUserEmail}`);
         if (res.data.success) {
           const date = new Date(res.data.lastSeen);
           setReceiverLastSeen(date.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }));
@@ -287,7 +287,7 @@ const Chat = () => {
       setIsOnline(online);
       if (!online) {
         try {
-          const res = await axios.get(`http://localhost:5000/api/user/last-seen/${selectedUserEmail}`);
+          const res = await axios.get(`${API_BASE_URL}/api/user/last-seen/${selectedUserEmail}`);
           if (res.data.success) {
             const date = new Date(res.data.lastSeen);
             setReceiverLastSeen(date.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }));

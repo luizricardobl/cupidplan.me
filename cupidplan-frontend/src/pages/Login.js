@@ -13,6 +13,7 @@ const Login = () => {
   const [timer, setTimer] = useState(30); // 30 seconds cooldown
   const [rememberMe, setRememberMe] = useState(false);
   const navigate = useNavigate();
+  const API_BASE_URL = process.env.REACT_APP_API_BASE_URL;
 
   useEffect(() => {
     const rememberedUser = localStorage.getItem("rememberedUser");
@@ -32,7 +33,7 @@ const Login = () => {
     }
 
     try {
-      const response = await fetch("http://localhost:5000/api/auth/send-otp", {
+      const response = await fetch(`${API_BASE_URL}/api/auth/send-otp`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email: userInput }),
@@ -82,7 +83,7 @@ const Login = () => {
     }
   
     try {
-      const response = await fetch("http://localhost:5000/api/auth/verify-otp", {
+      const response = await fetch(`${API_BASE_URL}/api/auth/verify-otp`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email: userInput, otp }),

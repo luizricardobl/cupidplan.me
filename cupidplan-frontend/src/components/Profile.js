@@ -8,8 +8,9 @@ import { useNavigate } from "react-router-dom";
 import { io } from "socket.io-client";
 import cupidPlan from "../assets/cupid-plan.png";
 
+const API_BASE_URL = process.env.REACT_APP_API_BASE_URL;
 
-const socket = io("http://localhost:5000", {
+const socket = io(`${API_BASE_URL}`, {
   transports: ["websocket"],
   withCredentials: true,
 });
@@ -78,7 +79,7 @@ const calculateAge = (dob) => {
     const token = localStorage.getItem("token");
   
     try {
-      const res = await axios.get("http://localhost:5000/api/messages/unread", {
+      const res = await axios.get(`${API_BASE_URL}/api/messages/unread`, {
         headers: { Authorization: `Bearer ${token}` },
       });
   
@@ -98,7 +99,7 @@ const calculateAge = (dob) => {
         const token = localStorage.getItem("token");
         console.log("Token being used:", token);
   
-        const response = await axios.get("http://localhost:5000/api/user/me", {
+        const response = await axios.get(`${API_BASE_URL}/api/user/me`, {
           headers: { Authorization: `Bearer ${token}` },
         });
   
@@ -138,7 +139,7 @@ const calculateAge = (dob) => {
           console.warn("⚠️ No token found in localStorage");
           return;
         }
-        const res = await axios.get("http://localhost:5000/api/likes/received/count", {
+        const res = await axios.get(`${API_BASE_URL}/api/likes/received/count`, {
           headers: { Authorization: `Bearer ${token}` },
         });
         setLikesThisWeek(res.data.count);
@@ -167,7 +168,7 @@ const calculateAge = (dob) => {
   const fetchRecentMatches = async () => {
     try {
       const res = await axios.get(
-        `http://localhost:5000/api/matches/recent/${
+        `${API_BASE_URL}/api/matches/recent/${
           localStorage.getItem("rememberedUser") || sessionStorage.getItem("loggedInUser")
         }`
       );
@@ -251,7 +252,7 @@ useEffect(() => {
   
       // Update name and location in database
       await axios.put(
-        "http://localhost:5000/api/user/update-basic-info",
+        `${API_BASE_URL}/api/user/update-basic-info`,
         {
           name: profile.name,
           location: profile.location,
@@ -265,7 +266,7 @@ useEffect(() => {
   
       // Update preferences like distance, age, etc.
       await axios.put(
-        "http://localhost:5000/api/user/preferences",
+        `${API_BASE_URL}/api/user/preferences`,
         {
           minAge: profile.minAge,
           maxAge: profile.maxAge,
@@ -307,7 +308,7 @@ useEffect(() => {
       const token = localStorage.getItem("token");
   
       await axios.put(
-        "http://localhost:5000/api/user/about-me",
+        `${API_BASE_URL}/api/user/about-me`,
         { aboutMe: profile.aboutMe },
         {
           headers: {
@@ -334,7 +335,7 @@ useEffect(() => {
   
     try {
       const res = await axios.put(
-        "http://localhost:5000/api/user/preferences",
+        `${API_BASE_URL}/api/user/preferences`,
         {
           minAge: profile.minAge,
           maxAge: profile.maxAge,
@@ -401,7 +402,7 @@ useEffect(() => {
   
     try {
       const token = localStorage.getItem("token");
-      const response = await axios.post("http://localhost:5000/api/upload/upload-profile-pic", formData, {
+      const response = await axios.post(`${API_BASE_URL}/api/upload/upload-profile-pic`, formData, {
         headers: {
           Authorization: `Bearer ${token}`,
           "Content-Type": "multipart/form-data",
@@ -461,7 +462,7 @@ useEffect(() => {
       console.log("Saving setting:", key, "→", body);
 
   
-      await axios.put("http://localhost:5000/api/user/settings/toggles", body, {
+      await axios.put(`${API_BASE_URL}/api/user/settings/toggles`, body, {
 
         headers: {
           Authorization: `Bearer ${token}`,
@@ -490,7 +491,7 @@ useEffect(() => {
       const token = localStorage.getItem("token");
   
       await axios.post(
-        "http://localhost:5000/api/chat/mark-read",
+        `${API_BASE_URL}/api/chat/mark-read`,
         { senderEmail },
         { headers: { Authorization: `Bearer ${token}` } }
       );
@@ -544,7 +545,7 @@ useEffect(() => {
 
     
     axios
-      .delete("http://localhost:5000/api/upload/delete-profile-pic", {
+      .delete(`${API_BASE_URL}/api/upload/delete-profile-pic`, {
         headers: {
           Authorization: `Bearer ${localStorage.getItem("token")}`,
         },
@@ -591,7 +592,7 @@ useEffect(() => {
       onClick={async () => {
         try {
           const token = localStorage.getItem("token");
-          await axios.delete("http://localhost:5000/api/upload/delete-profile-pic", {
+          await axios.delete(`${API_BASE_URL}/api/upload/delete-profile-pic`, {
             headers: {
               Authorization: `Bearer ${token}`,
             },
