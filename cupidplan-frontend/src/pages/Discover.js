@@ -9,6 +9,8 @@ import { motion } from "framer-motion";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTimes, faHeart, faInfoCircle } from '@fortawesome/free-solid-svg-icons';
 
+const API_BASE_URL = process.env.REACT_APP_API_BASE_URL;
+
 const calculateAge = (dob) => {
     const birthDate = new Date(dob);
     const today = new Date();
@@ -20,7 +22,7 @@ const calculateAge = (dob) => {
     return age;
 };
 
-const socket = io("http://localhost:5000", {
+const socket = io(`${API_BASE_URL}`, {
     transports: ["websocket"],
     withCredentials: true,
 });
@@ -54,7 +56,7 @@ const [selectedPhoto, setSelectedPhoto] = useState(null);
     useEffect(() => {
         const fetchMatches = async () => {
             try {
-                const res = await fetch(`http://localhost:5000/api/matches/discover/${loggedInEmail}`);
+                const res = await fetch(`${API_BASE_URL}/api/matches/discover/${loggedInEmail}`);
                 const data = await res.json();
                 if (data.success) {
                     setMatches(data.matches);
@@ -102,8 +104,8 @@ const [selectedPhoto, setSelectedPhoto] = useState(null);
 
         const route =
             direction === "right"
-                ? "http://localhost:5000/api/swipes/like"
-                : "http://localhost:5000/api/swipes/pass";
+                ? `${API_BASE_URL}/api/swipes/like`
+                : `${API_BASE_URL}/api/swipes/pass`;
 
         try {
             const res = await axios.post(route, {

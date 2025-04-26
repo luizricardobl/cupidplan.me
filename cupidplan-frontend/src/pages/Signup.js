@@ -2,6 +2,8 @@ import React, { useState, useEffect, useRef} from "react";
 import { Link, useNavigate } from "react-router-dom";
 import "../styles/Signup.css"; // Keep using the same CSS
 
+const API_BASE_URL = process.env.REACT_APP_API_BASE_URL;
+
 const Signup = () => {
   const [step, setStep] = useState(1); // Manage signup step
   const [fullName, setFullName] = useState("");
@@ -126,7 +128,7 @@ const Signup = () => {
 
     try {
       // Step 1: Create user
-      const res = await fetch("http://localhost:5000/api/auth/signup", {
+      const res = await fetch(`${API_BASE_URL}/api/auth/signup`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(userData),
@@ -142,7 +144,7 @@ const Signup = () => {
       console.log("✅ Account created. Sending OTP...");
   
       // Step 2: Send OTP
-      const otpRes = await fetch("http://localhost:5000/api/auth/send-otp", {
+      const otpRes = await fetch(`${API_BASE_URL}/api/auth/send-otp`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email }),
@@ -219,7 +221,7 @@ const Signup = () => {
     }
   
     try {
-      const verifyResponse = await fetch("http://localhost:5000/api/auth/verify-otp", {
+      const verifyResponse = await fetch(`${API_BASE_URL}/api/auth/verify-otp`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email, otp: enteredOtp }),
@@ -250,7 +252,7 @@ const Signup = () => {
     console.log("📩 Resend OTP clicked. Sending request..."); // Debugging log
   
     try {
-      const response = await fetch("http://localhost:5000/api/auth/send-otp", {
+      const response = await fetch(`${API_BASE_URL}/api/auth/send-otp`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email }),

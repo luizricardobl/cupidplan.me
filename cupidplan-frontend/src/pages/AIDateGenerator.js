@@ -22,6 +22,7 @@ const AIDateGenerator = () => {
   const [generatedIdea, setGeneratedIdea] = useState("");
   const [step, setStep] = useState(1);
   const [loading, setLoading] = useState(false);
+  const API_BASE_URL = process.env.REACT_APP_API_BASE_URL;
 
   const handleInput = (field, value) => {
     setFormData({ ...formData, [field]: value });
@@ -64,7 +65,7 @@ const AIDateGenerator = () => {
     };
   
     try {
-      const res = await axios.post("http://localhost:5000/api/date-generator", payload);
+      const res = await axios.post(`${API_BASE_URL}/api/date-generator`, payload);
       setGeneratedIdea(res.data.idea);
     } catch (err) {
       alert("Something went wrong.");

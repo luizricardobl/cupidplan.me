@@ -13,12 +13,13 @@ const Album = () => {
   const [deleteMsg, setDeleteMsg] = useState("");
   const [albumPhotos, setAlbumPhotos] = useState([]);
   const [enlargedImage, setEnlargedImage] = useState(null);
+  const API_BASE_URL = process.env.REACT_APP_API_BASE_URL;
 
   // 🔄 Load existing photos on mount
   useEffect(() => {
     const fetchAlbum = async () => {
       try {
-        const res = await axios.get(`http://localhost:5000/api/user/album/${email}`);
+        const res = await axios.get(`${API_BASE_URL}/api/user/album/${email}`);
         if (res.data.success) {
           setAlbumPhotos(res.data.album || []);
         }
@@ -53,7 +54,7 @@ const Album = () => {
     formData.append("email", email);
 
     try {
-      const res = await axios.post("http://localhost:5000/api/upload/photo-album", formData);
+      const res = await axios.post(`${API_BASE_URL}/api/upload/photo-album`, formData);
       if (res.data.success) {
         setSuccessMsg("✅ Photos uploaded successfully!");
         setSelectedFiles([]);
@@ -75,7 +76,7 @@ const Album = () => {
   
       const res = await axios({
         method: "DELETE",
-        url: "http://localhost:5000/api/upload/photo-album/delete",
+        url: `${API_BASE_URL}/api/upload/photo-album/delete`,
         data: { email, photoUrl },
         headers: {
           Authorization: `Bearer ${token}`,

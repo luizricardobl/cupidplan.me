@@ -20,6 +20,7 @@ import { io } from "socket.io-client";
 import { useEffect } from "react";
 import AIDateGenerator from "./pages/AIDateGenerator";
 
+const API_BASE_URL = process.env.REACT_APP_API_BASE_URL;
 
 function App() {
   const location = useLocation(); 
@@ -29,7 +30,7 @@ function App() {
   const isLoggedIn = !isLoginPage && !isSignupPage && !isRestrictedPage; 
   const isDateGeneratorPage = location.pathname === "/generatedate";
 
-  const socket = io("http://localhost:5000", {
+  const socket = io(`${API_BASE_URL}`, {
     transports: ["websocket"],
     withCredentials: true,
     query: {

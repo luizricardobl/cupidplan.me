@@ -1,7 +1,9 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios"; 
-import "../styles/Home.css"; 
+import "../styles/Home.css";
+
+const API_BASE_URL = process.env.REACT_APP_API_BASE_URL;
 
 const Home = () => {
   const navigate = useNavigate();
@@ -31,7 +33,7 @@ const Home = () => {
   
     const fetchUserProfile = async () => {
       try {
-        const res = await axios.get("http://localhost:5000/api/user/me", {
+        const res = await axios.get(`${API_BASE_URL}/api/user/me`, {
           headers: { Authorization: `Bearer ${token}` },
         });
         setUser({ email: storedEmail, name: res.data.name });

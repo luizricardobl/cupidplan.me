@@ -2,6 +2,8 @@ import React, { useEffect, useState } from "react";
 import "../styles/Discover.css";
 import { useNavigate } from "react-router-dom";
 
+const API_BASE_URL = process.env.REACT_APP_API_BASE_URL;
+
 const ConfirmedMatches = () => {
   const [matches, setMatches] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -13,7 +15,7 @@ const ConfirmedMatches = () => {
   useEffect(() => {
     const fetchConfirmedMatches = async () => {
       try {
-        const res = await fetch(`http://localhost:5000/api/matches/confirmed/${loggedInEmail}`);
+        const res = await fetch(`${API_BASE_URL}/api/matches/confirmed/${loggedInEmail}`);
         const data = await res.json();
         if (data.success) {
           setMatches(data.matches);
