@@ -3,6 +3,11 @@ import "../styles/Dates.css";
 import axios from "axios";
 import confetti from "canvas-confetti";
 
+const BASE_URL =
+  window.location.hostname === "localhost"
+    ? "http://localhost:5000"
+    : "https://cupidplan-me.onrender.com"; // ✅
+
 const Dates = () => {
   const [folders, setFolders] = useState([]);
   const [expandedFolders, setExpandedFolders] = useState({});
@@ -15,7 +20,8 @@ const Dates = () => {
   useEffect(() => {
     const fetchDates = async () => {
       try {
-        const res = await axios.get(`http://localhost:5000/api/shared-dates/for/${currentUserEmail}`);
+        const res = await axios.get(`${BASE_URL}/api/shared-dates/for/${currentUserEmail}`);
+
         if (res.data.success) {
           setFolders(res.data.grouped);
         }
@@ -54,7 +60,8 @@ const Dates = () => {
   };
   const handleDeleteDate = async (id, partnerEmail) => {
     try {
-      const res = await axios.delete(`http://localhost:5000/api/shared-dates/delete/${id}`);
+      const res = await axios.delete(`${BASE_URL}/api/shared-dates/delete/${id}`);
+
       if (res.data.success) {
         setFolders(prev =>
           prev.map(folder => {

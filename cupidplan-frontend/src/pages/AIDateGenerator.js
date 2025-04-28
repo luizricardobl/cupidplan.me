@@ -1,6 +1,10 @@
 import React, { useState } from "react";
 import "../styles/AIDateGenerator.css";
 import axios from "axios";
+const BASE_URL =
+  window.location.hostname === "localhost"
+    ? "http://localhost:5000"
+    : "https://cupidplan-me.onrender.com";
 
 const AIDateGenerator = () => {
     const [formData, setFormData] = useState({
@@ -64,7 +68,8 @@ const AIDateGenerator = () => {
     };
   
     try {
-      const res = await axios.post("http://localhost:5000/api/date-generator", payload);
+      const res = await axios.post(`${BASE_URL}/api/date-generator`, payload);
+
       setGeneratedIdea(res.data.idea);
     } catch (err) {
       alert("Something went wrong.");

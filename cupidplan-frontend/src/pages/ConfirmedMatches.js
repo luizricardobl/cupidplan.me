@@ -2,6 +2,11 @@ import React, { useEffect, useState } from "react";
 import "../styles/Discover.css";
 import { useNavigate } from "react-router-dom";
 
+const BASE_URL =
+  window.location.hostname === "localhost"
+    ? "http://localhost:5000"
+    : "https://cupidplan-me.onrender.com"; 
+
 const ConfirmedMatches = () => {
   const [matches, setMatches] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -13,7 +18,8 @@ const ConfirmedMatches = () => {
   useEffect(() => {
     const fetchConfirmedMatches = async () => {
       try {
-        const res = await fetch(`http://localhost:5000/api/matches/confirmed/${loggedInEmail}`);
+        const res = await fetch(`${BASE_URL}/api/matches/confirmed/${loggedInEmail}`);
+
         const data = await res.json();
         if (data.success) {
           setMatches(data.matches);

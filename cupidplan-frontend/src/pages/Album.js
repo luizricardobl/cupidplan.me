@@ -2,6 +2,11 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import "../styles/Album.css";
 
+const BASE_URL =
+  window.location.hostname === "localhost"
+    ? "http://localhost:5000"
+    : "https://cupidplan-me.onrender.com"; 
+
 const Album = () => {
   const email =
     localStorage.getItem("rememberedUser") || sessionStorage.getItem("loggedInUser");
@@ -18,7 +23,8 @@ const Album = () => {
   useEffect(() => {
     const fetchAlbum = async () => {
       try {
-        const res = await axios.get(`http://localhost:5000/api/user/album/${email}`);
+        const res = await axios.get(`${BASE_URL}/api/user/album/${email}`);
+
         if (res.data.success) {
           setAlbumPhotos(res.data.album || []);
         }
@@ -53,7 +59,8 @@ const Album = () => {
     formData.append("email", email);
 
     try {
-      const res = await axios.post("http://localhost:5000/api/upload/photo-album", formData);
+      const res = await axios.post(`${BASE_URL}/api/upload/photo-album`, formData);
+
       if (res.data.success) {
         setSuccessMsg("✅ Photos uploaded successfully!");
         setSelectedFiles([]);
@@ -75,7 +82,7 @@ const Album = () => {
   
       const res = await axios({
         method: "DELETE",
-        url: "http://localhost:5000/api/upload/photo-album/delete",
+        url: `${BASE_URL}/api/upload/photo-album/delete`,
         data: { email, photoUrl },
         headers: {
           Authorization: `Bearer ${token}`,

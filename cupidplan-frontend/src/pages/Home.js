@@ -3,6 +3,11 @@ import { useNavigate } from "react-router-dom";
 import axios from "axios"; 
 import "../styles/Home.css"; 
 
+const BASE_URL =
+  window.location.hostname === "localhost"
+    ? "http://localhost:5000"
+    : "https://cupidplan-me.onrender.com"; 
+
 const Home = () => {
   const navigate = useNavigate();
   const [user, setUser] = useState({ email: "", name: "" });
@@ -31,7 +36,7 @@ const Home = () => {
   
     const fetchUserProfile = async () => {
       try {
-        const res = await axios.get("http://localhost:5000/api/user/me", {
+        const res = await axios.get(`${BASE_URL}/api/user/me`, {
           headers: { Authorization: `Bearer ${token}` },
         });
         setUser({ email: storedEmail, name: res.data.name });
