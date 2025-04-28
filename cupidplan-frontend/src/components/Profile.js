@@ -8,11 +8,14 @@ import { useNavigate } from "react-router-dom";
 import { io } from "socket.io-client";
 import cupidPlan from "../assets/cupid-plan.png";
 
+const BASE_URL = window.location.hostname === "localhost" 
+  ? "http://localhost:5000" 
+  : "https://cupidplan-me.onrender.com";
 
-const socket = io("http://localhost:5000", {
-  transports: ["websocket"],
-  withCredentials: true,
-});
+  const socket = io(BASE_URL, {
+    transports: ["websocket"],
+    withCredentials: true,
+  });  
 
 const Profile = () => {
   const [editingProfile, setEditingProfile] = useState(false);
@@ -78,7 +81,7 @@ const calculateAge = (dob) => {
     const token = localStorage.getItem("token");
   
     try {
-      const res = await axios.get("http://localhost:5000/api/messages/unread", {
+      const res = await axios.get(`${BASE_URL}/api/messages/unread`, {
         headers: { Authorization: `Bearer ${token}` },
       });
   
@@ -98,9 +101,10 @@ const calculateAge = (dob) => {
         const token = localStorage.getItem("token");
         console.log("Token being used:", token);
   
-        const response = await axios.get("http://localhost:5000/api/user/me", {
+        const response = await axios.get(`${BASE_URL}/api/user/me`, {
           headers: { Authorization: `Bearer ${token}` },
         });
+        
   
         const data = response.data;
   
@@ -138,9 +142,10 @@ const calculateAge = (dob) => {
           console.warn("⚠️ No token found in localStorage");
           return;
         }
-        const res = await axios.get("http://localhost:5000/api/likes/received/count", {
+        const res = await axios.get(`${BASE_URL}/api/likes/received/count`, {
           headers: { Authorization: `Bearer ${token}` },
         });
+        
         setLikesThisWeek(res.data.count);
       } catch (err) {
         console.error("❌ Failed to fetch likes:", err);
@@ -166,11 +171,8 @@ const calculateAge = (dob) => {
   
   const fetchRecentMatches = async () => {
     try {
-      const res = await axios.get(
-        `http://localhost:5000/api/matches/recent/${
-          localStorage.getItem("rememberedUser") || sessionStorage.getItem("loggedInUser")
-        }`
-      );
+      const res = await axios.get(`${BASE_URL}/api/matches/recent/${localStorage.getItem("rememberedUser") || sessionStorage.getItem("loggedInUser")}`);
+
   
       if (res.data.success) {
         const shuffled = shuffle(res.data.recentMatches);
@@ -250,23 +252,16 @@ useEffect(() => {
       const token = localStorage.getItem("token");
   
       // Update name and location in database
-      await axios.put(
-        "http://localhost:5000/api/user/update-basic-info",
-        {
-          name: profile.name,
-          location: profile.location,
-        },
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
+      await axios.put(`${BASE_URL}/api/user/update-basic-info`, {
+        name: profile.name,
+        location: profile.location,
+      }, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      
   
       // Update preferences like distance, age, etc.
-      await axios.put(
-        "http://localhost:5000/api/user/preferences",
-        {
+      await axios.put(`${BASE_URL}/api/user/preferences`, {
           minAge: profile.minAge,
           maxAge: profile.maxAge,
           distance: profile.distance,
@@ -306,15 +301,12 @@ useEffect(() => {
     try {
       const token = localStorage.getItem("token");
   
-      await axios.put(
-        "http://localhost:5000/api/user/about-me",
-        { aboutMe: profile.aboutMe },
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
+      await axios.put(`${BASE_URL}/api/user/about-me`, {
+        aboutMe: profile.aboutMe,
+      }, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      
   
       setEditingBio(false);
       setBioSaved(true);
@@ -333,9 +325,7 @@ useEffect(() => {
     )?.[0];
   
     try {
-      const res = await axios.put(
-        "http://localhost:5000/api/user/preferences",
-        {
+      const res = await axios.put(`${BASE_URL}/api/user/preferences`, {
           minAge: profile.minAge,
           maxAge: profile.maxAge,
           distance: profile.distance,
@@ -401,12 +391,13 @@ useEffect(() => {
   
     try {
       const token = localStorage.getItem("token");
-      const response = await axios.post("http://localhost:5000/api/upload/upload-profile-pic", formData, {
+      const response = await axios.post(`${BASE_URL}/api/upload/upload-profile-pic`, formData, {
         headers: {
           Authorization: `Bearer ${token}`,
           "Content-Type": "multipart/form-data",
         },
       });
+      
   
       const newUrl = response.data.url + `?cb=${Date.now()}`; // 💡 cache-busting trick
       setProfile((prev) => ({
@@ -461,12 +452,10 @@ useEffect(() => {
       console.log("Saving setting:", key, "→", body);
 
   
-      await axios.put("http://localhost:5000/api/user/settings/toggles", body, {
-
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
+      await axios.put(`${BASE_URL}/api/user/settings/toggles`, body, {
+        headers: { Authorization: `Bearer ${token}` },
       });
+      
       if (key === "aiRecommendations") {
         body.chatNotifications = newValue;
       
@@ -489,11 +478,12 @@ useEffect(() => {
     try {
       const token = localStorage.getItem("token");
   
-      await axios.post(
-        "http://localhost:5000/api/chat/mark-read",
-        { senderEmail },
-        { headers: { Authorization: `Bearer ${token}` } }
-      );
+      await axios.post(`${BASE_URL}/api/chat/mark-read`, {
+        senderEmail,
+      }, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      
   
       // Clear the unread notification
       setUnreadSenders([]);
@@ -591,11 +581,10 @@ useEffect(() => {
       onClick={async () => {
         try {
           const token = localStorage.getItem("token");
-          await axios.delete("http://localhost:5000/api/upload/delete-profile-pic", {
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
+          await axios.delete(`${BASE_URL}/api/upload/delete-profile-pic`, {
+            headers: { Authorization: `Bearer ${token}` },
           });
+          
           setProfile((prev) => ({ ...prev, profilePicUrl: "" }));
         } catch (err) {
           console.error("❌ Failed to delete profile picture:", err);
