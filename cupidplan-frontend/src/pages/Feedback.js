@@ -3,6 +3,11 @@ import axios from "axios";
 import "../styles/Feedback.css";
 import { useEffect } from "react";
 
+const BASE_URL =
+  window.location.hostname === "localhost"
+    ? "http://localhost:5000"
+    : "https://cupidplan-me.onrender.com";
+
 const Feedback = () => {
   const [name, setName] = useState("");
   const [rating, setRating] = useState(5);
@@ -16,7 +21,7 @@ const Feedback = () => {
     e.preventDefault();
 
     try {
-      await axios.post("http://localhost:5000/api/feedback/submit", {
+      await axios.post(`${BASE_URL}/api/feedback/submit`, {
         name,
         rating,
         comment,
@@ -41,7 +46,7 @@ const Feedback = () => {
       localStorage.getItem("rememberedUser") || sessionStorage.getItem("loggedInUser");
   
     if (email) {
-      fetch(`http://localhost:5000/api/user/${email}`)
+      fetch(`${BASE_URL}/api/user/${email}`)
         .then((res) => res.json())
         .then((data) => {
           if (data.success && data.user) {
