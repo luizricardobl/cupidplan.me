@@ -52,11 +52,10 @@ console.log('All modules loaded successfully.');
 
 // ✅ Initialize Express and HTTP server for Socket.IO
 const app = express();
-const http = require("http");
 const server = http.createServer(app);
 
 // ✅ Socket.IO setup
-const { Server } = require("socket.io");
+
 const io = new Server(server, {
   cors: {
     origin: '*',
