@@ -46,7 +46,7 @@ const Feedback = () => {
       localStorage.getItem("rememberedUser") || sessionStorage.getItem("loggedInUser");
   
     if (email) {
-      + fetch(`${BASE_URL}/api/user/by-email/${email}`)
+       fetch(`${BASE_URL}/api/user/by-email/${email}`)
         .then((res) => res.json())
         .then((data) => {
           if (data.success && data.data) {
