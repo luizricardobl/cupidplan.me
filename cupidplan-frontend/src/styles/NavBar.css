@@ -168,3 +168,51 @@
     max-height: 80vh !important;
   }
 }
+
+
+/* ✅ Additional Navbar Mobile Fixes */
+@media (max-width: 768px) {
+  .nav-bar {
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 10px 15px;
+  }
+
+  .nav-logo {
+    justify-content: center;
+    width: 100%;
+    margin-bottom: 10px;
+  }
+
+  .nav-links {
+    flex-direction: column;
+    gap: 10px;
+    width: 100%;
+  }
+
+  .top-right-buttons {
+    flex-direction: column;
+    width: 100%;
+    gap: 10px;
+    align-items: flex-start;
+    margin-top: 10px;
+  }
+
+  .nav-button,
+  .top-button {
+    width: 100%;
+    text-align: left;
+    font-size: 1rem;
+    padding: 10px 16px;
+    box-sizing: border-box;
+  }
+
+  .logout-btn {
+    position: relative;
+    top: auto;
+    right: auto;
+    width: 100%;
+    margin-top: 10px;
+    z-index: 1;
+  }
+}
