@@ -81,7 +81,7 @@ const calculateAge = (dob) => {
     const token = localStorage.getItem("token");
   
     try {
-      const res = await axios.get(`${BASE_URL}/api/messages/unread`, {
+      const res = await axios.get(`${BASE_URL}/api/chat-history/unread`, {
         headers: { Authorization: `Bearer ${token}` },
       });
   
