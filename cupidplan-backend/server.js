@@ -26,7 +26,7 @@ sgMail.setApiKey(process.env.SENDGRID_API_KEY);
 console.log('Loading routes...');
 const authRoutes = require('./routes/authRoutes');
 const userRoutes = require('./routes/userRoutes');
-const uploadRoutes = require('./routes/uploadRoute');
+const uploadRoute = require('./routes/uploadRoute');
 const swipeRoutes = require('./routes/swipeRoutes');
 const likeRoutes = require('./routes/likeRoutes');
 const feedbackRoutes = require('./routes/feedbackRoutes');
