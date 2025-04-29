@@ -186,5 +186,65 @@ button:hover {
   transform: scale(1.11);
 }
 
+/* ✅ Responsive Fixes */
+@media (max-width: 768px) {
+  body, html {
+    font-size: 90%;
+    padding: 0;
+    margin: 0;
+    overflow-x: hidden;
+  }
 
+  .login-box,
+  .matches-container,
+  .feedback-container,
+  .about-container,
+  .help-container,
+  .chat-container,
+  .album-upload-container,
+  .ai-date-generator {
+    width: 95% !important;
+    margin: 20px auto !important;
+    padding: 20px !important;
+  }
 
+  h1, h2 {
+    font-size: 1.5rem !important;
+  }
+
+  .match-buttons,
+  .nav-btns,
+  .chat-form,
+  .folder-header,
+  .folder-content,
+  .slide-card,
+  .video-wrapper,
+  .album-preview-grid {
+    flex-direction: column !important;
+    align-items: center !important;
+    gap: 10px !important;
+  }
+
+  .match-buttons button,
+  .selectable-option,
+  .find-match-btn,
+  .view-date-button {
+    width: 90% !important;
+    font-size: 1rem !important;
+  }
+
+  .chat-box {
+    height: 300px !important;
+  }
+
+  .heart-generate-button {
+    left: 50% !important;
+    transform: translateX(-50%) translateY(-50%) !important;
+  }
+
+  .date-modal,
+  .profile-modal-card {
+    width: 95% !important;
+    max-height: 80vh !important;
+  }
+}
