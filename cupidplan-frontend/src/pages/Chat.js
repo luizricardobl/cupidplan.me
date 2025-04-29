@@ -190,7 +190,8 @@ const Chat = () => {
 
     const fetchChatHistory = async () => {
       try {
-        const res = await fetch(`${BASE_URL}/api/chat/history/${currentUserEmail}/${selectedUserEmail}`);
+        const res = await fetch(`${BASE_URL}/api/chat-history/history/${currentUserEmail}/${selectedUserEmail}`);
+
 
         if (res.ok) {
           const data = await res.json();
