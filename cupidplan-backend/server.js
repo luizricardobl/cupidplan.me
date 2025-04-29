@@ -126,11 +126,6 @@ app.post("/api/verify-otp", (req, res) => {
   }
 });
 
-// ✅ Socket.IO real-time chat
-const ChatModel = require("./models/Chat");
-const User = require("./models/User");
-
-
 
 io.on("connection", (socket) => {
   console.log("🔌 New user connected:", socket.id);
