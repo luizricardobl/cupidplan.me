@@ -231,3 +231,4 @@ router.get("/confirmed/:email", async (req, res) => {
 });
 
 module.exports = router;
+

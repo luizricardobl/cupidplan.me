@@ -101,3 +101,5 @@ router.post("/mark-read", authenticateUser, async (req, res) => {
 
 
 module.exports = router;
+
+

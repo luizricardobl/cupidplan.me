@@ -93,3 +93,4 @@ router.get("/unread", authenticateUser, async (req, res) => {
 });
 
 module.exports = router;
+

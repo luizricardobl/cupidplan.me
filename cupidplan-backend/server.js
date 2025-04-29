@@ -13,19 +13,42 @@ require('dotenv').config();
 
 console.log('Loading nodemailer...');
 const nodemailer = require('nodemailer');
-const sgMail = require("@sendgrid/mail");
-sgMail.setApiKey(process.env.SENDGRID_API_KEY);
-const userRoutes = require('./routes/userRoutes');
-const uploadRoute = require("./routes/uploadRoute");
-const swipeRoutes = require("./routes/swipeRoutes");
-const onlineUsers = {};
-const lastSeenMap = {};       
-const feedbackRoutes = require("./routes/feedbackRoutes");
-const dateIdeaRoutes = require("./routes/dateIdeaRoutes");
 
-global.lastSeenMap = lastSeenMap; 
+console.log('Loading socket.io and HTTP...');
+const http = require('http');
+const { Server } = require('socket.io');
+
+console.log('Loading sendgrid...');
+const sgMail = require('@sendgrid/mail');
+sgMail.setApiKey(process.env.SENDGRID_API_KEY);
+
+// ✅ Load routes (no functional changes, just organized better)
+console.log('Loading routes...');
+const authRoutes = require('./routes/authRoutes');
+const userRoutes = require('./routes/userRoutes');
+const uploadRoutes = require('./routes/uploadRoute');
+const swipeRoutes = require('./routes/swipeRoutes');
+const likeRoutes = require('./routes/likeRoutes');
+const feedbackRoutes = require('./routes/feedbackRoutes');
+const chatRoutes = require('./routes/chatRoutes');
+const chatHistoryRoutes = require('./routes/chatHistoryRoutes');
+const matchesRoutes = require('./routes/matchesRoutes');
+const datesRoutes = require('./routes/dates');
+const sharedDatesRoutes = require('./routes/sharedDates');
+const dateIdeaRoutes = require('./routes/dateIdeaRoutes');
+
+// ✅ Load models (needed for WebSocket functionality)
+console.log('Loading models...');
+const ChatModel = require('./models/Chat');
+const User = require('./models/User');
+
+// ✅ Set up global variables
+console.log('Setting global variables...');
+global.lastSeenMap = {}; 
+const onlineUsers = {};
 
 console.log('All modules loaded successfully.');
+
 
 // ✅ Initialize Express and HTTP server for Socket.IO
 const app = express();
@@ -70,23 +93,21 @@ const transporter = nodemailer.createTransport({
   },
 });
 
-// ✅ Routes
-const authRoutes = require("./routes/authRoutes");
-const dateRoutes = require("./routes/dates");
-const matchRoutes = require("./routes/matchesRoutes");
-const chatRoutes = require("./routes/chatRoutes");
-const chatHistoryRoutes = require("./routes/chatHistoryRoutes");
 
+// ✅ Proper API route mounting
 app.use("/api/auth", authRoutes);
-app.use("/api/dates", dateRoutes);
-app.use("/api/matches", matchRoutes);
+app.use("/api/user", userRoutes);
+app.use("/api/upload", uploadRoutes);
+app.use("/api/likes", likeRoutes);
 app.use("/api/chat", chatRoutes);
-app.use("/api/chat", chatHistoryRoutes);
-app.use("/api/messages", chatHistoryRoutes);
-app.use("/api/shared-dates", require("./routes/sharedDates"));
+app.use("/api/chat-history", chatHistoryRoutes);
 app.use("/api/feedback", feedbackRoutes);
-app.use("/api/date-generator", require("./routes/dateIdeaRoutes"));
+app.use("/api/matches", matchesRoutes);
+app.use("/api/dates", datesRoutes);
+app.use("/api/swipes", swipeRoutes);
 app.use("/api/date-generator", dateIdeaRoutes);
+app.use("/api/shared-dates", sharedDatesRoutes);
+
 
 // ✅ OTP Verification Route
 app.post("/api/verify-otp", (req, res) => {
