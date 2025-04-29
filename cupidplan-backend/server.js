@@ -96,7 +96,7 @@ const transporter = nodemailer.createTransport({
 // ✅ Proper API route mounting
 app.use("/api/auth", authRoutes);
 app.use("/api/user", userRoutes);
-app.use("/api/upload", uploadRoutes);
+app.use("/api/upload", uploadRoute);
 app.use("/api/likes", likeRoutes);
 app.use("/api/chat", chatRoutes);
 app.use("/api/chat-history", chatHistoryRoutes);
