@@ -4,8 +4,14 @@ const User = require("../models/User");
 const nodemailer = require("nodemailer");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
-const fetch = require("node-fetch"); // ✅ Used for Geocoding API
+const fetch = require("node-fetch"); 
 const sgMail = require("@sendgrid/mail");
+const multer = require("multer");
+const streamifier = require("streamifier");
+const cloudinary = require("../cloudinary"); 
+
+const storage = multer.memoryStorage();
+const upload = multer({ storage });
 
 sgMail.setApiKey(process.env.SENDGRID_API_KEY);
 
@@ -16,7 +22,7 @@ let otpStorage = {};
 const GOOGLE_MAPS_API_KEY = "AIzaSyC4gwNf8YgwW08UYEBjRkT-S08EBbStkp4";
 
 // 🔹 1. User Signup & Save in Database
-router.post("/signup", async (req, res) => {
+router.post("/signup", upload.single("profilePicture"), async (req, res) => {
   try {
     console.log("📩 Signup request received:", req.body);
 
@@ -31,9 +37,10 @@ router.post("/signup", async (req, res) => {
       location,
       aboutMe,
       relationshipGoal,
-      hobbies,
-      dealbreakers,
     } = req.body;
+
+    const hobbies = JSON.parse(req.body.hobbies || "[]");
+    const dealbreakers = JSON.parse(req.body.dealbreakers || "[]");
 
     if (!name || !email || !password) {
       console.log("❌ Missing required fields");
@@ -51,8 +58,33 @@ router.post("/signup", async (req, res) => {
     const salt = await bcrypt.genSalt(10);
     const hashedPassword = await bcrypt.hash(password, salt);
 
+    // ✅ Upload profile picture to Cloudinary
+    let profilePicUrl = "";
+    let profilePicPublicId = "";
+
+    if (req.file) {
+      try {
+        const bufferStream = streamifier.createReadStream(req.file.buffer);
+        const result = await new Promise((resolve, reject) => {
+          const stream = cloudinary.uploader.upload_stream(
+            { folder: "cupidplan/profile_pics" },
+            (error, result) => {
+              if (error) reject(error);
+              else resolve(result);
+            }
+          );
+          bufferStream.pipe(stream);
+        });
+
+        profilePicUrl = result.secure_url;
+        profilePicPublicId = result.public_id;
+      } catch (err) {
+        console.error("❌ Error uploading profile picture to Cloudinary:", err.message);
+      }
+    }
+
     // ✅ Get geo-coordinates from Google Geocoding API
-    let coordinates = [0, 0]; // Default
+    let coordinates = [0, 0]; 
     try {
       const geoRes = await fetch(`https://maps.googleapis.com/maps/api/geocode/json?address=${encodeURIComponent(location)}&key=${GOOGLE_MAPS_API_KEY}`);
       const geoData = await geoRes.json();
@@ -88,6 +120,8 @@ router.post("/signup", async (req, res) => {
       relationshipGoal,
       hobbies,
       dealbreakers,
+      profilePicUrl,
+      profilePicPublicId,
       verified: false,
     });
 
@@ -178,4 +212,3 @@ router.post("/verify-otp", async (req, res) => {
 });
 
 module.exports = router;
-

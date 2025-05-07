@@ -29,6 +29,9 @@ const Signup = () => {
   const [newHobby, setNewHobby] = useState(""); 
   const [newDealbreaker, setNewDealbreaker] = useState("");
 
+  const [loadingRedirect, setLoadingRedirect] = useState(false);
+
+
   // OTP Verification
   const [otp, setOtp] = useState(["", "", "", "", "", ""]);
   const [resendDisabled, setResendDisabled] = useState(true);
@@ -111,30 +114,27 @@ const Signup = () => {
       return;
     }
   
-    const userData = {
-      name: fullName, // backend expects "name"
-      email,
-      phone,
-      password,
-      dob,
-      gender,
-      interestedIn,
-      location,
-      aboutMe,
-      relationshipGoal,
-      hobbies,
-      dealbreakers,
-    };
-
-    console.log("📦 Sending this user data to backend:", userData);
-    console.table(userData);
-
     try {
-      // Step 1: Create user
+      const formData = new FormData();
+      formData.append("name", fullName);
+      formData.append("email", email);
+      formData.append("phone", phone);
+      formData.append("password", password);
+      formData.append("dob", dob);
+      formData.append("gender", gender);
+      formData.append("interestedIn", interestedIn);
+      formData.append("location", location);
+      formData.append("aboutMe", aboutMe);
+      formData.append("relationshipGoal", relationshipGoal);
+      formData.append("hobbies", JSON.stringify(hobbies));
+      formData.append("dealbreakers", JSON.stringify(dealbreakers));
+      if (profilePicture) {
+        formData.append("profilePicture", profilePicture);
+      }
+  
       const res = await fetch(`${BASE_URL}/api/auth/signup`, {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(userData),
+        body: formData, // No headers needed for multipart/form-data
       });
   
       const data = await res.json();
@@ -146,7 +146,6 @@ const Signup = () => {
   
       console.log("✅ Account created. Sending OTP...");
   
-      // Step 2: Send OTP
       const otpRes = await fetch(`${BASE_URL}/api/auth/send-otp`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -162,10 +161,9 @@ const Signup = () => {
   
       alert("✅ OTP sent! Please check your email.");
       setStep(5);
-  
-      // Start countdown timer
       setResendDisabled(true);
       setCountdown(30);
+  
       const interval = setInterval(() => {
         setCountdown((prev) => {
           if (prev === 1) {
@@ -180,6 +178,7 @@ const Signup = () => {
       alert("❌ Signup failed. Try again.");
     }
   };
+  
   
 
   // Handle going back to the previous step
@@ -235,14 +234,20 @@ const Signup = () => {
       if (verifyResponse.ok && verifyData.success) {
         alert("🎉 Email verified successfully! Welcome to CupidPlan.Me.");
       
-        // ✅ Save user login so Home knows who they are
+        localStorage.setItem("token", verifyData.token);
         localStorage.setItem("rememberedUser", email);
         sessionStorage.setItem("loggedInUser", email);
       
-        navigate("/home");
+        // ✅ Show spinner and redirect after short delay
+        setLoadingRedirect(true); 
+        setTimeout(() => {
+          navigate("/home");
+        }, 1000);
       } else {
         alert(verifyData.message || "Invalid OTP. Try again.");
       }
+      
+      
     } catch (error) {
       console.error("❌ Error verifying OTP:", error);
       alert("Something went wrong. Please try again.");
@@ -615,6 +620,13 @@ const Signup = () => {
           <>
             <h1 className="signup-title">Almost There!</h1>
             <p className="signup-subtitle">Please verify your email to complete your registration.</p>
+            {loadingRedirect && (
+  <div className="loading-overlay">
+    <div className="loading-spinner"></div>
+    <p>Redirecting you to your dashboard...</p>
+  </div>
+)}
+
 
             <form onSubmit={handleVerification} className="signup-form">
               <div className="verification-box">
