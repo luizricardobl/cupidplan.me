@@ -557,14 +557,10 @@ useEffect(() => {
 
 
 
-<button
-  className="camera-button"
-  onClick={() => !uploadingImage && document.getElementById("profilePicInput").click()}
-  disabled={uploadingImage}
-  title={uploadingImage ? "Uploading..." : "Upload new picture"}
->
-  <i className="fa-solid fa-camera"></i>
-</button>
+
+
+
+
 
 
   <input
@@ -609,6 +605,16 @@ useEffect(() => {
                 <p className="profile-location-age">
                   {profile.location} • {profile.age} years old
                 </p>
+                {/* ✅ Add this new styled button here */}
+  <button
+    className="upload-profile-pic-undername-btn"
+    onClick={() =>
+      !uploadingImage && document.getElementById("profilePicInput").click()
+    }
+    disabled={uploadingImage}
+  >
+    {uploadingImage ? "Uploading..." : "📸 Add Profile Picture"}
+  </button>
               </div>
             </div>
           </div>
