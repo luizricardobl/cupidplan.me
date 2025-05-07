@@ -15,11 +15,10 @@ const generateDateIdea = async (preferences) => {
   const food = preferences.favoriteFood || [];
   const relationshipStage = preferences.relationshipStage || "dating";
   const budget = preferences.budget || "moderate";
-  const dateFrequency = preferences.dateFrequency || "occasional";
-  const specialOccasion = preferences.specialOccasion || false;
+  const dateFrequency = preferences.dateFrequency || "occasionally";
+  const specialOccasion = preferences.specialOccasion || null;
 
   const venueKeywords = [...new Set(getVenueKeywordsForPreferences(preferences))];
-
   let realVenueSuggestions = [];
   let uniqueVenues = new Set();
 
@@ -29,7 +28,7 @@ const generateDateIdea = async (preferences) => {
       for (const place of venues) {
         if (!uniqueVenues.has(place)) {
           uniqueVenues.add(place);
-          realVenueSuggestions.push(`- ${place} (${keyword})`);
+          realVenueSuggestions.push(`${place} (${keyword})`);
         }
       }
     } catch (err) {
@@ -37,99 +36,68 @@ const generateDateIdea = async (preferences) => {
     }
   }
 
-  const realVenueText = realVenueSuggestions.length
-    ? realVenueSuggestions.join("\n")
-    : "";
-
   const prompt = `
-You're a creative date planner helping ${relationshipStage} couples create magical experiences together. 
-Create a personalized, romantic full-day date idea based on these details:
+You're a witty, playful AI date planner. You're helping a couple plan an exciting, creative date in ${city} based on what they love.
 
-### Couple's Profile:
-- Shared passions: ${hobbies.join(", ") || "exploring new experiences"}
-- Favorite foods: ${food.join(", ") || "delicious cuisine"}
-- Location: ${city}
+Keep the tone upbeat, natural, and fun — like you're talking to a best friend. Use emojis, storytelling, and real venues if available.
+
+Their preferences:
+- Relationship: ${relationshipStage}
+- City: ${city}
+- Hobbies: ${hobbies.join(", ") || "open to anything"}
+- Favorite Foods: ${food.join(", ") || "good food"}
 - Budget: ${budget}
 - Date frequency: ${dateFrequency}
-${specialOccasion ? `- Special occasion: ${specialOccasion}\n` : ""}
+${specialOccasion ? `- Special Occasion: ${specialOccasion}` : ""}
 
-### Available Venues/Activities:
-${realVenueText || "Use creative local options that match their interests"}
+Real venue ideas to optionally use:
+${realVenueSuggestions.length ? realVenueSuggestions.join("\n") : "No specific venues found – be creative."}
 
-### Guidelines:
-1. PERSONALIZATION:
-   - Weave their hobbies naturally into multiple activities
-   - Include at least one surprise element they wouldn't expect
-   - For ${relationshipStage} couples, make it ${relationshipStage === "married" ? "rekindle the spark" : "help them connect deeper"}
+💡 Guidelines:
+- Structure the day naturally: start chill, build energy, end romantic.
+- Keep it casual, flirty, and visually fun with emojis.
+- Include surprises, sensory moments (taste, scent, views), and interactions.
+- DO NOT mention you're an AI or that this is a generated plan.
+- Respond with only the plan (no intros or explanations).
 
-2. STRUCTURE:
-   - Create a narrative flow throughout the day
-   - Alternate between active and relaxed moments
-   - Include at least one unique activity they've likely never done
-
-3. ROMANCE BOOSTERS:
-   - Add subtle romantic touches in unexpected places
-   - Include sensory elements (taste, touch, scent, etc.)
-   - Create opportunities for meaningful connection
-
-4. FORMAT:
-Morning: [Start with something energizing but not too early]
-...
-Afternoon: [Mix of activity and relaxation]
-...
-Dinner: [Make this special - consider their food preferences]
-...
-Evening: [Build toward romantic climax]
-...
-Secret Sauce: [One unexpected twist that makes it unforgettable]
-
-Respond ONLY with the date plan in the specified format - no introductions or explanations. Make it feel tailor-made for them, using a warm, excited tone that builds anticipation.
+Now generate a full date experience that feels real and exciting!
 `;
 
   try {
     const response = await openai.chat.completions.create({
-      model: 'gpt-4',
+      model: "gpt-4",
       messages: [
-        {
-          role: 'user',
-          content: prompt,
-        },
+        { role: "system", content: "You're a playful, creative Gen Z-friendly AI date planner." },
+        { role: "user", content: prompt },
       ],
-      temperature: 0.8,
-      max_tokens: 700,
+      temperature: 0.95,
+      max_tokens: 800,
     });
 
     let dateIdea = response.choices[0].message.content;
-
-    dateIdea = dateIdea
-      .replace(/\*/g, "")
-      .replace(/\\/g, "")
-      .replace(/\n{2,}/g, "\n\n")
-      .trim();
-
-    return dateIdea;
+    return dateIdea.trim();
   } catch (error) {
-    console.error("OpenAI API error:", error);
+    console.error("❌ OpenAI API error:", error);
     return generateFallbackDateIdea(preferences);
   }
 };
 
-// ✅ Fallback date idea
+// ✅ Fallback if GPT fails
 function generateFallbackDateIdea(preferences) {
   const hobbies = preferences.hobbies || [];
   const food = preferences.favoriteFood || [];
   const city = preferences.location || "your city";
 
   return `
-Morning: Start with a cozy breakfast at a local café known for ${food.length ? food[0] : "great pastries"}.
+✨ Your Backup Date Plan ✨
 
-Afternoon: Explore ${hobbies.length ? `a ${hobbies[0]} exhibit` : "a museum"} in ${city}, followed by a chill walk in a scenic park.
+Start with a cozy breakfast at a local café in ${city}, maybe something known for amazing ${food.length ? food[0] : "pastries"} ☕🥐
 
-Dinner: Enjoy ${food.length ? food.slice(0, 2).join(" and ") : "something delicious"} at a romantic spot with a relaxed vibe.
+Then explore a local spot that aligns with your interests — like a ${hobbies.length ? hobbies[0] : "museum or park"}.
 
-Evening: Cap it off with a private activity like stargazing or a mini game night.
+For dinner, find a chill restaurant that serves ${food.slice(0, 2).join(" and ") || "something tasty"} and offers a romantic vibe 🍝🍣
 
-Secret Sauce: Leave each other hand-written notes to discover at different points in the date.
+Cap the night off with a scenic walk or rooftop hangout. Bring something meaningful like a question jar or mini photo book to spark deeper convos. 💬💖
 `.trim();
 }
 
