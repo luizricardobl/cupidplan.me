@@ -29,13 +29,19 @@ function App() {
   const isLoggedIn = !isLoginPage && !isSignupPage && !isRestrictedPage; 
   const isDateGeneratorPage = location.pathname === "/generatedate";
 
-  const socket = io("http://localhost:5000", {
-    transports: ["websocket"],
-    withCredentials: true,
-    query: {
-      email: localStorage.getItem("rememberedUser") || sessionStorage.getItem("loggedInUser"),
-    },
-  });
+  const socket = io(
+    window.location.hostname === "localhost"
+      ? "http://localhost:5000"
+      : "https://cupidplan-me.onrender.com",
+    {
+      transports: ["websocket"],
+      withCredentials: true,
+      query: {
+        email: localStorage.getItem("rememberedUser") || sessionStorage.getItem("loggedInUser"),
+      },
+    }
+  );
+  
   
   useEffect(() => {
     const currentUserEmail = localStorage.getItem("rememberedUser") || sessionStorage.getItem("loggedInUser");
